@@ -10,6 +10,7 @@ export interface Movie {
   runtime: number | null;
   tagline: string;
   popularity: number;
+  videos?: { results: Video[] };
 }
 
 export interface TVShow {
@@ -24,6 +25,7 @@ export interface TVShow {
   number_of_seasons: number;
   tagline: string;
   popularity: number;
+  videos?: { results: Video[] };
 }
 
 export type Media = (Movie & { media_type: 'movie' }) | (TVShow & { media_type: 'tv' });
@@ -38,4 +40,17 @@ export interface CastMember {
 
 export interface Credits {
   cast: CastMember[];
+}
+
+export interface Video {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
 }

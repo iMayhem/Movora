@@ -1,26 +1,55 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getMovieDetails, getMovieCredits, getSimilarMovies } from '@/lib/tmdb';
-import { Star, Calendar, Clock } from 'lucide-react';
+import { Star, Calendar, Clock, PlayCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { WatchLaterButton } from '@/components/movies/WatchLaterButton';
 import { MovieList } from '@/components/movies/MovieList';
+import { VideoPlayer } from '@/components/common/VideoPlayer';
+import type { Media, Movie, Credits } from '@/types/tmdb';
 
 type MoviePageProps = {
   params: { id: string };
 };
 
-export default async function MoviePage({ params }: MoviePageProps) {
-  const movieId = Number(params.id);
-  const movie = await getMovieDetails(movieId);
-  const credits = await getMovieCredits(movieId);
-  const similarMovies = await getSimilarMovies(movieId);
-  const cast = credits?.cast.slice(0, 10) || [];
+export default function MoviePage({ params }: MoviePageProps) {
+  const [movie, setMovie] = useState<(Movie & { media_type: 'movie' }) | null>(null);
+  const [credits, setCredits] = useState<Credits | null>(null);
+  const [similarMovies, setSimilarMovies] = useState<Media[]>([]);
+  const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchMovieData = async () => {
+      const movieId = Number(params.id);
+      const movieDetails = await getMovieDetails(movieId);
+      setMovie(movieDetails);
+      const movieCredits = await getMovieCredits(movieId);
+      setCredits(movieCredits);
+      const similar = await getSimilarMovies(movieId);
+      setSimilarMovies(similar);
+    };
+
+    fetchMovieData();
+  }, [params.id]);
+
 
   if (!movie) {
-    return <div>Movie not found.</div>;
+    return <div>Loading...</div>;
   }
+  
+  const trailer = movie.videos?.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
+  const cast = credits?.cast.slice(0, 10) || [];
 
   return (
+    <>
+    <VideoPlayer 
+      isOpen={isVideoPlayerOpen}
+      onClose={() => setIsVideoPlayerOpen(false)}
+      videoKey={trailer?.key}
+    />
     <div className="container mx-auto px-4 py-8 text-white">
       <div className="relative h-[30vh] md:h-[50vh] w-full">
         {movie.backdrop_path && (
@@ -31,6 +60,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
             style={{ objectFit: 'cover' }}
             className="rounded-lg opacity-30"
             data-ai-hint="movie backdrop"
+            priority
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
@@ -71,7 +101,15 @@ export default async function MoviePage({ params }: MoviePageProps) {
               ))}
             </div>
             <p className="text-base leading-relaxed mb-6">{movie.overview}</p>
-            <WatchLaterButton item={movie} />
+            <div className="flex items-center gap-4">
+              {trailer && (
+                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg">
+                  <PlayCircle className="mr-2" />
+                  Play Trailer
+                </Button>
+              )}
+              <WatchLaterButton item={movie} />
+            </div>
           </div>
         </div>
       </div>
@@ -105,5 +143,6 @@ export default async function MoviePage({ params }: MoviePageProps) {
         )}
       </div>
     </div>
+    </>
   );
 }

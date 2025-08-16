@@ -22,6 +22,7 @@ async function fetcher<T>(path: string, params: Record<string, string> = {}): Pr
 }
 
 const normalizeMedia = (items: (Movie | TVShow)[], media_type: 'movie' | 'tv'): Media[] => {
+  if (!items) return [];
   return items.map(item => ({ ...item, media_type }));
 };
 
@@ -45,7 +46,7 @@ export async function searchMedia(query: string, media_type: 'movie' | 'tv'): Pr
 
 // Movie specific functions
 export async function getMovieDetails(id: number): Promise<(Movie & { media_type: 'movie' }) | null> {
-  const movie = await fetcher<Movie>(`/movie/${id}`);
+  const movie = await fetcher<Movie>(`/movie/${id}`, { append_to_response: 'videos' });
   if (!movie) return null;
   return { ...movie, media_type: 'movie' };
 }
@@ -63,7 +64,7 @@ export async function getSimilarMovies(id: number): Promise<Media[]> {
 
 // TV Show specific functions
 export async function getTvShowDetails(id: number): Promise<(TVShow & { media_type: 'tv' }) | null> {
-  const show = await fetcher<TVShow>(`/tv/${id}`);
+  const show = await fetcher<TVShow>(`/tv/${id}`, { append_to_response: 'videos' });
   if (!show) return null;
   return { ...show, media_type: 'tv' };
 }
