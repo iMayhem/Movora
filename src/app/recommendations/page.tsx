@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useFormState, useFormStatus } from 'react-dom';
+import { useEffect, useState, useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useWatchLater } from '@/hooks/useWatchLater';
 import { Button } from '@/components/ui/button';
 import { searchMedia } from '@/lib/tmdb';
@@ -22,7 +22,7 @@ function SubmitButton() {
 
 export default function RecommendationsPage() {
   const { watchLater } = useWatchLater();
-  const [state, formAction] = useFormState(getAIRecommendations, undefined);
+  const [state, formAction] = useActionState(getAIRecommendations, undefined);
   const [recommendedMedia, setRecommendedMedia] = useState<Media[]>([]);
   const [isLoadingMedia, setIsLoadingMedia] = useState(false);
 
