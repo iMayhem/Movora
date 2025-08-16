@@ -4,8 +4,9 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Home } from 'lucide-react';
+import { Suspense } from 'react';
 
-export default function NotFound() {
+function NotFoundContent() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] text-center px-4">
         <h1 className="text-8xl font-bold font-headline text-primary">404</h1>
@@ -21,4 +22,13 @@ export default function NotFound() {
         </Button>
     </div>
   )
+}
+
+
+export default function NotFound() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <NotFoundContent />
+        </Suspense>
+    )
 }
