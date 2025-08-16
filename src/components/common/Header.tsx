@@ -41,7 +41,7 @@ export function Header() {
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
             <Logo />
-            <span className="hidden font-bold sm:inline-block font-headline">CineStream</span>
+            <span className="hidden font-bold sm:inline-block font-headline">Movora</span>
           </Link>
           <nav className="hidden gap-6 md:flex">
             {navItems.map(item => (

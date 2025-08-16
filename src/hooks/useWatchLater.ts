@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { toast } from './use-toast';
 import type { Media } from '@/types/tmdb';
 
-const WATCH_LATER_KEY = 'cineStreamWatchLater';
+const WATCH_LATER_KEY = 'movoraWatchLater';
 
 export function useWatchLater() {
   const [watchLater, setWatchLater] = useState<Media[]>([]);
