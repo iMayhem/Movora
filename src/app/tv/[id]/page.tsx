@@ -118,7 +118,7 @@ export default function TvShowPage({ params }: TvShowPageProps) {
             <h2 className="font-headline text-3xl font-bold mb-6">Top Cast</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
               {cast.map(member => (
-                <div key={member.id} className="text-center">
+                <div key={member.cast_id} className="text-center">
                   <Image
                     src={member.profile_path ? `https://image.tmdb.org/t/p/w185${member.profile_path}` : "https://placehold.co/185x278.png"}
                     alt={member.name}
