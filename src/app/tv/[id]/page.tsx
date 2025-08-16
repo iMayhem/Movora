@@ -14,7 +14,7 @@ export default async function TvShowPage({ params }: TvShowPageProps) {
   const show = await getTvShowDetails(tvShowId);
   const credits = await getTvShowCredits(tvShowId);
   const similarShows = await getSimilarTvShows(tvShowId);
-  const cast = credits.cast.slice(0, 10);
+  const cast = credits?.cast.slice(0, 10) || [];
 
   if (!show) {
     return <div>TV Show not found.</div>;

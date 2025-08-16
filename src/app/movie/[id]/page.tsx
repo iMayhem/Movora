@@ -14,7 +14,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
   const movie = await getMovieDetails(movieId);
   const credits = await getMovieCredits(movieId);
   const similarMovies = await getSimilarMovies(movieId);
-  const cast = credits.cast.slice(0, 10);
+  const cast = credits?.cast.slice(0, 10) || [];
 
   if (!movie) {
     return <div>Movie not found.</div>;
