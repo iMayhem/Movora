@@ -27,8 +27,8 @@ export default async function MoviePage({ params }: MoviePageProps) {
           <Image
             src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
             alt={`${movie.title} backdrop`}
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: 'cover' }}
             className="rounded-lg opacity-30"
             data-ai-hint="movie backdrop"
           />

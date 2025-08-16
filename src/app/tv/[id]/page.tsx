@@ -27,8 +27,8 @@ export default async function TvShowPage({ params }: TvShowPageProps) {
           <Image
             src={`https://image.tmdb.org/t/p/original${show.backdrop_path}`}
             alt={`${show.name} backdrop`}
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: 'cover' }}
             className="rounded-lg opacity-30"
             data-ai-hint="tv show backdrop"
           />
