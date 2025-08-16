@@ -33,7 +33,7 @@ export default function MoviePage({ params }: MoviePageProps) {
     };
 
     fetchMovieData();
-  }, [params.id]);
+  }, [params]);
 
 
   if (!movie) {

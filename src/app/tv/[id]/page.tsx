@@ -33,7 +33,7 @@ export default function TvShowPage({ params }: TvShowPageProps) {
     };
 
     fetchTvShowData();
-  }, [params.id]);
+  }, [params]);
 
   if (!show) {
     return <div>Loading...</div>;
