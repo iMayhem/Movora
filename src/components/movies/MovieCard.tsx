@@ -10,9 +10,8 @@ type MovieCardProps = {
 };
 
 export function MovieCard({ item }: MovieCardProps) {
-  const isMovie = 'title' in item;
-  const href = isMovie ? `/movie/${item.id}` : `/tv/${item.id}`;
-  const title = isMovie ? item.title : item.name;
+  const href = item.media_type === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`;
+  const title = item.media_type === 'movie' ? item.title : item.name;
   const releaseDate = 'release_date' in item ? item.release_date : item.first_air_date;
 
   return (
