@@ -4,6 +4,7 @@ import { discoverMovies } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
+import { FeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 
 const BOLLYWOOD_PARAMS = {
   with_original_language: 'hi',
@@ -73,6 +74,8 @@ export default async function BollywoodPage() {
           <p>Could not load trending movies.</p>
         )}
       </section>
+
+      <FeaturedBollywood />
 
       {sections.map((section, index) => (
         <section key={section.slug}>
