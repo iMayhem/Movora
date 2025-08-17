@@ -88,6 +88,18 @@ const featuredTitles = [
     'Cinderella',
     'Ice Age: Continental Drift',
     'The Emperor\'s New Groove',
+    'Snow White and the Seven Dwarfs',
+    'Madagascar 3: Europe\'s Most Wanted',
+    'Madagascar: Escape 2 Africa',
+    'How to Train Your Dragon: The Hidden World',
+    'Corpse Bride',
+    'Shrek Forever After',
+    'The Princess and the Frog',
+    'Peter Pan',
+    '101 Dalmatians',
+    'Ferdinand',
+    'Puss in Boots',
+    'Pocahontas',
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
@@ -113,6 +125,14 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
         movieResults = await searchMedia(title, 'movie', { year: '1999' });
     } else if (title === 'Cinderella') {
         movieResults = await searchMedia(title, 'movie', { year: '1950' });
+    } else if (title === 'Snow White and the Seven Dwarfs') {
+        movieResults = await searchMedia(title, 'movie', { year: '1937' });
+    } else if (title === 'Peter Pan') {
+        movieResults = await searchMedia(title, 'movie', { year: '1953' });
+    } else if (title === '101 Dalmatians') {
+        movieResults = await searchMedia(title, 'movie', { year: '1961' });
+    } else if (title === 'Pocahontas') {
+        movieResults = await searchMedia(title, 'movie', { year: '1995' });
     }
     else {
        movieResults = await searchMedia(title, 'movie');
