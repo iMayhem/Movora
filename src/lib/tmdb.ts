@@ -14,7 +14,7 @@ async function fetcher<T>(path: string, params: Record<string, string> = {}): Pr
   Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
 
   try {
-    const response = await fetch(url.toString(), { cache: 'no-store' });
+    const response = await fetch(url.toString());
     if (!response.ok) {
       console.error(`Failed to fetch from TMDB: ${response.statusText}`);
       return null;
