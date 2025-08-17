@@ -131,6 +131,15 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
     title: 'Popular Animated TV Shows',
     fetcher: () => discoverTvShows({ with_genres: '16', sort_by: 'popularity.desc' }, 5),
   },
+  'recent-upcoming-animated': {
+    title: 'Recent & Upcoming Animated Movies',
+    fetcher: () => discoverMovies({
+      with_genres: '16',
+      'primary_release_date.gte': '2020-01-01',
+      'primary_release_date.lte': '2025-12-31',
+      sort_by: 'popularity.desc'
+    }, 5),
+  },
 };
 
 export default async function DiscoverPage({ params }: DiscoverPageProps) {

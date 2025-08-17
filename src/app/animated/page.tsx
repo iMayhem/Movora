@@ -35,6 +35,17 @@ const sections = [
     isMovie: true,
   },
   {
+    title: 'Recent & Upcoming Animated Movies',
+    slug: 'recent-upcoming-animated',
+    fetcher: () => discoverMovies({
+      with_genres: '16',
+      'primary_release_date.gte': '2020-01-01',
+      'primary_release_date.lte': '2025-12-31',
+      sort_by: 'popularity.desc'
+    }, 1),
+    isMovie: true,
+  },
+  {
     title: 'Popular Animated TV Shows',
     slug: 'popular-animated-tv',
     fetcher: () => discoverTvShows({ ...ANIMATED_TV_PARAMS, sort_by: 'popularity.desc' }, 1),
