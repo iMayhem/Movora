@@ -4,6 +4,7 @@ import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
+import { FeaturedAnimated } from '@/components/movies/FeaturedAnimated';
 
 const ANIMATED_MOVIE_PARAMS = {
   with_genres: '16,10751', // Animation & Family
@@ -67,6 +68,7 @@ export default async function AnimatedPage() {
             World of Animation
           </h1>
         </div>
+        <FeaturedAnimated />
         {trendingAnimated.length > 0 ? (
           <TrendingCarousel items={trendingAnimated} />
         ) : (
