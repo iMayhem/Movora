@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -16,7 +17,7 @@ const navItems = [
   { name: 'Top 250', href: '/letterboxd' },
   { name: 'Animated', href: '/animated' },
   { name: 'Mindfucks', href: '/mindfucks' },
-  { name: 'Indian Cartoons', href: '/indian-cartoons' },
+  { name: 'Cartoons', href: '/indian-cartoons' },
 ];
 
 export function Header() {
@@ -46,6 +47,8 @@ export function Header() {
             <Link href="/" className="mr-6 flex items-center space-x-2">
                 <span className="font-bold">Movora</span>
             </Link>
+        </div>
+        <div className="flex flex-1 items-center justify-between space-x-4">
             <nav className="hidden gap-6 md:flex">
                 {navItems.map(item => (
                 <Link
@@ -60,18 +63,16 @@ export function Header() {
                 </Link>
                 ))}
             </nav>
-        </div>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <form onSubmit={handleSearch} className="relative w-full max-w-[200px]">
-              <Input
-              type="search"
-              placeholder="Search movies & shows..."
-              className="pl-10"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              />
-              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-          </form>
+            <form onSubmit={handleSearch} className="relative w-full max-w-[150px]">
+                <Input
+                type="search"
+                placeholder="Search..."
+                className="pl-10"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                />
+                <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+            </form>
         </div>
       </div>
     </header>
