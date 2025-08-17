@@ -20,7 +20,7 @@ export default async function LetterboxdPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="font-headline text-4xl font-bold text-white md:text-5xl">
-            Letterboxd Top 250
+            Top 250
           </h1>
           <p className="text-muted-foreground mt-2">
             Based on TMDB ratings, inspired by the official Letterboxd list.

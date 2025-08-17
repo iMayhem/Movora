@@ -11,7 +11,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 
 const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
   'letterboxd-top-250': {
-    title: 'Letterboxd Top 250',
+    title: 'Top 250',
     fetcher: () => discoverMovies({ 'sort_by': 'vote_average.desc', 'vote_count.gte': '1000', 'with_original_language': 'en', 'include_adult': 'false', 'without_genres': '99,10751' }, 13),
   },
   'latest-bollywood': {
