@@ -27,6 +27,21 @@ const sections = [
     params: { ...NETFLIX_PARAMS, with_genres: '35' },
   },
   {
+    title: 'Dramas',
+    slug: 'drama-netflix',
+    params: { ...NETFLIX_PARAMS, with_genres: '18' },
+  },
+  {
+    title: 'Thrillers',
+    slug: 'thriller-netflix',
+    params: { ...NETFLIX_PARAMS, with_genres: '53' },
+  },
+  {
+    title: 'Horror',
+    slug: 'horror-netflix',
+    params: { ...NETFLIX_PARAMS, with_genres: '27' },
+  },
+  {
     title: 'Sci-Fi & Fantasy',
     slug: 'scifi-netflix',
     params: { ...NETFLIX_PARAMS, with_genres: '878,14' },

@@ -31,6 +31,21 @@ const sections = [
     slug: 'drama-prime',
     params: { ...PRIME_PARAMS, with_genres: '18' },
   },
+  {
+    title: 'Thrillers',
+    slug: 'thriller-prime',
+    params: { ...PRIME_PARAMS, with_genres: '53' },
+  },
+    {
+    title: 'Sci-Fi & Fantasy',
+    slug: 'scifi-prime',
+    params: { ...PRIME_PARAMS, with_genres: '878,14' },
+  },
+  {
+    title: 'Romantic Movies',
+    slug: 'romance-prime',
+    params: { ...PRIME_PARAMS, with_genres: '10749' },
+  },
 ];
 
 export default async function PrimePage() {

@@ -43,6 +43,18 @@ const discoverCategories: Record<string, { title: string; params: Record<string,
     title: 'Comedies on Netflix',
     params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '35' },
   },
+  'drama-netflix': {
+    title: 'Dramas on Netflix',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '18' },
+  },
+  'thriller-netflix': {
+    title: 'Thrillers on Netflix',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '53' },
+  },
+  'horror-netflix': {
+    title: 'Horror on Netflix',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '27' },
+  },
   'scifi-netflix': {
     title: 'Sci-Fi & Fantasy on Netflix',
     params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '878,14' },
@@ -62,6 +74,18 @@ const discoverCategories: Record<string, { title: string; params: Record<string,
   'drama-prime': {
     title: 'Dramas on Prime',
     params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '18' },
+  },
+  'thriller-prime': {
+    title: 'Thrillers on Prime',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '53' },
+  },
+  'scifi-prime': {
+    title: 'Sci-Fi & Fantasy on Prime',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '878,14' },
+  },
+  'romance-prime': {
+    title: 'Romantic Movies on Prime',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '10749' },
   },
 };
 
