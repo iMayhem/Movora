@@ -4,9 +4,11 @@ import { MovieList } from '@/components/movies/MovieList';
 import type { Media } from '@/types/tmdb';
 
 export default async function Home() {
-  const trendingMovies = await getTrending('movie');
-  const popularMovies = await getPopular('movie');
-  const popularTv = await getPopular('tv');
+  const [trendingMovies, popularMovies, popularTv] = await Promise.all([
+    getTrending('movie'),
+    getPopular('movie'),
+    getPopular('tv'),
+  ]);
 
   const initialMedia: Media[] = [...popularMovies, ...popularTv].sort(
     (a, b) => b.popularity - a.popularity
