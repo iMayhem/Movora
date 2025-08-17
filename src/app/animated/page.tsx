@@ -49,9 +49,16 @@ export default async function AnimatedPage() {
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
       <section>
-        <h1 className="mb-6 font-headline text-4xl font-bold text-white md:text-5xl">
-          World of Animation
-        </h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <h1 className="font-headline text-4xl font-bold text-white md:text-5xl">
+            World of Animation
+          </h1>
+          <Link href="https://trakt.tv/users/a925sw/lists/animated-kids-movies-e597020e-f596-4239-ada5-2fd888229292?sort=rank,asc" target="_blank" rel="noopener noreferrer">
+              <Button variant="outline">
+                  View on Trakt.tv
+              </Button>
+          </Link>
+        </div>
         {trendingAnimated.length > 0 ? (
           <TrendingCarousel items={trendingAnimated} />
         ) : (
