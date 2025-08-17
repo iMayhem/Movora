@@ -51,7 +51,19 @@ const featuredTitles = [
     'Storks',
     'The Nightmare Before Christmas',
     'Kung Fu Panda 3',
-    'The Good Dinosaur'
+    'The Good Dinosaur',
+    'A Bug\'s Life',
+    'Madagascar',
+    'The Little Mermaid',
+    'Hotel Transylvania',
+    'Kubo and the Two Strings',
+    'Hotel Transylvania 2',
+    'Cars 2',
+    'Cars 3',
+    'Mulan',
+    'The Croods',
+    'The Simpsons Movie',
+    'Ice Age: Collision Course'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
@@ -65,6 +77,10 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
         movieResults = await searchMedia('The Lion King', 'movie', { year: '1994' });
     } else if (title === 'Beauty and the Beast') {
         movieResults = await searchMedia('Beauty and the Beast', 'movie', { year: '1991' });
+    } else if (title === 'The Little Mermaid') {
+        movieResults = await searchMedia('The Little Mermaid', 'movie', { year: '1989' });
+    } else if (title === 'Mulan') {
+        movieResults = await searchMedia('Mulan', 'movie', { year: '1998' });
     }
     else {
        movieResults = await searchMedia(title, 'movie');
