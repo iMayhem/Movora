@@ -1,9 +1,7 @@
 
 import { discoverMovies } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
-import { Button } from '@/components/ui/button';
 import { FeaturedMindfucks } from '@/components/movies/FeaturedMindfucks';
-import type { Media } from '@/types/tmdb';
 
 const MINDFUCK_PARAMS = {
   'sort_by': 'vote_average.desc',
@@ -15,6 +13,9 @@ const MINDFUCK_PARAMS = {
 
 export default async function MindfucksPage() {
   const mindfuckMovies = await discoverMovies(MINDFUCK_PARAMS, 50);
+
+  // Sort by vote_average in descending order
+  const sortedMovies = mindfuckMovies.sort((a, b) => b.vote_average - a.vote_average);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -32,7 +33,7 @@ export default async function MindfucksPage() {
       <FeaturedMindfucks />
 
       <div className="mt-12">
-        <MovieList initialMedia={mindfuckMovies} showControls={false} />
+        <MovieList initialMedia={sortedMovies} showControls={false} />
       </div>
     </div>
   );
