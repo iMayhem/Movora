@@ -7,6 +7,8 @@ import { fetchIndianCartoonsByChannel } from '@/components/movies/FeaturedIndian
 import { fetchAllAdventure, fetchMedia, allShows } from '@/components/movies/FeaturedAdventure';
 
 const HOLLYWOOD_PARAMS = { with_original_language: 'en', region: 'US' };
+const HOLLYWOOD_VOTE_COUNT = { 'vote_count.gte': '300' };
+const HOLLYWOOD_TV_VOTE_COUNT = { 'vote_count.gte': '200' };
 
 export const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
     'top-weekly': {
@@ -32,6 +34,26 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
             ]);
             return [...movies, ...tv].sort((a,b) => b.popularity - a.popularity);
         }
+    },
+    'top-rated-hollywood-movies': {
+        title: 'Top Rated Hollywood Movies',
+        fetcher: () => discoverMovies({ ...HOLLYWOOD_PARAMS, ...HOLLYWOOD_VOTE_COUNT, sort_by: 'vote_average.desc' }, 10),
+    },
+    'top-rated-hollywood-tv': {
+        title: 'Top Rated Hollywood TV Shows',
+        fetcher: () => discoverTvShows({ ...HOLLYWOOD_PARAMS, ...HOLLYWOOD_TV_VOTE_COUNT, sort_by: 'vote_average.desc' }, 10),
+    },
+    'action-adventure-hollywood': {
+        title: 'Action & Adventure',
+        fetcher: () => discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '28,12' }, 10),
+    },
+    'comedy-hollywood': {
+        title: 'Comedy',
+        fetcher: () => discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '35' }, 10),
+    },
+    'scifi-fantasy-hollywood': {
+        title: 'Sci-Fi & Fantasy',
+        fetcher: () => discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '878,14' }, 10),
     },
     'discover': {
         title: 'Discover',
