@@ -77,12 +77,6 @@ export default async function BollywoodPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
-      <section>
-        <h1 className="mb-6 font-headline text-4xl font-bold text-white md:text-5xl">
-          Spotlight on Bollywood
-        </h1>
-      </section>
-
       <FeaturedBollywood showMore />
 
       {sections.map((section, index) => (
