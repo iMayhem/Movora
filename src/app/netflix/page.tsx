@@ -54,11 +54,7 @@ export default async function NetflixPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
-      <section>
-        <h1 className="mb-6 font-headline text-4xl font-bold text-white md:text-5xl">
-          All Things Netflix
-        </h1>
-      </section>
+      
 
       {sections.map((section, index) => (
         <section key={section.slug}>
