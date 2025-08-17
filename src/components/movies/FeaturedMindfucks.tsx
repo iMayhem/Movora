@@ -45,7 +45,19 @@ const featuredTitles = [
   'The Manchurian Candidate',
   'Breakdown',
   'K-PAX',
-  'Paycheck'
+  'Paycheck',
+  'Total Recall',
+  'Jackie Brown',
+  'Pan\'s Labyrinth',
+  'Gothika',
+  'Solaris',
+  'Frailty',
+  'Open Your Eyes',
+  'Jacob\'s Ladder',
+  'Swordfish',
+  'Basic',
+  'Perfect Stranger',
+  'Insomnia'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
