@@ -12,14 +12,13 @@ import {
 
 type MovieListProps = {
   initialMedia?: Media[];
-  media?: Media[]; // For client-side updates
   showControls?: boolean;
   carousel?: boolean;
 };
 
 
-export function MovieList({ initialMedia, media, showControls = true, carousel = false }: MovieListProps) {
-  const items = media || initialMedia || [];
+export function MovieList({ initialMedia, showControls = true, carousel = false }: MovieListProps) {
+  const items = initialMedia || [];
 
   if (carousel) {
     return (
