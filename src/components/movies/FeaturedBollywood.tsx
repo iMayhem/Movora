@@ -2,8 +2,10 @@
 import { searchMedia } from '@/lib/tmdb';
 import { MovieList } from './MovieList';
 import type { Media } from '@/types/tmdb';
+import Link from 'next/link';
+import { Button } from '../ui/button';
 
-const featuredTitles = [
+export const featuredBollywoodTitles = [
     "Sardar Udham",
     "Gangubai Kathiawadi",
     "The Kashmir Files",
@@ -106,8 +108,8 @@ const featuredTitles = [
     "IB 71"
 ];
 
-async function fetchFeaturedMedia(): Promise<Media[]> {
-  const uniqueTitles = [...new Set(featuredTitles)];
+export async function fetchFeaturedBollywood(): Promise<Media[]> {
+  const uniqueTitles = [...new Set(featuredBollywoodTitles)];
   const mediaPromises = uniqueTitles.map(async (title) => {
     const movieResults = await searchMedia(title, 'movie', { region: 'IN' });
     if (movieResults.length > 0) return movieResults[0];
@@ -130,15 +132,20 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
   return uniqueMedia;
 }
 
-export async function FeaturedBollywood() {
-  const featuredMedia = await fetchFeaturedMedia();
+export async function FeaturedBollywood({ showMore = false }: { showMore?: boolean }) {
+  const featuredMedia = await fetchFeaturedBollywood();
 
   return (
     <section>
         <div className="flex justify-between items-center mb-6">
             <h2 className="font-headline text-3xl font-bold">Featured Bollywood</h2>
+            {showMore && (
+                 <Link href="/discover/featured-bollywood">
+                    <Button variant="outline">More</Button>
+                </Link>
+            )}
         </div>
-        <MovieList initialMedia={featuredMedia} showControls={false} />
+        <MovieList initialMedia={featuredMedia} showControls={false} carousel={showMore} />
     </section>
   );
 }

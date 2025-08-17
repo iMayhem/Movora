@@ -52,7 +52,7 @@ const sections = [
   {
     title: 'Thrilling Rides',
     slug: 'thriller-bollywood',
-    params: { ...BOLLYWOOD_PARAMS, with_genres: '53' },
+    params: { ...BOLLYROOD_PARAMS, with_genres: '53' },
   },
 ];
 
@@ -75,7 +75,7 @@ export default async function BollywoodPage() {
         )}
       </section>
 
-      <FeaturedBollywood />
+      <FeaturedBollywood showMore />
 
       {sections.map((section, index) => (
         <section key={section.slug}>

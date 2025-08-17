@@ -3,6 +3,7 @@
 import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { notFound } from 'next/navigation';
+import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 
 type DiscoverPageProps = {
   params: { slug: string };
@@ -18,6 +19,10 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
   'mindfucks-movies': {
     title: 'Best Mindfucks',
     fetcher: () => discoverMovies({ 'sort_by': 'vote_average.desc', 'vote_count.gte': '500', 'with_genres': '53,9648,878', 'without_genres': '16,10751,28', 'include_adult': 'false' }, 10),
+  },
+  'featured-bollywood': {
+    title: 'Featured Bollywood',
+    fetcher: () => fetchFeaturedBollywood(),
   },
   'latest-bollywood': {
     title: 'Latest Bollywood Releases',
