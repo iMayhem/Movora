@@ -82,7 +82,7 @@ const featuredTitles = [
     'Moominvalley', 'Mosley', 'My Favorite War', 'Nahuel and the Magic Book', 'No. 7 Cherry Lane',
     'Onward', 'Over the Moon', 'Red Shoes and the Seven Dwarfs', 'Ride Your Wave', 'Scoob!',
     'A Shaun the Sheep Movie: Farmageddon', 'Soul', 'Terra Willy', 'Trolls World Tour',
-    'True North', 'The Willoughbys', 'Wolfwalkers', 'A Whisker Away', 'Abominable',
+    'True North', 'The Willoughbys', 'Wolfwalkers', 'A Whisker away', 'Abominable',
     'The Addams Family', 'The Angry Birds Movie 2', 'Buñuel in the Labyrinth of the Turtles',
     'Children of the Sea', 'Dilili in Paris', 'Frozen II', 'Funan', 'I Lost My Body',
     'Jacob, Mimmi and the Talking Dogs', 'The Last Fiction', 'The Lego Movie 2: The Second Part',
@@ -97,7 +97,7 @@ const featuredTitles = [
     'Mirai', 'Next Gen', 'On Happiness Road', 'Peter Rabbit', 'Seder-Masochism',
     'Sgt. Stubby: An American Hero', 'Sherlock Gnomes', 'Smallfoot',
     'Tall Tales from the Magical Garden of Antoon Krings', 'Teen Titans Go! To the Movies',
-    'Tito and the Birds', 'The Wolf House'
+    'Tito and the Birds'
 ].filter((v, i, a) => a.indexOf(v) === i);
 
 
