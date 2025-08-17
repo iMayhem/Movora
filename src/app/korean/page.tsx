@@ -32,11 +32,6 @@ const movieSections = [
     slug: 'thriller-korean-movies',
     params: { ...KOREAN_PARAMS, with_genres: '53' },
   },
-  {
-    title: 'Korean Romance',
-    slug: 'romance-korean-movies',
-    params: { ...KOREAN_PARAMS, with_genres: '10749' },
-  },
 ];
 
 const tvSections = [

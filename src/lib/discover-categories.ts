@@ -198,10 +198,6 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         title: 'Korean Thrillers',
         fetcher: () => discoverMovies({ with_original_language: 'ko', region: 'KR', with_genres: '53', include_adult: 'false' }, 15),
     },
-    'romance-korean-movies': {
-        title: 'Korean Romance',
-        fetcher: () => discoverMovies({ with_original_language: 'ko', region: 'KR', with_genres: '10749', include_adult: 'false' }, 15),
-    },
     'popular-korean-tv': {
         title: 'Popular Korean TV Shows',
         fetcher: () => discoverTvShows({ with_original_language: 'ko', region: 'KR', sort_by: 'popularity.desc', include_adult: 'false' }, 15),
