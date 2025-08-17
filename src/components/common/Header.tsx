@@ -43,37 +43,35 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center">
         <div className="mr-4 flex">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href="/" className="mr-6 flex items-center space-x-2">
                 <span className="font-bold">Movora</span>
             </Link>
+            <nav className="hidden gap-6 md:flex">
+                {navItems.map(item => (
+                <Link
+                    key={item.name}
+                    href={item.href}
+                    className={cn(
+                    'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
+                    pathname === item.href ? 'text-foreground' : 'text-foreground/60'
+                    )}
+                >
+                    {item.name}
+                </Link>
+                ))}
+            </nav>
         </div>
-        <div className="flex flex-1 items-center justify-between space-x-4">
-          <nav className="hidden gap-6 md:flex">
-            {navItems.map(item => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
-                  pathname === item.href ? 'text-foreground' : 'text-foreground/60'
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-          <div className="flex flex-1 items-center justify-end space-x-4">
-            <form onSubmit={handleSearch} className="relative w-full max-w-[200px]">
-                <Input
-                type="search"
-                placeholder="Search movies & shows..."
-                className="pl-10"
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                />
-                <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-            </form>
-          </div>
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          <form onSubmit={handleSearch} className="relative w-full max-w-[200px]">
+              <Input
+              type="search"
+              placeholder="Search movies & shows..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              />
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+          </form>
         </div>
       </div>
     </header>
