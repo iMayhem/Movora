@@ -62,7 +62,7 @@ export function Header() {
           </nav>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <form onSubmit={handleSearch} className="relative w-full max-w-[200px]">
+          <form onSubmit={handleSearch} className="relative w-full max-w-[150px]">
             <Input
               type="search"
               placeholder="Search movies & shows..."
