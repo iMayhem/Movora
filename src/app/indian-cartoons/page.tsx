@@ -22,6 +22,21 @@ const sections = [
     slug: 'latest-indian-cartoons',
     fetcher: () => discoverTvShows({ ...INDIAN_CARTOON_PARAMS, sort_by: 'first_air_date.desc' }, 1),
   },
+  {
+    title: 'Cartoon Network',
+    slug: 'cn-indian-cartoons',
+    fetcher: () => discoverTvShows({ ...INDIAN_CARTOON_PARAMS, with_networks: '56' }, 1),
+  },
+  {
+    title: 'Hungama TV',
+    slug: 'hungama-indian-cartoons',
+    fetcher: () => discoverTvShows({ ...INDIAN_CARTOON_PARAMS, with_networks: '318' }, 1),
+  },
+  {
+    title: 'Pogo',
+    slug: 'pogo-indian-cartoons',
+    fetcher: () => discoverTvShows({ ...INDIAN_CARTOON_PARAMS, with_networks: '319' }, 1),
+  },
 ];
 
 export default async function IndianCartoonsPage() {
