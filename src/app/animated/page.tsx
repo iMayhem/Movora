@@ -6,18 +6,20 @@ import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
 
 const ANIMATED_MOVIE_PARAMS = {
-  with_genres: '16',
+  with_genres: '16,10751', // Animation & Family
+  'certification_country': 'US',
+  'certification.lte': 'PG',
 };
 
 const ANIMATED_TV_PARAMS = {
-  with_genres: '16',
+  with_genres: '16,10751',
 };
 
 const sections = [
   {
     title: 'Top Rated Animated Movies',
     slug: 'top-rated-animated',
-    fetcher: () => discoverMovies({ ...ANIMATED_MOVIE_PARAMS, sort_by: 'vote_average.desc', 'vote_count.gte': '250' }, 1),
+    fetcher: () => discoverMovies({ ...ANIMATED_MOVIE_PARAMS, sort_by: 'vote_average.desc', 'vote_count.gte': '100' }, 1),
     isMovie: true,
   },
   {
@@ -53,11 +55,6 @@ export default async function AnimatedPage() {
           <h1 className="font-headline text-4xl font-bold text-white md:text-5xl">
             World of Animation
           </h1>
-          <Link href="https://trakt.tv/users/a925sw/lists/animated-kids-movies-e597020e-f596-4239-ada5-2fd888229292?sort=rank,asc" target="_blank" rel="noopener noreferrer">
-              <Button variant="outline">
-                  View on Trakt.tv
-              </Button>
-          </Link>
         </div>
         {trendingAnimated.length > 0 ? (
           <TrendingCarousel items={trendingAnimated} />
