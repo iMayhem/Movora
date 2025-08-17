@@ -48,28 +48,14 @@ const tvSections = [
 ];
 
 export default async function KoreanPage() {
-  const [
-    trendingKorean, 
-    ...sectionMovies
-  ] = await Promise.all([
-    discoverMovies({ ...KOREAN_PARAMS, sort_by: 'popularity.desc' }, 3),
-    ...movieSections.map(section => discoverMovies(section.params, 3)),
-  ]);
+  const sectionMovies = await Promise.all(
+    movieSections.map(section => discoverMovies(section.params, 3)),
+  );
 
   const sectionTvShows = await Promise.all(tvSections.map(section => discoverTvShows(section.params, 3)))
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
-      <section>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        </div>
-        {trendingKorean.length > 0 ? (
-          <TrendingCarousel items={trendingKorean} />
-        ) : (
-          <p>Could not load trending Korean content.</p>
-        )}
-      </section>
-
       {movieSections.map((section, index) => (
         <section key={section.slug}>
           <div className="flex justify-between items-center mb-6">
