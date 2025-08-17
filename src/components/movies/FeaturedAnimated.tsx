@@ -187,7 +187,7 @@ export async function FeaturedAnimated({ showMore = false }: { showMore?: boolea
           </Link>
         )}
       </div>
-      <MovieList initialMedia={featuredMedia} showControls={false} carousel={showMore} />
+      <MovieList initialMedia={featuredMedia} carousel={showMore} />
     </section>
   );
 }

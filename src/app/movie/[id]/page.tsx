@@ -91,7 +91,7 @@ export default async function MoviePage({ params: { id } }: MoviePageProps) {
           {similarMovies.length > 0 && (
             <section className="mt-12">
               <h2 className="font-headline text-3xl font-bold mb-6">Similar Movies</h2>
-              <MovieList initialMedia={similarMovies as Media[]} showControls={false} />
+              <MovieList initialMedia={similarMovies as Media[]} />
             </section>
           )}
         </div>

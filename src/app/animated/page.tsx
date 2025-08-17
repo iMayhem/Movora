@@ -88,7 +88,7 @@ export default async function AnimatedPage() {
           </div>
           <MovieList
             initialMedia={sectionMedia[index]}
-            showControls={false}
+            
             carousel
           />
         </section>

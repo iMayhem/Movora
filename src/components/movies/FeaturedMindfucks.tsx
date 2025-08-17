@@ -129,7 +129,7 @@ export async function FeaturedMindfucks() {
 
   return (
     <section className="mb-12">
-        <MovieList initialMedia={featuredMedia} showControls={false} />
+        <MovieList initialMedia={featuredMedia} />
     </section>
   );
 }

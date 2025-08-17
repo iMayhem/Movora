@@ -1,5 +1,3 @@
-'use client';
-
 import type { Media } from '@/types/tmdb';
 import { MovieCard } from './MovieCard';
 import {
@@ -12,12 +10,11 @@ import {
 
 type MovieListProps = {
   initialMedia?: Media[];
-  showControls?: boolean;
   carousel?: boolean;
 };
 
 
-export function MovieList({ initialMedia, showControls = true, carousel = false }: MovieListProps) {
+export function MovieList({ initialMedia, carousel = false }: MovieListProps) {
   const items = initialMedia || [];
 
   if (carousel) {

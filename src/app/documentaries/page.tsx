@@ -80,7 +80,7 @@ export default async function DocumentariesPage() {
           </div>
           <MovieList
             initialMedia={sectionMedia[index]}
-            showControls={false}
+            
             carousel
           />
         </section>

@@ -50,7 +50,7 @@ export default async function Home() {
               <Button variant="outline">More</Button>
             </Link>
         </div>
-        <MovieList initialMedia={topWeekly} showControls={false} carousel />
+        <MovieList initialMedia={topWeekly} carousel />
       </section>
       
       <section>
@@ -60,7 +60,7 @@ export default async function Home() {
               <Button variant="outline">More</Button>
             </Link>
         </div>
-        <MovieList initialMedia={nowPlayingMovies} showControls={false} carousel />
+        <MovieList initialMedia={nowPlayingMovies} carousel />
       </section>
 
       <section>
@@ -70,7 +70,7 @@ export default async function Home() {
               <Button variant="outline">More</Button>
             </Link>
         </div>
-        <MovieList initialMedia={mostViewed} showControls={false} carousel />
+        <MovieList initialMedia={mostViewed} carousel />
       </section>
     </div>
   );

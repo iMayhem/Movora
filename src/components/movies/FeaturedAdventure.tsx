@@ -142,7 +142,7 @@ export async function FeaturedAdventure() {
                 </div>
                 <MovieList
                     initialMedia={allSectionMedia[index]}
-                    showControls={false}
+                    
                     carousel
                 />
             </section>

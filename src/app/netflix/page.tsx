@@ -77,7 +77,7 @@ export default async function NetflixPage() {
           </div>
           <MovieList
             initialMedia={sectionMovies[index]}
-            showControls={false}
+            
             carousel
           />
         </section>

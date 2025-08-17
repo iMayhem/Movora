@@ -67,7 +67,7 @@ export default async function KoreanPage() {
           </div>
           <MovieList
             initialMedia={sectionMovies[index]}
-            showControls={false}
+            
             carousel
           />
         </section>
@@ -83,7 +83,7 @@ export default async function KoreanPage() {
         </div>
         <MovieList
             initialMedia={sectionTvShows[index]}
-            showControls={false}
+            
             carousel
         />
         </section>

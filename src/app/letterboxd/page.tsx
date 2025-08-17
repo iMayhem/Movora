@@ -27,7 +27,7 @@ export default async function LetterboxdPage() {
           </p>
         </div>
       </div>
-      <MovieList initialMedia={topMovies.slice(0, 250)} showControls={false} />
+      <MovieList initialMedia={topMovies.slice(0, 250)} />
     </div>
   );
 }

@@ -102,7 +102,7 @@ export default async function BollywoodPage() {
           </div>
           <MovieList
             initialMedia={sectionMovies[index]}
-            showControls={false}
+            
             carousel
           />
         </section>
@@ -118,7 +118,7 @@ export default async function BollywoodPage() {
           </div>
           <MovieList
             initialMedia={sectionTvShows[index]}
-            showControls={false}
+            
             carousel
           />
         </section>

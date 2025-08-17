@@ -92,7 +92,7 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
           {similarShows.length > 0 && (
             <section className="mt-12">
               <h2 className="font-headline text-3xl font-bold mb-6">Similar Shows</h2>
-              <MovieList initialMedia={similarShows as Media[]} showControls={false} />
+              <MovieList initialMedia={similarShows as Media[]} />
             </section>
           )}
         </div>

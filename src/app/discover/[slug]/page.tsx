@@ -23,7 +23,7 @@ export default async function DiscoverPage({ params: { slug } }: DiscoverPagePro
       <h1 className="mb-8 font-headline text-4xl font-bold text-white md:text-5xl">
         {category.title}
       </h1>
-      <MovieList initialMedia={movies} showControls={false} />
+      <MovieList initialMedia={movies} />
     </div>
   );
 }

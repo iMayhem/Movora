@@ -33,7 +33,7 @@ export default async function MindfucksPage() {
       <FeaturedMindfucks />
 
       <div className="mt-12">
-        <MovieList initialMedia={sortedMovies} showControls={false} />
+        <MovieList initialMedia={sortedMovies} />
       </div>
     </div>
   );

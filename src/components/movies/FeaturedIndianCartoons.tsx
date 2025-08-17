@@ -189,7 +189,7 @@ export async function FeaturedIndianCartoons() {
                 </div>
                 <MovieList
                     initialMedia={allSectionMedia[index]}
-                    showControls={false}
+                    
                     carousel
                 />
             </section>

@@ -80,7 +80,7 @@ export default function RecommendationsPage() {
           ) : recommendedMedia.length > 0 ? (
             <div className="w-full">
               <h2 className="font-headline text-3xl font-bold text-center mb-6">Our Suggestions For You</h2>
-              <MovieList initialMedia={recommendedMedia} showControls={false} />
+              <MovieList initialMedia={recommendedMedia} />
             </div>
           ) : (
             !state?.error && state?.success && (
