@@ -24,6 +24,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1 }: Vid
         key={`${mediaId}-${season}-${episode}`}
         src={src}
         title="VIDEASY Player"
+        sandbox="allow-scripts allow-same-origin"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowFullScreen
         className="w-full h-full border-0"
