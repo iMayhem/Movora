@@ -10,6 +10,18 @@ const featuredTitles = [
   'The Sixth Sense',
   'Memento',
   'Brainscan',
+  'A Beautiful Mind',
+  'The Prestige',
+  'The Illusionist',
+  'Shutter Island',
+  'The Devil\'s Advocate',
+  'Black Swan',
+  'The Matrix',
+  'The Shining',
+  'The Machinist',
+  'Donnie Darko',
+  'Vanilla Sky',
+  'The Game',
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
