@@ -13,7 +13,7 @@ const MINDFUCK_PARAMS = {
 };
 
 export default async function MindfucksPage() {
-  const mindfuckMovies = await discoverMovies({ ...MINDFUCK_PARAMS }, 5); 
+  const mindfuckMovies = await discoverMovies({ ...MINDFUCK_PARAMS }, 10); 
 
   return (
     <div className="container mx-auto px-4 py-8">
