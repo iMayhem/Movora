@@ -1,4 +1,5 @@
-import { discoverMovies } from '@/lib/tmdb';
+
+import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { notFound } from 'next/navigation';
 
@@ -8,106 +9,122 @@ type DiscoverPageProps = {
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-const discoverCategories: Record<string, { title: string; params: Record<string, string> }> = {
+const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
   'latest-bollywood': {
     title: 'Latest Bollywood Releases',
-    params: { with_original_language: 'hi', region: 'IN', sort_by: 'primary_release_date.desc', 'vote_count.gte': 25 },
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', sort_by: 'primary_release_date.desc', 'vote_count.gte': 25 }, 5),
   },
   'netflix-bollywood': {
     title: 'Netflix Bollywood',
-    params: { with_original_language: 'hi', region: 'IN', watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', 'vote_count.gte': 25 },
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', 'vote_count.gte': 25 }, 5),
   },
   'prime-bollywood': {
     title: 'Amazon Prime Bollywood',
-    params: { with_original_language: 'hi', region: 'IN', watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '119', 'vote_count.gte': 25 },
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '119', 'vote_count.gte': 25 }, 5),
   },
   'action-bollywood': {
     title: 'Action Packed Bollywood',
-    params: { with_original_language: 'hi', region: 'IN', with_genres: '28', 'vote_count.gte': 25 },
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', with_genres: '28', 'vote_count.gte': 25 }, 5),
   },
   'romance-bollywood': {
     title: 'Romantic Bollywood Flicks',
-    params: { with_original_language: 'hi', region: 'IN', with_genres: '10749', 'vote_count.gte': 25 },
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', with_genres: '10749', 'vote_count.gte': 25 }, 5),
   },
   'thriller-bollywood': {
     title: 'Thrilling Bollywood Rides',
-    params: { with_original_language: 'hi', region: 'IN', with_genres: '53', 'vote_count.gte': 25 },
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', with_genres: '53', 'vote_count.gte': 25 }, 5),
   },
   'top-rated-netflix': {
     title: 'Top Rated on Netflix',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', sort_by: 'vote_average.desc', 'vote_count.gte': 300 },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', sort_by: 'vote_average.desc', 'vote_count.gte': 300 }, 5),
   },
   'action-netflix': {
     title: 'Action & Adventure on Netflix',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '28' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '28' }, 5),
   },
   'comedy-netflix': {
     title: 'Comedies on Netflix',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '35' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '35' }, 5),
   },
   'drama-netflix': {
     title: 'Dramas on Netflix',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '18' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '18' }, 5),
   },
   'thriller-netflix': {
     title: 'Thrillers on Netflix',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '53' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '53' }, 5),
   },
   'horror-netflix': {
     title: 'Horror on Netflix',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '27' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '27' }, 5),
   },
   'scifi-netflix': {
     title: 'Sci-Fi & Fantasy on Netflix',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '878,14' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '878,14' }, 5),
   },
   'top-rated-prime': {
     title: 'Top Rated on Prime',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', sort_by: 'vote_average.desc', 'vote_count.gte': 300 },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', sort_by: 'vote_average.desc', 'vote_count.gte': 300 }, 5),
   },
   'action-prime': {
     title: 'Action & Adventure on Prime',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '28' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '28' }, 5),
   },
   'comedy-prime': {
     title: 'Comedies on Prime',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '35' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '35' }, 5),
   },
   'drama-prime': {
     title: 'Dramas on Prime',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '18' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '18' }, 5),
   },
   'thriller-prime': {
     title: 'Thrillers on Prime',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '53' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '53' }, 5),
   },
   'scifi-prime': {
     title: 'Sci-Fi & Fantasy on Prime',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '878,14' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '878,14' }, 5),
   },
   'romance-prime': {
     title: 'Romantic Movies on Prime',
-    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '10749' },
+    fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '10749' }, 5),
   },
   'top-rated-imdb': {
     title: 'Top Rated of All Time',
-    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc' },
+    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc' }, 5),
   },
   'popular-this-year-imdb': {
     title: 'Popular This Year',
-    params: { 'vote_count.gte': '250', primary_release_year: String(CURRENT_YEAR) },
+    fetcher: () => discoverMovies({ 'vote_count.gte': '250', primary_release_year: String(CURRENT_YEAR) }, 5),
   },
   'top-rated-action-imdb': {
     title: 'Top Rated Action Movies',
-    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '28' },
+    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '28' }, 5),
   },
   'top-rated-drama-imdb': {
     title: 'Top Rated Dramas',
-    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '18' },
+    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '18' }, 5),
   },
   'top-rated-scifi-imdb': {
     title: 'Top Rated Sci-Fi & Fantasy',
-    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '878,14' },
+    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '878,14' }, 5),
+  },
+  'top-rated-animated': {
+    title: 'Top Rated Animated Movies',
+    fetcher: () => discoverMovies({ with_genres: '16', sort_by: 'vote_average.desc', 'vote_count.gte': '250' }, 5),
+  },
+  'pixar-animated': {
+    title: 'Pixar Animation Studios',
+    fetcher: () => discoverMovies({ with_genres: '16', with_companies: '3' }, 5),
+  },
+  'ghibli-animated': {
+    title: 'Studio Ghibli',
+    fetcher: () => discoverMovies({ with_genres: '16', with_companies: '10342' }, 5),
+  },
+  'popular-animated-tv': {
+    title: 'Popular Animated TV Shows',
+    fetcher: () => discoverTvShows({ with_genres: '16', sort_by: 'popularity.desc' }, 5),
   },
 };
 
@@ -118,7 +135,7 @@ export default async function DiscoverPage({ params }: DiscoverPageProps) {
     notFound();
   }
 
-  const movies = await discoverMovies(category.params, 5); // Fetch 5 pages for "More" pages
+  const movies = await category.fetcher();
 
   return (
     <div className="container mx-auto px-4 py-8">

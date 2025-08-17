@@ -70,6 +70,18 @@ export async function discoverMovies(params: Record<string, string> = {}, pages 
   return normalizeMedia(allResults, 'movie');
 }
 
+export async function discoverTvShows(params: Record<string, string> = {}, pages = 1): Promise<Media[]> {
+  const pagePromises = Array.from({ length: pages }, (_, i) => 
+    fetcher<{ results: TVShow[] }>(`/discover/tv`, { ...params, page: String(i + 1) })
+  );
+  
+  const allPages = await Promise.all(pagePromises);
+  const allResults = allPages.flatMap(page => page?.results || []);
+  
+  if (!allResults.length) return [];
+  return normalizeMedia(allResults, 'tv');
+}
+
 
 // Movie specific functions
 export async function getMovieDetails(id: number): Promise<(Movie & { media_type: 'movie' }) | null> {
