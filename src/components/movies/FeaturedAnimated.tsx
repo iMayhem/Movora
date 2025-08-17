@@ -27,7 +27,19 @@ const featuredTitles = [
     'Despicable Me 2',
     'Ratatouille',
     'Shrek',
-    'Trolls'
+    'Trolls',
+    'Tangled',
+    'Coco',
+    'Minions',
+    'The Lego Movie',
+    'Cars',
+    'Toy Story 2',
+    'Brave',
+    'Aladdin',
+    'Monsters University',
+    'Spider-Man: Into the Spider-Verse',
+    'Despicable Me 3',
+    'Sausage Party'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
