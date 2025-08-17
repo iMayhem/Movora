@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 const KOREAN_PARAMS = {
   with_original_language: 'ko',
   region: 'KR',
+  include_adult: 'false',
 };
 
 const movieSections = [
