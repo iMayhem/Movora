@@ -1,6 +1,8 @@
+
 import { discoverMovies, discoverTvShows, getPopular, getTrending, getNowPlayingMovies } from '@/lib/tmdb';
 import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 import { fetchFeaturedAnimated } from '@/components/movies/FeaturedAnimated';
+import { fetchFeaturedKorean } from '@/components/movies/FeaturedKorean';
 
 export const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
     'top-weekly': {
@@ -52,6 +54,10 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
     'featured-animated': {
         title: 'Featured Animated',
         fetcher: () => fetchFeaturedAnimated(),
+    },
+    'featured-korean': {
+        title: 'Featured Korean Cinema',
+        fetcher: () => fetchFeaturedKorean(),
     },
     'latest-bollywood': {
         title: 'Latest Bollywood Releases',

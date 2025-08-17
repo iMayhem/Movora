@@ -2,8 +2,8 @@
 import Link from 'next/link';
 import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
-import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
+import { FeaturedKorean } from '@/components/movies/FeaturedKorean';
 
 const KOREAN_PARAMS = {
   with_original_language: 'ko',
@@ -56,6 +56,7 @@ export default async function KoreanPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
+        <FeaturedKorean showMore />
       {movieSections.map((section, index) => (
         <section key={section.slug}>
           <div className="flex justify-between items-center mb-6">
