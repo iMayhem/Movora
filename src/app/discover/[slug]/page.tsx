@@ -47,6 +47,22 @@ const discoverCategories: Record<string, { title: string; params: Record<string,
     title: 'Sci-Fi & Fantasy on Netflix',
     params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '878,14' },
   },
+  'top-rated-prime': {
+    title: 'Top Rated on Prime',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', sort_by: 'vote_average.desc', 'vote_count.gte': 300 },
+  },
+  'action-prime': {
+    title: 'Action & Adventure on Prime',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '28' },
+  },
+  'comedy-prime': {
+    title: 'Comedies on Prime',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '35' },
+  },
+  'drama-prime': {
+    title: 'Dramas on Prime',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '18' },
+  },
 };
 
 export default async function DiscoverPage({ params }: DiscoverPageProps) {
