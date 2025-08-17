@@ -22,6 +22,18 @@ const featuredTitles = [
   'Donnie Darko',
   'Vanilla Sky',
   'The Game',
+  '1408',
+  'American Psycho',
+  'The Usual Suspects',
+  'Unbreakable',
+  'Saw',
+  'Cube',
+  'Moon',
+  'Requiem for a Dream',
+  'Total Recall',
+  'Event Horizon',
+  'Source Code',
+  'Awake',
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
