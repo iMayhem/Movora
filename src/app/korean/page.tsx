@@ -62,9 +62,6 @@ export default async function KoreanPage() {
     <div className="container mx-auto px-4 py-8 space-y-16">
       <section>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <h1 className="font-headline text-4xl font-bold text-white md:text-5xl">
-              Korean Wave
-            </h1>
         </div>
         {trendingKorean.length > 0 ? (
           <TrendingCarousel items={trendingKorean} />
