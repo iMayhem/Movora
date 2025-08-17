@@ -51,8 +51,8 @@ export async function getPopular(media_type: 'movie' | 'tv', params: Record<stri
   return normalizeMedia(allResults, media_type);
 }
 
-export async function searchMedia(query: string, media_type: 'movie' | 'tv'): Promise<Media[]> {
-  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/search/${media_type}`, { query });
+export async function searchMedia(query: string, media_type: 'movie' | 'tv', params: Record<string, string> = {}): Promise<Media[]> {
+  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/search/${media_type}`, { query, ...params });
   if (!data?.results) return [];
   return normalizeMedia(data.results, media_type);
 }

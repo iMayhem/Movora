@@ -20,7 +20,13 @@ const featuredTitles = [
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
   const mediaPromises = featuredTitles.map(async (title) => {
-    const movieResults = await searchMedia(title, 'movie');
+    let movieResults;
+    if (title === 'Moana') {
+       movieResults = await searchMedia('Moana', 'movie', { year: '2016' });
+    } else {
+       movieResults = await searchMedia(title, 'movie');
+    }
+    
     if (movieResults.length > 0) return movieResults[0];
 
     const tvResults = await searchMedia(title, 'tv');
