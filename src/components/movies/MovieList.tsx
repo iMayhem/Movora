@@ -4,6 +4,13 @@ import { useState } from 'react';
 import type { Media } from '@/types/tmdb';
 import { MovieCard } from './MovieCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 
 type MovieListProps = {
   initialMedia: Media[];
@@ -52,35 +59,55 @@ export function MovieList({ initialMedia, showControls = true }: MovieListProps)
     setMedia(sortedAndFiltered);
   };
   
+  if (!showControls) {
+    return (
+       <Carousel
+        opts={{
+          align: 'start',
+          dragFree: true,
+        }}
+        className="w-full"
+      >
+        <CarouselContent className="-ml-2">
+          {initialMedia.map((item, index) => (
+            <CarouselItem key={`${item.id}-${index}`} className="pl-2 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+               <MovieCard item={item} />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious className="hidden sm:flex" />
+        <CarouselNext className="hidden sm:flex" />
+      </Carousel>
+    )
+  }
+
   return (
     <div>
-      {showControls && (
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <h2 className="font-headline text-3xl font-bold">Discover</h2>
-          <div className="flex gap-4">
-            <Select onValueChange={handleTypeChange} defaultValue="all">
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Filter by Type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="movie">Movies</SelectItem>
-                <SelectItem value="tv">TV Shows</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select onValueChange={handleSortChange} defaultValue="popularity.desc">
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="popularity.desc">Popularity</SelectItem>
-                <SelectItem value="release_date.desc">Release Date</SelectItem>
-                <SelectItem value="vote_average.desc">Rating</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <h2 className="font-headline text-3xl font-bold">Discover</h2>
+        <div className="flex gap-4">
+          <Select onValueChange={handleTypeChange} defaultValue="all">
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Filter by Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="movie">Movies</SelectItem>
+              <SelectItem value="tv">TV Shows</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select onValueChange={handleSortChange} defaultValue="popularity.desc">
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="popularity.desc">Popularity</SelectItem>
+              <SelectItem value="release_date.desc">Release Date</SelectItem>
+              <SelectItem value="vote_average.desc">Rating</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      )}
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
         {media.map(item => (
           <MovieCard key={`${item.id}-${item.media_type}`} item={item} />

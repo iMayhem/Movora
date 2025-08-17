@@ -52,6 +52,14 @@ export async function searchMedia(query: string, media_type: 'movie' | 'tv'): Pr
   return normalizeMedia(data.results, media_type);
 }
 
+// Discover movies with specific criteria
+export async function discoverMovies(params: Record<string, string> = {}): Promise<Media[]> {
+  const data = await fetcher<{ results: Movie[] }>(`/discover/movie`, params);
+  if (!data?.results) return [];
+  return normalizeMedia(data.results, 'movie');
+}
+
+
 // Movie specific functions
 export async function getMovieDetails(id: number): Promise<(Movie & { media_type: 'movie' }) | null> {
   const movie = await fetcher<Movie>(`/movie/${id}`, { append_to_response: 'videos' });
