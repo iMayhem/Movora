@@ -40,10 +40,15 @@ export async function getTrending(media_type: 'movie' | 'tv'): Promise<Media[]> 
   return normalizeMedia(data.results);
 }
 
-export async function getPopular(media_type: 'movie' | 'tv', params: Record<string, string> = {}): Promise<Media[]> {
-  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/${media_type}/popular`, params);
-  if (!data?.results) return [];
-  return normalizeMedia(data.results, media_type);
+export async function getPopular(media_type: 'movie' | 'tv', params: Record<string, string> = {}, pages = 1): Promise<Media[]> {
+  const pagePromises = Array.from({ length: pages }, (_, i) => 
+    fetcher<{ results: (Movie | TVShow)[] }>(`/${media_type}/popular`, { ...params, page: String(i + 1) })
+  );
+  const allPages = await Promise.all(pagePromises);
+  const allResults = allPages.flatMap(page => page?.results || []);
+
+  if (!allResults.length) return [];
+  return normalizeMedia(allResults, media_type);
 }
 
 export async function searchMedia(query: string, media_type: 'movie' | 'tv'): Promise<Media[]> {
@@ -53,16 +58,16 @@ export async function searchMedia(query: string, media_type: 'movie' | 'tv'): Pr
 }
 
 // Discover movies with specific criteria
-export async function discoverMovies(params: Record<string, string> = {}): Promise<Media[]> {
-  const [page1, page2] = await Promise.all([
-    fetcher<{ results: Movie[] }>(`/discover/movie`, { ...params, page: '1' }),
-    fetcher<{ results: Movie[] }>(`/discover/movie`, { ...params, page: '2' })
-  ]);
+export async function discoverMovies(params: Record<string, string> = {}, pages = 2): Promise<Media[]> {
+  const pagePromises = Array.from({ length: pages }, (_, i) => 
+    fetcher<{ results: Movie[] }>(`/discover/movie`, { ...params, page: String(i + 1) })
+  );
   
-  const results = [...(page1?.results || []), ...(page2?.results || [])];
+  const allPages = await Promise.all(pagePromises);
+  const allResults = allPages.flatMap(page => page?.results || []);
   
-  if (!results.length) return [];
-  return normalizeMedia(results, 'movie');
+  if (!allResults.length) return [];
+  return normalizeMedia(allResults, 'movie');
 }
 
 

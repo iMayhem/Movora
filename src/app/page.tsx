@@ -6,8 +6,8 @@ import type { Media } from '@/types/tmdb';
 export default async function Home() {
   const [trendingMovies, popularMovies, popularTv] = await Promise.all([
     getTrending('movie'),
-    getPopular('movie'),
-    getPopular('tv'),
+    getPopular('movie', {}, 2), // fetch 2 pages
+    getPopular('tv', {}, 2), // fetch 2 pages
   ]);
 
   const initialMedia: Media[] = [...popularMovies, ...popularTv].sort(
@@ -28,7 +28,10 @@ export default async function Home() {
       </section>
 
       <section>
-        <MovieList initialMedia={initialMedia} />
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h2 className="font-headline text-3xl font-bold">Discover</h2>
+        </div>
+        <MovieList initialMedia={initialMedia} showControls={false} />
       </section>
     </div>
   );

@@ -1,10 +1,13 @@
+import Link from 'next/link';
 import { discoverMovies } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
+import { Button } from '@/components/ui/button';
 
 const BOLLYWOOD_PARAMS = {
   with_original_language: 'hi',
   region: 'IN',
+  'vote_count.gte': 25,
 };
 
 const STREAMING_PARAMS = {
@@ -13,23 +16,43 @@ const STREAMING_PARAMS = {
   with_watch_monetization_types: 'flatrate',
 };
 
+const sections = [
+  {
+    title: 'Latest Releases',
+    slug: 'latest-bollywood',
+    params: { ...BOLLYWOOD_PARAMS, sort_by: 'primary_release_date.desc' },
+  },
+  {
+    title: 'Netflix Bollywood',
+    slug: 'netflix-bollywood',
+    params: { ...STREAMING_PARAMS, with_watch_providers: '8' },
+  },
+  {
+    title: 'Amazon Prime Bollywood',
+    slug: 'prime-bollywood',
+    params: { ...STREAMING_PARAMS, with_watch_providers: '119' },
+  },
+  {
+    title: 'Action Packed',
+    slug: 'action-bollywood',
+    params: { ...BOLLYWOOD_PARAMS, with_genres: '28' },
+  },
+  {
+    title: 'Romantic Flicks',
+    slug: 'romance-bollywood',
+    params: { ...BOLLYWOOD_PARAMS, with_genres: '10749' },
+  },
+  {
+    title: 'Thrilling Rides',
+    slug: 'thriller-bollywood',
+    params: { ...BOLLYWOOD_PARAMS, with_genres: '53' },
+  },
+];
+
 export default async function BollywoodPage() {
-  const [
-    topBollywood,
-    latestBollywood,
-    actionMovies,
-    romanceMovies,
-    thrillerMovies,
-    netflixMovies,
-    primeMovies,
-  ] = await Promise.all([
-    discoverMovies({ ...BOLLYWOOD_PARAMS, sort_by: 'vote_average.desc', 'vote_count.gte': 200 }),
-    discoverMovies({ ...BOLLYWOOD_PARAMS, sort_by: 'primary_release_date.desc' }),
-    discoverMovies({ ...BOLLYWOOD_PARAMS, with_genres: '28' }), // Action
-    discoverMovies({ ...BOLLYWOOD_PARAMS, with_genres: '10749' }), // Romance
-    discoverMovies({ ...BOLLYWOOD_PARAMS, with_genres: '53' }), // Thriller
-    discoverMovies({ ...STREAMING_PARAMS, with_watch_providers: '8' }), // Netflix
-    discoverMovies({ ...STREAMING_PARAMS, with_watch_providers: '119' }), // Amazon Prime
+  const [topBollywood, ...sectionMovies] = await Promise.all([
+    discoverMovies({ ...BOLLYWOOD_PARAMS, sort_by: 'vote_average.desc', 'vote_count.gte': 200 }, 1),
+    ...sections.map(section => discoverMovies(section.params, 1)),
   ]);
 
   return (
@@ -44,36 +67,22 @@ export default async function BollywoodPage() {
           <p>Could not load trending movies.</p>
         )}
       </section>
-      
-      <section>
-        <h2 className="mb-6 font-headline text-3xl font-bold">Latest Releases</h2>
-        <MovieList initialMedia={latestBollywood} showControls={false} />
-      </section>
 
-      <section>
-        <h2 className="mb-6 font-headline text-3xl font-bold">Netflix Bollywood</h2>
-        <MovieList initialMedia={netflixMovies} showControls={false} />
-      </section>
-      
-      <section>
-        <h2 className="mb-6 font-headline text-3xl font-bold">Amazon Prime Bollywood</h2>
-        <MovieList initialMedia={primeMovies} showControls={false} />
-      </section>
-
-      <section>
-        <h2 className="mb-6 font-headline text-3xl font-bold">Action Packed</h2>
-        <MovieList initialMedia={actionMovies} showControls={false} />
-      </section>
-
-      <section>
-        <h2 className="mb-6 font-headline text-3xl font-bold">Romantic Flicks</h2>
-        <MovieList initialMedia={romanceMovies} showControls={false} />
-      </section>
-
-      <section>
-        <h2 className="mb-6 font-headline text-3xl font-bold">Thrilling Rides</h2>
-        <MovieList initialMedia={thrillerMovies} showControls={false} />
-      </section>
+      {sections.map((section, index) => (
+        <section key={section.slug}>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="font-headline text-3xl font-bold">{section.title}</h2>
+            <Link href={`/discover/${section.slug}`}>
+              <Button variant="outline">More</Button>
+            </Link>
+          </div>
+          <MovieList
+            initialMedia={sectionMovies[index]}
+            showControls={false}
+            carousel
+          />
+        </section>
+      ))}
     </div>
   );
 }
