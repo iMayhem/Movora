@@ -100,6 +100,18 @@ const featuredTitles = [
     'Ferdinand',
     'Puss in Boots',
     'Pocahontas',
+    'Alice in Wonderland',
+    'Cloudy with a Chance of Meatballs 2',
+    'Who Framed Roger Rabbit',
+    'The Iron Giant',
+    'Smurfs: The Lost Village',
+    'Lady and the Tramp',
+    'Penguins of Madagascar',
+    'Hotel Transylvania 3: Summer Vacation',
+    'Space Jam',
+    'Captain Underpants: The First Epic Movie',
+    'The Lorax',
+    'Bambi',
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
@@ -133,6 +145,12 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
         movieResults = await searchMedia(title, 'movie', { year: '1961' });
     } else if (title === 'Pocahontas') {
         movieResults = await searchMedia(title, 'movie', { year: '1995' });
+    } else if (title === 'Alice in Wonderland') {
+        movieResults = await searchMedia(title, 'movie', { year: '1951' });
+    } else if (title === 'Lady and the Tramp') {
+        movieResults = await searchMedia(title, 'movie', { year: '1955' });
+    } else if (title === 'Bambi') {
+        movieResults = await searchMedia(title, 'movie', { year: '1942' });
     }
     else {
        movieResults = await searchMedia(title, 'movie');
