@@ -112,6 +112,18 @@ const featuredTitles = [
     'Captain Underpants: The First Epic Movie',
     'The Lorax',
     'Bambi',
+    'Pinocchio',
+    'Dumbo',
+    'Bee Movie',
+    'Turbo',
+    '9',
+    'The Peanuts Movie',
+    'Sleeping Beauty',
+    'Rio 2',
+    'The Aristocats',
+    'Fantastic Mr. Fox',
+    'Happy Feet',
+    'Batman: The Killing Joke',
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
@@ -151,6 +163,14 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
         movieResults = await searchMedia(title, 'movie', { year: '1955' });
     } else if (title === 'Bambi') {
         movieResults = await searchMedia(title, 'movie', { year: '1942' });
+    } else if (title === 'Pinocchio') {
+        movieResults = await searchMedia(title, 'movie', { year: '1940' });
+    } else if (title === 'Dumbo') {
+        movieResults = await searchMedia(title, 'movie', { year: '1941' });
+    } else if (title === 'Sleeping Beauty') {
+        movieResults = await searchMedia(title, 'movie', { year: '1959' });
+    } else if (title === 'The Aristocats') {
+        movieResults = await searchMedia(title, 'movie', { year: '1970' });
     }
     else {
        movieResults = await searchMedia(title, 'movie');
