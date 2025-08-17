@@ -36,10 +36,14 @@ const normalizeMedia = (items: (Movie | TVShow)[], media_type?: 'movie' | 'tv'):
   }));
 };
 
-export async function getTrending(media_type: 'movie' | 'tv'): Promise<Media[]> {
-  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/trending/${media_type}/week`);
-  if (!data?.results) return [];
-  return normalizeMedia(data.results);
+export async function getTrending(media_type: 'movie' | 'tv', time_window: 'day' | 'week' = 'week', pages = 3): Promise<Media[]> {
+  const pagePromises = Array.from({ length: pages }, (_, i) =>
+    fetcher<{ results: (Movie | TVShow)[] }>(`/trending/${media_type}/${time_window}`, { page: String(i + 1) })
+  );
+  const allPages = await Promise.all(pagePromises);
+  const allResults = allPages.flatMap(page => page?.results || []);
+  if (!allResults?.length) return [];
+  return normalizeMedia(allResults);
 }
 
 export async function getPopular(media_type: 'movie' | 'tv', params: Record<string, string> = {}, pages = 1): Promise<Media[]> {
@@ -52,6 +56,18 @@ export async function getPopular(media_type: 'movie' | 'tv', params: Record<stri
   if (!allResults.length) return [];
   return normalizeMedia(allResults, media_type);
 }
+
+export async function getNowPlayingMovies(pages = 1): Promise<Media[]> {
+    const pagePromises = Array.from({ length: pages }, (_, i) => 
+        fetcher<{ results: Movie[] }>(`/movie/now_playing`, { page: String(i + 1) })
+    );
+    const allPages = await Promise.all(pagePromises);
+    const allResults = allPages.flatMap(page => page?.results || []);
+
+    if (!allResults.length) return [];
+    return normalizeMedia(allResults, 'movie');
+}
+
 
 export async function searchMedia(query: string, media_type: 'movie' | 'tv', params: Record<string, string> = {}): Promise<Media[]> {
   const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/search/${media_type}`, { query, ...params });
