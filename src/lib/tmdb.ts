@@ -28,7 +28,9 @@ async function fetcher<T>(path: string, params: Record<string, string> = {}): Pr
 
 const normalizeMedia = (items: (Movie | TVShow)[], media_type?: 'movie' | 'tv'): Media[] => {
   if (!items) return [];
-  return items.map(item => ({ 
+  return items
+    .filter(item => item.poster_path) // Filter out items without a poster_path
+    .map(item => ({ 
     ...item, 
     media_type: item.media_type || ('title' in item ? 'movie' : 'tv')
   }));
