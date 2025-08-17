@@ -7,11 +7,16 @@ import { Button } from '@/components/ui/button';
 const removeDuplicates = (media: Media[]): Media[] => {
   const seen = new Set<number>();
   return media.filter(item => {
+    if (!item || typeof item.id === 'undefined') {
+        return false;
+    }
     const duplicate = seen.has(item.id);
     seen.add(item.id);
     return !duplicate;
   });
 }
+
+const HOLLYWOOD_PARAMS = { with_original_language: 'en', region: 'US' };
 
 export default async function Home() {
   const [
@@ -21,10 +26,10 @@ export default async function Home() {
     topWeeklyMovies,
     topWeeklyTv
   ] = await Promise.all([
-    getPopular('movie', {}, 1),
-    getPopular('tv', {}, 1),
-    getNowPlayingMovies(1),
-    getTrending('movie', 'week', 1),
+    getPopular('movie', HOLLYWOOD_PARAMS, 1),
+    getPopular('tv', HOLLYWOOD_PARAMS, 1),
+    getNowPlayingMovies(1, HOLLYWOOD_PARAMS),
+    getTrending('movie', 'week', 1), // Trending is global, no region filter needed
     getTrending('tv', 'week', 1),
   ]);
 
@@ -50,7 +55,7 @@ export default async function Home() {
       
       <section>
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Newly Released</h2>
+            <h2 className="font-headline text-3xl font-bold">Newly Released in Theaters</h2>
             <Link href="/discover/newly-released">
               <Button variant="outline">More</Button>
             </Link>
@@ -60,7 +65,7 @@ export default async function Home() {
 
       <section>
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Most Viewed</h2>
+            <h2 className="font-headline text-3xl font-bold">Most Popular</h2>
             <Link href="/discover/most-viewed">
               <Button variant="outline">More</Button>
             </Link>

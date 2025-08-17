@@ -43,16 +43,20 @@ const normalizeMedia = (
   today.setHours(0, 0, 0, 0);
   return items
     .filter(item => {
-        if (!item.poster_path) return false;
+        if (!item || !item.poster_path) return false;
         const releaseDate = 'release_date' in item ? item.release_date : item.first_air_date;
         if (releaseDate) {
-            return new Date(releaseDate) <= today;
+            try {
+                return new Date(releaseDate) <= today;
+            } catch (e) {
+                return false;
+            }
         }
         return true;
     })
     .map(item => ({
       ...item,
-      media_type: item.media_type || ('title' in item ? 'movie' : 'tv'),
+      media_type: 'title' in item ? 'movie' : 'tv',
     }));
 };
 
@@ -111,11 +115,11 @@ export async function getPopular(
 }
 
 // Revalidate now playing every 15 minutes
-export async function getNowPlayingMovies(pages = 1): Promise<Media[]> {
+export async function getNowPlayingMovies(pages = 1, params: Record<string, string> = {}): Promise<Media[]> {
   const pagePromises = Array.from({length: pages}, (_, i) =>
     cachedFetcher<{results: Movie[]}>(
       `/movie/now_playing`,
-      {page: String(i + 1)},
+      {...params, page: String(i + 1)},
       900,
       ['now-playing']
     )()

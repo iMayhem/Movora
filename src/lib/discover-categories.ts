@@ -6,6 +6,8 @@ import { fetchFeaturedKorean } from '@/components/movies/FeaturedKorean';
 import { fetchIndianCartoonsByChannel } from '@/components/movies/FeaturedIndianCartoons';
 import { fetchAllAdventure, fetchMedia, allShows } from '@/components/movies/FeaturedAdventure';
 
+const HOLLYWOOD_PARAMS = { with_original_language: 'en', region: 'US' };
+
 export const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
     'top-weekly': {
         title: 'Top Weekly',
@@ -18,15 +20,15 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         }
     },
     'newly-released': {
-        title: 'Newly Released',
-        fetcher: () => getNowPlayingMovies(10),
+        title: 'Newly Released in Theaters',
+        fetcher: () => getNowPlayingMovies(10, HOLLYWOOD_PARAMS),
     },
     'most-viewed': {
-        title: 'Most Viewed',
+        title: 'Most Popular',
         fetcher: async () => {
             const [movies, tv] = await Promise.all([
-                getPopular('movie', {}, 5),
-                getPopular('tv', {}, 5),
+                getPopular('movie', HOLLYWOOD_PARAMS, 5),
+                getPopular('tv', HOLLYWOOD_PARAMS, 5),
             ]);
             return [...movies, ...tv].sort((a,b) => b.popularity - a.popularity);
         }

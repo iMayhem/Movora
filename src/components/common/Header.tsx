@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const navItems = [
-  { name: 'Home', href: '/' },
+  { name: 'Hollywood', href: '/' },
   { name: 'Bollywood', href: '/bollywood' },
   { name: 'Korean', href: '/korean' },
   { name: 'Netflix', href: '/netflix' },
