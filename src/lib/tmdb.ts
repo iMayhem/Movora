@@ -44,10 +44,10 @@ const normalizeMedia = (items: (Movie | TVShow)[], media_type?: 'movie' | 'tv'):
   }));
 };
 
-// Revalidate trending content every hour
+// Revalidate trending content every 5 minutes
 export async function getTrending(media_type: 'movie' | 'tv', time_window: 'day' | 'week' = 'week', pages = 3): Promise<Media[]> {
   const pagePromises = Array.from({ length: pages }, (_, i) =>
-    fetcher<{ results: (Movie | TVShow)[] }>(`/trending/${media_type}/${time_window}`, { page: String(i + 1) }, { revalidate: 3600 })
+    fetcher<{ results: (Movie | TVShow)[] }>(`/trending/${media_type}/${time_window}`, { page: String(i + 1) }, { revalidate: 300 })
   );
   const allPages = await Promise.all(pagePromises);
   const allResults = allPages.flatMap(page => page?.results || []);
@@ -55,10 +55,10 @@ export async function getTrending(media_type: 'movie' | 'tv', time_window: 'day'
   return normalizeMedia(allResults);
 }
 
-// Revalidate popular content every 6 hours
+// Revalidate popular content every 15 minutes
 export async function getPopular(media_type: 'movie' | 'tv', params: Record<string, string> = {}, pages = 1): Promise<Media[]> {
   const pagePromises = Array.from({ length: pages }, (_, i) => 
-    fetcher<{ results: (Movie | TVShow)[] }>(`/${media_type}/popular`, { ...params, page: String(i + 1) }, { revalidate: 21600 })
+    fetcher<{ results: (Movie | TVShow)[] }>(`/${media_type}/popular`, { ...params, page: String(i + 1) }, { revalidate: 900 })
   );
   const allPages = await Promise.all(pagePromises);
   const allResults = allPages.flatMap(page => page?.results || []);
@@ -67,10 +67,10 @@ export async function getPopular(media_type: 'movie' | 'tv', params: Record<stri
   return normalizeMedia(allResults, media_type);
 }
 
-// Revalidate now playing every 6 hours
+// Revalidate now playing every 15 minutes
 export async function getNowPlayingMovies(pages = 1): Promise<Media[]> {
     const pagePromises = Array.from({ length: pages }, (_, i) => 
-        fetcher<{ results: Movie[] }>(`/movie/now_playing`, { page: String(i + 1) }, { revalidate: 21600 })
+        fetcher<{ results: Movie[] }>(`/movie/now_playing`, { page: String(i + 1) }, { revalidate: 900 })
     );
     const allPages = await Promise.all(pagePromises);
     const allResults = allPages.flatMap(page => page?.results || []);
@@ -79,17 +79,17 @@ export async function getNowPlayingMovies(pages = 1): Promise<Media[]> {
     return normalizeMedia(allResults, 'movie');
 }
 
-// Revalidate search results every 24 hours
+// Revalidate search results every hour
 export async function searchMedia(query: string, media_type: 'movie' | 'tv', params: Record<string, string> = {}): Promise<Media[]> {
-  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/search/${media_type}`, { query, ...params }, { revalidate: 86400 });
+  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/search/${media_type}`, { query, ...params }, { revalidate: 3600 });
   if (!data?.results) return [];
   return normalizeMedia(data.results, media_type);
 }
 
-// Revalidate discovered content every 6 hours
+// Revalidate discovered content every 15 minutes
 export async function discoverMovies(params: Record<string, string> = {}, pages = 2): Promise<Media[]> {
   const pagePromises = Array.from({ length: pages }, (_, i) => 
-    fetcher<{ results: Movie[] }>(`/discover/movie`, { ...params, page: String(i + 1) }, { revalidate: 21600 })
+    fetcher<{ results: Movie[] }>(`/discover/movie`, { ...params, page: String(i + 1) }, { revalidate: 900 })
   );
   
   const allPages = await Promise.all(pagePromises);
@@ -101,7 +101,7 @@ export async function discoverMovies(params: Record<string, string> = {}, pages 
 
 export async function discoverTvShows(params: Record<string, string> = {}, pages = 1): Promise<Media[]> {
   const pagePromises = Array.from({ length: pages }, (_, i) => 
-    fetcher<{ results: TVShow[] }>(`/discover/tv`, { ...params, page: String(i + 1) }, { revalidate: 21600 })
+    fetcher<{ results: TVShow[] }>(`/discover/tv`, { ...params, page: String(i + 1) }, { revalidate: 900 })
   );
   
   const allPages = await Promise.all(pagePromises);
@@ -111,19 +111,19 @@ export async function discoverTvShows(params: Record<string, string> = {}, pages
   return normalizeMedia(allResults, 'tv');
 }
 
-// Revalidate details pages every 24 hours
+// Revalidate details pages every hour
 export async function getMovieDetails(id: number): Promise<(Movie & { media_type: 'movie' }) | null> {
-  const movie = await fetcher<Movie>(`/movie/${id}`, { append_to_response: 'videos' }, { revalidate: 86400 });
+  const movie = await fetcher<Movie>(`/movie/${id}`, { append_to_response: 'videos' }, { revalidate: 3600 });
   if (!movie) return null;
   return { ...movie, media_type: 'movie' };
 }
 
 export async function getMovieCredits(id: number): Promise<Credits | null> {
-  return fetcher<Credits>(`/movie/${id}/credits`, {}, { revalidate: 86400 });
+  return fetcher<Credits>(`/movie/${id}/credits`, {}, { revalidate: 3600 });
 }
 
 export async function getSimilarMovies(id: number): Promise<Media[]> {
-  const data = await fetcher<{ results: Movie[] }>(`/movie/${id}/similar`, {}, { revalidate: 86400 });
+  const data = await fetcher<{ results: Movie[] }>(`/movie/${id}/similar`, {}, { revalidate: 3600 });
   if (!data?.results) return [];
   return normalizeMedia(data.results, 'movie');
 }
@@ -131,21 +131,21 @@ export async function getSimilarMovies(id: number): Promise<Media[]> {
 
 // TV Show specific functions
 export async function getTvShowDetails(id: number): Promise<(TVShow & { media_type: 'tv' }) | null> {
-  const show = await fetcher<TVShow>(`/tv/${id}`, { append_to_response: 'videos,season_details' }, { revalidate: 86400 });
+  const show = await fetcher<TVShow>(`/tv/${id}`, { append_to_response: 'videos,season_details' }, { revalidate: 3600 });
   if (!show) return null;
   return { ...show, media_type: 'tv' };
 }
 
 export async function getTvShowCredits(id: number): Promise<Credits | null> {
-  return fetcher<Credits>(`/tv/${id}/credits`, {}, { revalidate: 86400 });
+  return fetcher<Credits>(`/tv/${id}/credits`, {}, { revalidate: 3600 });
 }
 
 export async function getSimilarTvShows(id: number): Promise<Media[]> {
-    const data = await fetcher<{ results: TVShow[] }>(`/tv/${id}/similar`, {}, { revalidate: 86400 });
+    const data = await fetcher<{ results: TVShow[] }>(`/tv/${id}/similar`, {}, { revalidate: 3600 });
     if (!data?.results) return [];
     return normalizeMedia(data.results, 'tv');
 }
 
 export async function getSeasonDetails(tvId: number, seasonNumber: number): Promise<SeasonDetails | null> {
-  return fetcher<SeasonDetails>(`/tv/${tvId}/season/${seasonNumber}`, {}, { revalidate: 86400 });
+  return fetcher<SeasonDetails>(`/tv/${tvId}/season/${seasonNumber}`, {}, { revalidate: 3600 });
 }
