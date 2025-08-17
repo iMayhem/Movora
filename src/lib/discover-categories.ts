@@ -10,7 +10,7 @@ const HOLLYWOOD_PARAMS = { with_original_language: 'en', region: 'US' };
 
 export const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
     'top-weekly': {
-        title: 'Top Weekly',
+        title: 'Trending Now',
         fetcher: async () => {
             const [movies, tv] = await Promise.all([
                 getTrending('movie', 'week', 5),
