@@ -21,7 +21,7 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
   },
   'latest-bollywood': {
     title: 'Latest Bollywood Releases',
-    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', sort_by: 'primary_release_date.desc', 'vote_count.gte': 25 }, 5),
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', sort_by: 'primary_release_date.desc', 'vote_count.gte': 25 }, 50),
   },
   'classics-bollywood': {
     title: 'Top-Rated Bollywood Classics',
