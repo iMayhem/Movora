@@ -26,11 +26,6 @@ export default async function LetterboxdPage() {
             Based on TMDB ratings, inspired by the official Letterboxd list.
           </p>
         </div>
-        <Link href="https://letterboxd.com/dave/list/official-top-250-narrative-feature-films/" target="_blank" rel="noopener noreferrer">
-          <Button variant="outline">
-            View on Letterboxd
-          </Button>
-        </Link>
       </div>
       <MovieList initialMedia={topMovies.slice(0, 250)} showControls={false} />
     </div>
