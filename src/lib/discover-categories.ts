@@ -240,5 +240,29 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
     'indian-cartoons-other': {
         title: 'Sony Yay!, Discovery Kids & More',
         fetcher: () => fetchIndianCartoonsByChannel('other-channels'),
+    },
+    'top-rated-documentaries': {
+        title: 'Top-Rated Documentaries',
+        fetcher: () => discoverMovies({ with_genres: '99', sort_by: 'vote_average.desc', 'vote_count.gte': '100' }, 10),
+    },
+    'recent-documentaries': {
+        title: 'Recent Documentaries',
+        fetcher: () => discoverMovies({ with_genres: '99', 'primary_release_date.gte': '2022-01-01', sort_by: 'popularity.desc' }, 10),
+    },
+    'bio-documentaries': {
+        title: 'Biographical Documentaries',
+        fetcher: () => discoverMovies({ with_genres: '99', with_keywords: '9844' }, 10),
+    },
+    'netflix-documentaries': {
+        title: 'Netflix Original Documentaries',
+        fetcher: () => discoverMovies({ with_genres: '99', with_watch_providers: '8', watch_region: 'US' }, 10),
+    },
+    'prime-documentaries': {
+        title: 'Prime Video Documentaries',
+        fetcher: () => discoverMovies({ with_genres: '99', with_watch_providers: '9', watch_region: 'US' }, 10),
+    },
+    'popular-docuseries': {
+        title: 'Popular Docuseries',
+        fetcher: () => discoverTvShows({ with_genres: '99', sort_by: 'popularity.desc' }, 10),
     }
 };
