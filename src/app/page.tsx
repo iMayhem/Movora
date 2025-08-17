@@ -33,6 +33,8 @@ export default async function Home() {
     actionMovies,
     comedyMovies,
     scifiMovies,
+    horrorMovies,
+    thrillerMovies,
   ] = await Promise.all([
     getPopular('movie', HOLLYWOOD_PARAMS, 1),
     getPopular('tv', HOLLYWOOD_PARAMS, 1),
@@ -44,6 +46,8 @@ export default async function Home() {
     discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '28,12' }, 1),
     discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '35' }, 1),
     discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '878,14' }, 1),
+    discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '27' }, 1),
+    discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '53' }, 1),
   ]);
 
   const mostViewed: Media[] = removeDuplicates([...popularMovies, ...popularTv]).sort(
@@ -134,6 +138,26 @@ export default async function Home() {
             </Link>
         </div>
         <MovieList initialMedia={scifiMovies} carousel />
+      </section>
+
+      <section>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h2 className="font-headline text-3xl font-bold">Horror</h2>
+            <Link href="/discover/horror-hollywood">
+              <Button variant="outline">More</Button>
+            </Link>
+        </div>
+        <MovieList initialMedia={horrorMovies} carousel />
+      </section>
+
+      <section>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h2 className="font-headline text-3xl font-bold">Thriller</h2>
+            <Link href="/discover/thriller-hollywood">
+              <Button variant="outline">More</Button>
+            </Link>
+        </div>
+        <MovieList initialMedia={thrillerMovies} carousel />
       </section>
     </div>
   );

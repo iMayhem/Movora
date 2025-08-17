@@ -55,6 +55,14 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         title: 'Sci-Fi & Fantasy',
         fetcher: () => discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '878,14' }, 10),
     },
+    'horror-hollywood': {
+        title: 'Horror',
+        fetcher: () => discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '27' }, 10),
+    },
+    'thriller-hollywood': {
+        title: 'Thriller',
+        fetcher: () => discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '53' }, 10),
+    },
     'discover': {
         title: 'Discover',
         fetcher: async () => {
