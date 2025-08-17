@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { useWatchLater } from '@/hooks/useWatchLater';
 import { Button } from '@/components/ui/button';
 import { searchMedia } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
@@ -10,6 +9,8 @@ import type { Media } from '@/types/tmdb';
 import { getAIRecommendations } from '@/app/actions/recommendations';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -21,7 +22,6 @@ function SubmitButton() {
 }
 
 export default function RecommendationsPage() {
-  const { watchLater } = useWatchLater();
   const [state, formAction] = useActionState(getAIRecommendations, undefined);
   const [recommendedMedia, setRecommendedMedia] = useState<Media[]>([]);
   const [isLoadingMedia, setIsLoadingMedia] = useState(false);
@@ -41,8 +41,6 @@ export default function RecommendationsPage() {
     }
   }, [state]);
 
-  const viewingHistoryTitles = watchLater.map(item => 'title' in item ? item.title : item.name);
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
@@ -50,16 +48,22 @@ export default function RecommendationsPage() {
           Personalized Recommendations
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Based on your &quot;Watch Later&quot; list, our AI will suggest new movies you might enjoy.
+          Enter some movies you've enjoyed, and our AI will suggest new ones you might like.
         </p>
       </div>
 
-      {watchLater.length > 0 ? (
         <div className="flex flex-col items-center">
-          <form action={formAction} className="mb-8">
-            {viewingHistoryTitles.map(title => (
-              <input key={title} type="hidden" name="viewingHistory" value={title} />
-            ))}
+          <form action={formAction} className="mb-8 w-full max-w-lg space-y-4 text-center">
+            <div>
+                <Label htmlFor="viewingHistory" className="sr-only">Your favorite movies</Label>
+                <Textarea 
+                    id="viewingHistory"
+                    name="viewingHistory"
+                    placeholder="Enter movie titles, one per line...&#10;The Dark Knight&#10;Inception&#10;Parasite"
+                    rows={5}
+                    className="text-center"
+                />
+            </div>
             <SubmitButton />
           </form>
 
@@ -84,15 +88,6 @@ export default function RecommendationsPage() {
             )
           )}
         </div>
-      ) : (
-         <Alert className="max-w-lg mx-auto">
-            <Terminal className="h-4 w-4" />
-            <AlertTitle>Your Watch Later list is empty!</AlertTitle>
-            <AlertDescription>
-                Add some movies or TV shows to your list to get personalized AI recommendations.
-            </AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 }

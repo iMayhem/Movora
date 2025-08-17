@@ -4,7 +4,7 @@ import { generateMovieRecommendations } from '@/ai/flows/generate-movie-recommen
 import { z } from 'zod';
 
 const RecommendationsSchema = z.object({
-  viewingHistory: z.array(z.string()).min(1, 'Please provide at least one movie.'),
+  viewingHistory: z.string().min(1, 'Please provide at least one movie.'),
 });
 
 type State = {
@@ -17,10 +17,11 @@ export async function getAIRecommendations(
   prevState: State | undefined,
   formData: FormData
 ): Promise<State> {
-  const viewingHistory = formData.getAll('viewingHistory').map(String);
+  const viewingHistoryRaw = formData.get('viewingHistory');
+  const viewingHistory = viewingHistoryRaw ? String(viewingHistoryRaw).split('\n').map(t => t.trim()).filter(Boolean) : [];
 
   const validatedFields = RecommendationsSchema.safeParse({
-    viewingHistory,
+    viewingHistory: viewingHistoryRaw as string,
   });
 
   if (!validatedFields.success) {
