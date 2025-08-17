@@ -52,6 +52,14 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
     title: 'Thrilling Bollywood Rides',
     fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', with_genres: '53', 'vote_count.gte': 25 }, 5),
   },
+    'popular-hindi-tv': {
+    title: 'Popular Hindi TV Shows',
+    fetcher: () => discoverTvShows({ with_original_language: 'hi', region: 'IN', sort_by: 'popularity.desc' }, 5),
+  },
+  'top-rated-hindi-tv': {
+    title: 'Top-Rated Hindi TV Shows',
+    fetcher: () => discoverTvShows({ with_original_language: 'hi', region: 'IN', sort_by: 'vote_average.desc', 'vote_count.gte': 20 }, 5),
+  },
   'top-rated-netflix': {
     title: 'Top Rated on Netflix',
     fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', sort_by: 'vote_average.desc', 'vote_count.gte': 300 }, 15),
