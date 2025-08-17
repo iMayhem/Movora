@@ -4,7 +4,7 @@ import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 import { fetchFeaturedAnimated } from '@/components/movies/FeaturedAnimated';
 import { fetchFeaturedKorean } from '@/components/movies/FeaturedKorean';
 import { fetchIndianCartoonsByChannel } from '@/components/movies/FeaturedIndianCartoons';
-import { fetchAllAdventure } from '@/components/movies/FeaturedAdventure';
+import { fetchAllAdventure, fetchMedia, allShows } from '@/components/movies/FeaturedAdventure';
 
 export const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
     'top-weekly': {
@@ -64,6 +64,26 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
     'featured-adventure': {
         title: 'Adventure & Survival',
         fetcher: () => fetchAllAdventure(),
+    },
+    'survival-docs': {
+        title: 'The Survivalists: Pushing Human Limits',
+        fetcher: () => fetchMedia(allShows.survivalists),
+    },
+    'explorer-docs': {
+        title: 'The Adventurers & Explorers: Journey to the Unknown',
+        fetcher: () => fetchMedia(allShows.adventurers),
+    },
+    'wildlife-docs': {
+        title: 'The Wild Kingdom: Up Close with Nature\'s Wonders',
+        fetcher: () => fetchMedia(allShows['wild-kingdom']),
+    },
+    'competition-docs': {
+        title: 'The Competition: Survival of the Fittest',
+        fetcher: () => fetchMedia(allShows.competition),
+    },
+    'expedition-docs': {
+        title: 'Deep Dives: Ocean and Mountain Expeditions',
+        fetcher: () => fetchMedia(allShows.expeditions),
     },
     'latest-bollywood': {
         title: 'Latest Bollywood Releases',
