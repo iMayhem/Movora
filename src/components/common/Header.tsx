@@ -19,6 +19,7 @@ const navItems = [
   { name: 'Mindfucks', href: '/mindfucks' },
   { name: 'Cartoons', href: '/indian-cartoons' },
   { name: 'Documentaries', href: '/documentaries' },
+  { name: 'Adventure', href: '/adventure' },
 ];
 
 export function Header() {

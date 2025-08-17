@@ -4,6 +4,7 @@ import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 import { fetchFeaturedAnimated } from '@/components/movies/FeaturedAnimated';
 import { fetchFeaturedKorean } from '@/components/movies/FeaturedKorean';
 import { fetchIndianCartoonsByChannel } from '@/components/movies/FeaturedIndianCartoons';
+import { fetchAllAdventure } from '@/components/movies/FeaturedAdventure';
 
 export const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
     'top-weekly': {
@@ -59,6 +60,10 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
     'featured-korean': {
         title: 'Featured Korean Cinema',
         fetcher: () => fetchFeaturedKorean(),
+    },
+    'featured-adventure': {
+        title: 'Adventure & Survival',
+        fetcher: () => fetchAllAdventure(),
     },
     'latest-bollywood': {
         title: 'Latest Bollywood Releases',
