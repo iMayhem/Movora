@@ -9,8 +9,8 @@ type DiscoverPageProps = {
   params: { slug: string };
 };
 
-export default async function DiscoverPage({ params }: DiscoverPageProps) {
-  const category = discoverCategories[params.slug];
+export default async function DiscoverPage({ params: { slug } }: DiscoverPageProps) {
+  const category = discoverCategories[slug];
 
   if (!category) {
     notFound();

@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { getMovieDetails, getMovieCredits, getSimilarMovies } from '@/lib/tmdb';
 import { Star, Calendar, Clock } from 'lucide-react';
@@ -11,8 +12,8 @@ type MoviePageProps = {
   params: { id: string };
 };
 
-export default async function MoviePage({ params }: MoviePageProps) {
-  const movieId = Number(params.id);
+export default async function MoviePage({ params: { id } }: MoviePageProps) {
+  const movieId = Number(id);
   const movie = await getMovieDetails(movieId);
   
   if (!movie) {
