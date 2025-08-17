@@ -22,7 +22,7 @@ export default function TvShowPage({ params }: TvShowPageProps) {
   const [credits, setCredits] = useState<Credits | null>(null);
   const [similarShows, setSimilarShows] = useState<Media[]>([]);
   const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
-  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [selectedSeason, setSelectedSeason] = useState<number | undefined>(undefined);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const [episodesInSeason, setEpisodesInSeason] = useState<number[]>([]);
 
@@ -36,13 +36,17 @@ export default function TvShowPage({ params }: TvShowPageProps) {
       setCredits(showCredits);
       const similar = await getSimilarTvShows(tvShowId);
       setSimilarShows(similar);
+      if (showDetails?.seasons && showDetails.seasons.length > 0) {
+        const firstSeason = showDetails.seasons.find(s => s.season_number > 0)?.season_number ?? 1;
+        setSelectedSeason(firstSeason);
+      }
     };
 
     fetchTvShowData();
-  }, [params]);
+  }, [params.id]);
 
   useEffect(() => {
-    if (show) {
+    if (show && selectedSeason !== undefined) {
       const season = show.seasons?.find(s => s.season_number === selectedSeason);
       if (season) {
         setEpisodesInSeason(Array.from({ length: season.episode_count }, (_, i) => i + 1));
@@ -58,6 +62,10 @@ export default function TvShowPage({ params }: TvShowPageProps) {
   const cast = credits?.cast.slice(0, 10) || [];
   const seasons = show.seasons?.filter(s => s.season_number > 0) || [];
 
+  const handleSeasonChange = (value: string) => {
+    setSelectedSeason(Number(value));
+  };
+  
   return (
     <>
       <VideoPlayer
@@ -126,8 +134,9 @@ export default function TvShowPage({ params }: TvShowPageProps) {
                   <div className="flex-1">
                     <Label htmlFor="season-select">Season</Label>
                     <Select
-                      value={String(selectedSeason)}
-                      onValueChange={(value) => setSelectedSeason(Number(value))}
+                      value={selectedSeason !== undefined ? String(selectedSeason) : ''}
+                      onValueChange={handleSeasonChange}
+                      disabled={seasons.length === 0}
                     >
                       <SelectTrigger id="season-select">
                         <SelectValue placeholder="Select season" />
@@ -164,7 +173,7 @@ export default function TvShowPage({ params }: TvShowPageProps) {
               </div>
               
               <div className="flex items-center gap-4">
-                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg">
+                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg" disabled={!selectedSeason}>
                   <PlayCircle className="mr-2" />
                   Watch Now
                 </Button>
