@@ -3,6 +3,7 @@ import { discoverMovies, discoverTvShows, getPopular, getTrending, getNowPlaying
 import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 import { fetchFeaturedAnimated } from '@/components/movies/FeaturedAnimated';
 import { fetchFeaturedKorean } from '@/components/movies/FeaturedKorean';
+import { fetchIndianCartoonsByChannel } from '@/components/movies/FeaturedIndianCartoons';
 
 export const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
     'top-weekly': {
@@ -212,20 +213,28 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         title: 'Top-Rated Korean TV Shows',
         fetcher: () => discoverTvShows({ with_original_language: 'ko', region: 'KR', sort_by: 'vote_average.desc', 'vote_count.gte': 20, include_adult: 'false' }, 20),
     },
-    'popular-indian-animated-movies': {
-        title: 'Popular Indian Animated Movies',
-        fetcher: () => discoverMovies({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'popularity.desc' }, 20),
+    'indian-cartoons-cn': {
+        title: 'Cartoon Network Shows',
+        fetcher: () => fetchIndianCartoonsByChannel('cartoon-network'),
     },
-    'top-rated-indian-animated-movies': {
-        title: 'Top Rated Indian Animated Movies',
-        fetcher: () => discoverMovies({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'vote_average.desc', 'vote_count.gte': 5 }, 20),
+    'indian-cartoons-pogo': {
+        title: 'Pogo Shows',
+        fetcher: () => fetchIndianCartoonsByChannel('pogo'),
     },
-    'popular-indian-animated-tv': {
-        title: 'Popular Indian Animated TV Shows',
-        fetcher: () => discoverTvShows({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'popularity.desc' }, 20),
+    'indian-cartoons-nick': {
+        title: 'Nickelodeon Shows',
+        fetcher: () => fetchIndianCartoonsByChannel('nick'),
     },
-    'top-rated-indian-animated-tv': {
-        title: 'Top Rated Indian Animated TV Shows',
-        fetcher: () => discoverTvShows({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'vote_average.desc', 'vote_count.gte': 2 }, 20),
+    'indian-cartoons-disney': {
+        title: 'Disney Channel Shows',
+        fetcher: () => fetchIndianCartoonsByChannel('disney'),
+    },
+    'indian-cartoons-hungama': {
+        title: 'Hungama TV Shows',
+        fetcher: () => fetchIndianCartoonsByChannel('hungama'),
+    },
+    'indian-cartoons-disney-xd': {
+        title: 'Disney XD Shows',
+        fetcher: () => fetchIndianCartoonsByChannel('disney-xd'),
     },
 };
