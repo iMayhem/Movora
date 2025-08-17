@@ -93,7 +93,19 @@ const featuredTitles = [
   'Perfect Blue',
   'The Man from Earth',
   'Memories',
-  'Stay'
+  'Stay',
+  'Oblivion',
+  'Midnight in Paris',
+  'The Thirteenth Floor',
+  'Dark City',
+  'Coherence',
+  'Mr. Nobody',
+  'Oculus',
+  'Exam',
+  'The Tall Man',
+  'Primal Fear',
+  'Revolver',
+  '11:14'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
