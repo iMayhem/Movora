@@ -1,6 +1,6 @@
 
 import Image from 'next/image';
-import { getTvShowDetails, getTvShowCredits, getSimilarTvShows } from '@/lib/tmdb';
+import { getTvShowDetails, getSimilarTvShows } from '@/lib/tmdb';
 import { Star, Calendar, Tv } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { MovieList } from '@/components/movies/MovieList';
@@ -21,12 +21,8 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
     return <div>TV show not found.</div>;
   }
   
-  const [credits, similarShows] = await Promise.all([
-    getTvShowCredits(tvShowId),
-    getSimilarTvShows(tvShowId)
-  ]);
+  const similarShows = await getSimilarTvShows(tvShowId);
   
-  const cast = credits?.cast.slice(0, 10) || [];
   const seasons = show.seasons?.filter(s => s.season_number > 0) || [];
 
   return (
@@ -93,28 +89,8 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
         </div>
 
         <div className="px-4 md:px-8">
-          <section className="mb-12">
-            <h2 className="font-headline text-3xl font-bold mb-6">Top Cast</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {cast.map(member => (
-                <div key={member.id} className="text-center">
-                  <Image
-                    src={member.profile_path ? `https://image.tmdb.org/t/p/w185${member.profile_path}` : "https://placehold.co/185x278.png"}
-                    alt={member.name}
-                    width={185}
-                    height={278}
-                    className="rounded-lg mb-2 mx-auto"
-                    data-ai-hint="actor portrait"
-                  />
-                  <p className="font-semibold">{member.name}</p>
-                  <p className="text-sm text-muted-foreground">{member.character}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
           {similarShows.length > 0 && (
-            <section>
+            <section className="mt-12">
               <h2 className="font-headline text-3xl font-bold mb-6">Similar Shows</h2>
               <MovieList initialMedia={similarShows as Media[]} showControls={false} />
             </section>

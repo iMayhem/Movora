@@ -1,6 +1,6 @@
 
 import Image from 'next/image';
-import { getMovieDetails, getMovieCredits, getSimilarMovies } from '@/lib/tmdb';
+import { getMovieDetails, getSimilarMovies } from '@/lib/tmdb';
 import { Star, Calendar, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { MovieList } from '@/components/movies/MovieList';
@@ -20,12 +20,7 @@ export default async function MoviePage({ params: { id } }: MoviePageProps) {
     return <div>Movie not found.</div>;
   }
   
-  const [credits, similarMovies] = await Promise.all([
-    getMovieCredits(movieId),
-    getSimilarMovies(movieId),
-  ]);
-
-  const cast = credits?.cast.slice(0, 10) || [];
+  const similarMovies = await getSimilarMovies(movieId);
 
   return (
     <VideoPlayerDialog
@@ -93,28 +88,8 @@ export default async function MoviePage({ params: { id } }: MoviePageProps) {
         </div>
 
         <div className="px-4 md:px-8">
-          <section className="mb-12">
-            <h2 className="font-headline text-3xl font-bold mb-6">Top Cast</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-              {cast.map(member => (
-                <div key={member.id} className="text-center">
-                  <Image
-                    src={member.profile_path ? `https://image.tmdb.org/t/p/w185${member.profile_path}`: "https://placehold.co/185x278.png"}
-                    alt={member.name}
-                    width={185}
-                    height={278}
-                    className="rounded-lg mb-2 mx-auto"
-                    data-ai-hint="actor portrait"
-                  />
-                  <p className="font-semibold">{member.name}</p>
-                  <p className="text-sm text-muted-foreground">{member.character}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
           {similarMovies.length > 0 && (
-            <section>
+            <section className="mt-12">
               <h2 className="font-headline text-3xl font-bold mb-6">Similar Movies</h2>
               <MovieList initialMedia={similarMovies as Media[]} showControls={false} />
             </section>
