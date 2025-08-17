@@ -52,7 +52,7 @@ const sections = [
   {
     title: 'Thrilling Rides',
     slug: 'thriller-bollywood',
-    params: { ...BOLLYROOD_PARAMS, with_genres: '53' },
+    params: { ...BOLLYWOOD_PARAMS, with_genres: '53' },
   },
 ];
 
