@@ -17,6 +17,7 @@ const navItems = [
   { name: 'Top 250', href: '/letterboxd' },
   { name: 'Animated', href: '/animated' },
   { name: 'Mindfucks', href: '/mindfucks' },
+  { name: 'Indian Cartoons', href: '/indian-cartoons' },
 ];
 
 export function Header() {

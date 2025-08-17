@@ -212,4 +212,20 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         title: 'Top-Rated Korean TV Shows',
         fetcher: () => discoverTvShows({ with_original_language: 'ko', region: 'KR', sort_by: 'vote_average.desc', 'vote_count.gte': 20, include_adult: 'false' }, 20),
     },
+    'popular-indian-animated-movies': {
+        title: 'Popular Indian Animated Movies',
+        fetcher: () => discoverMovies({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'popularity.desc' }, 20),
+    },
+    'top-rated-indian-animated-movies': {
+        title: 'Top Rated Indian Animated Movies',
+        fetcher: () => discoverMovies({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'vote_average.desc', 'vote_count.gte': 5 }, 20),
+    },
+    'popular-indian-animated-tv': {
+        title: 'Popular Indian Animated TV Shows',
+        fetcher: () => discoverTvShows({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'popularity.desc' }, 20),
+    },
+    'top-rated-indian-animated-tv': {
+        title: 'Top Rated Indian Animated TV Shows',
+        fetcher: () => discoverTvShows({ with_genres: '16', with_original_language: 'hi', region: 'IN', sort_by: 'vote_average.desc', 'vote_count.gte': 2 }, 20),
+    },
 };
