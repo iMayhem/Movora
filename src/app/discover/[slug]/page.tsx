@@ -1,4 +1,5 @@
 
+
 import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { notFound } from 'next/navigation';
@@ -21,6 +22,10 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
   'latest-bollywood': {
     title: 'Latest Bollywood Releases',
     fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', sort_by: 'primary_release_date.desc', 'vote_count.gte': 25 }, 5),
+  },
+  'classics-bollywood': {
+    title: 'Top-Rated Bollywood Classics',
+    fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', 'primary_release_date.lte': '2000-12-31', sort_by: 'vote_average.desc', 'vote_count.gte': 50 }, 5),
   },
   'netflix-bollywood': {
     title: 'Netflix Bollywood',

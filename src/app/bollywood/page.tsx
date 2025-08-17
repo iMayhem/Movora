@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { discoverMovies } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
@@ -21,6 +22,11 @@ const sections = [
     title: 'Latest Releases',
     slug: 'latest-bollywood',
     params: { ...BOLLYWOOD_PARAMS, sort_by: 'primary_release_date.desc' },
+  },
+  {
+    title: 'Top-Rated Classics',
+    slug: 'classics-bollywood',
+    params: { ...BOLLYWOOD_PARAMS, 'primary_release_date.lte': '2000-12-31', sort_by: 'vote_average.desc', 'vote_count.gte': 50 },
   },
   {
     title: 'Netflix Bollywood',
