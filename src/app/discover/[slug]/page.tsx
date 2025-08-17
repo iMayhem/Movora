@@ -98,6 +98,18 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
     title: 'Romantic Movies on Prime',
     fetcher: () => discoverMovies({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '10749' }, 5),
   },
+    'popular-tv-prime': {
+    title: 'Popular TV Shows on Prime',
+    fetcher: () => discoverTvShows({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', sort_by: 'popularity.desc' }, 5),
+  },
+  'comedy-tv-prime': {
+    title: 'Binge-Worthy Comedies on Prime',
+    fetcher: () => discoverTvShows({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '35' }, 5),
+  },
+  'drama-tv-prime': {
+    title: 'Gripping Dramas on Prime',
+    fetcher: () => discoverTvShows({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '18' }, 5),
+  },
   'top-rated-imdb': {
     title: 'Top Rated of All Time',
     fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc' }, 5),
