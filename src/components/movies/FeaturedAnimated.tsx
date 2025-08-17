@@ -63,7 +63,19 @@ const featuredTitles = [
     'Mulan',
     'The Croods',
     'The Simpsons Movie',
-    'Ice Age: Collision Course'
+    'Ice Age: Collision Course',
+    'Megamind',
+    'Ralph Breaks the Internet',
+    'Bolt',
+    'Home',
+    'Cloudy with a Chance of Meatballs',
+    'Rio',
+    'Ice Age: Dawn of the Dinosaurs',
+    'Kung Fu Panda 2',
+    'Shrek the Third',
+    'The Polar Express',
+    'Ice Age: The Meltdown',
+    'Rise of the Guardians',
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
