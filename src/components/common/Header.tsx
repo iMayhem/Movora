@@ -7,7 +7,6 @@ import { useState, useEffect, FormEvent } from 'react';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Logo } from '@/components/icons/Logo';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -40,8 +39,7 @@ export function Header() {
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <div className="flex items-center gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <Logo />
-            <span className="sr-only">Movora</span>
+            <span className="font-bold">Movora</span>
           </Link>
           <nav className="hidden gap-6 md:flex">
             {navItems.map(item => (
