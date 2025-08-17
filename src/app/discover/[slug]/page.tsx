@@ -4,6 +4,7 @@ import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { notFound } from 'next/navigation';
 import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
+import { fetchFeaturedAnimated } from '@/components/movies/FeaturedAnimated';
 
 type DiscoverPageProps = {
   params: { slug: string };
@@ -23,6 +24,10 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
   'featured-bollywood': {
     title: 'Featured Bollywood',
     fetcher: () => fetchFeaturedBollywood(),
+  },
+  'featured-animated': {
+    title: 'Featured Animated',
+    fetcher: () => fetchFeaturedAnimated(),
   },
   'latest-bollywood': {
     title: 'Latest Bollywood Releases',

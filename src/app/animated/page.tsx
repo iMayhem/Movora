@@ -68,13 +68,15 @@ export default async function AnimatedPage() {
             World of Animation
           </h1>
         </div>
-        <FeaturedAnimated />
+        
         {trendingAnimated.length > 0 ? (
           <TrendingCarousel items={trendingAnimated} />
         ) : (
           <p>Could not load trending animated movies.</p>
         )}
       </section>
+
+      <FeaturedAnimated showMore />
 
       {sections.map((section, index) => (
         <section key={section.slug}>
