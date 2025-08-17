@@ -129,7 +129,6 @@ export async function FeaturedMindfucks() {
 
   return (
     <section className="mb-12">
-        <h2 className="font-headline text-3xl font-bold mb-6">Featured</h2>
         <MovieList initialMedia={featuredMedia} showControls={false} />
     </section>
   );
