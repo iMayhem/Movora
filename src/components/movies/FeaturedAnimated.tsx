@@ -23,7 +23,12 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
     let movieResults;
     if (title === 'Moana') {
        movieResults = await searchMedia('Moana', 'movie', { year: '2016' });
-    } else {
+    } else if (title === 'WALL-E') {
+        movieResults = await searchMedia('WALL-E', 'movie', { year: '2008' });
+    } else if (title === 'The Lion King') {
+        movieResults = await searchMedia('The Lion King', 'movie', { year: '1994' });
+    }
+    else {
        movieResults = await searchMedia(title, 'movie');
     }
     
