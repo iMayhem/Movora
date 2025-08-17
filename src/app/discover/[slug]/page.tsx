@@ -63,22 +63,6 @@ const discoverCategories: Record<string, { title: string; params: Record<string,
     title: 'Dramas on Prime',
     params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '18' },
   },
-   'top-rated-disney': {
-    title: 'Top Rated on Disney+',
-    params: { watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '122', sort_by: 'vote_average.desc', 'vote_count.gte': 100 },
-  },
-  'action-disney': {
-    title: 'Action & Adventure on Disney+',
-    params: { watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '122', with_genres: '28' },
-  },
-  'comedy-disney': {
-    title: 'Comedies on Disney+',
-    params: { watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '122', with_genres: '35' },
-  },
-  'drama-disney': {
-    title: 'Dramas on Disney+',
-    params: { watch_region: 'IN', with_watch_monetization_types: 'flatrate', with_watch_providers: '122', with_genres: '18' },
-  },
 };
 
 export default async function DiscoverPage({ params }: DiscoverPageProps) {

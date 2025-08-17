@@ -13,7 +13,6 @@ const navItems = [
   { name: 'Bollywood', href: '/bollywood' },
   { name: 'Netflix', href: '/netflix' },
   { name: 'Prime', href: '/prime' },
-  { name: 'Disney', href: '/disney' },
 ];
 
 export function Header() {
