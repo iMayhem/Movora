@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { getTvShowDetails, getTvShowCredits, getSimilarTvShows } from '@/lib/tmdb';
 import { Star, Calendar, Tv } from 'lucide-react';
@@ -12,8 +13,8 @@ type TvShowPageProps = {
   params: { id: string };
 };
 
-export default async function TvShowPage({ params }: TvShowPageProps) {
-  const tvShowId = Number(params.id);
+export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
+  const tvShowId = Number(id);
   const show = await getTvShowDetails(tvShowId);
 
   if (!show) {
