@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { discoverMovies } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { Button } from '@/components/ui/button';
+import { FeaturedMindfucks } from '@/components/movies/FeaturedMindfucks';
 
 const MINDFUCK_PARAMS = {
   'sort_by': 'primary_release_date.desc',
@@ -32,7 +33,12 @@ export default async function MindfucksPage() {
           </Button>
         </Link>
       </div>
-      <MovieList initialMedia={mindfuckMovies} showControls={false} />
+
+      <FeaturedMindfucks />
+
+      <div className="mt-12">
+        <MovieList initialMedia={mindfuckMovies} showControls={false} />
+      </div>
     </div>
   );
 }
