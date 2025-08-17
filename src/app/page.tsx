@@ -2,6 +2,8 @@ import { getTrending, getPopular } from '@/lib/tmdb';
 import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { MovieList } from '@/components/movies/MovieList';
 import type { Media } from '@/types/tmdb';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default async function Home() {
   const [trendingMovies, popularMovies, popularTv] = await Promise.all([
@@ -30,6 +32,9 @@ export default async function Home() {
       <section>
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
             <h2 className="font-headline text-3xl font-bold">Discover</h2>
+            <Link href="/discover/discover">
+              <Button variant="outline">More</Button>
+            </Link>
         </div>
         <MovieList initialMedia={initialMedia} showControls={false} />
       </section>

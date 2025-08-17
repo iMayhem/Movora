@@ -1,6 +1,6 @@
 
 
-import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
+import { discoverMovies, discoverTvShows, getPopular } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { notFound } from 'next/navigation';
 import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
@@ -13,6 +13,16 @@ type DiscoverPageProps = {
 const CURRENT_YEAR = new Date().getFullYear();
 
 const discoverCategories: Record<string, { title: string; fetcher: () => Promise<any> }> = {
+  'discover': {
+    title: 'Discover',
+    fetcher: async () => {
+        const [popularMovies, popularTv] = await Promise.all([
+            getPopular('movie', {}, 10),
+            getPopular('tv', {}, 10),
+        ]);
+        return [...popularMovies, ...popularTv].sort((a,b) => b.popularity - a.popularity);
+    }
+  },
   'letterboxd-top-250': {
     title: 'Top 250',
     fetcher: () => discoverMovies({ 'sort_by': 'vote_average.desc', 'vote_count.gte': '1000', 'with_original_language': 'en', 'include_adult': 'false', 'without_genres': '99,10751' }, 13),
