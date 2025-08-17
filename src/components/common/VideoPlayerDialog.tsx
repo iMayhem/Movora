@@ -1,13 +1,15 @@
 
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
   DialogTitle,
 } from '@/components/ui/dialog';
 import { VideoPlayer } from './VideoPlayer';
+import { useIsMobile } from '@/hooks/use-mobile';
+
 
 type VideoPlayerContextType = {
   mediaId: number;
@@ -37,13 +39,45 @@ type VideoPlayerDialogProps = {
 };
 
 export function VideoPlayerDialog({ children, mediaId, mediaType }: VideoPlayerDialogProps) {
+  const [open, setOpen] = useState(false);
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
   const [isPlayable, setIsPlayable] = useState(mediaType === 'movie');
+  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    if (isMobile) {
+      if (open) {
+        try {
+          screen.orientation.lock('landscape').catch(() => {});
+        } catch (error) {
+          console.warn('Screen orientation lock not supported or failed:', error);
+        }
+      } else {
+        try {
+          screen.orientation.unlock();
+        } catch (error) {
+            console.warn('Screen orientation unlock not supported or failed:', error);
+        }
+      }
+    }
+    
+    // Cleanup on component unmount
+    return () => {
+        if (isMobile) {
+            try {
+                screen.orientation.unlock();
+            }
+            catch (error) {
+                // Ignore errors on cleanup
+            }
+        }
+    }
+  }, [open, isMobile]);
 
   return (
     <VideoPlayerContext.Provider value={{ mediaId, mediaType, season, episode, setSeason, setEpisode, isPlayable, setIsPlayable }}>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         {children}
         <DialogContent className="max-w-4xl p-0 bg-black border-0">
           <DialogTitle className="sr-only">VIDEASY Player</DialogTitle>
