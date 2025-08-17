@@ -15,6 +15,7 @@ const navItems = [
   { name: 'Prime', href: '/prime' },
   { name: 'Top IMDB', href: '/top-imdb' },
   { name: 'Animated', href: '/animated' },
+  { name: 'Indian Cartoons', href: '/indian-cartoons' },
 ];
 
 export function Header() {

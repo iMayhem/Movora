@@ -126,6 +126,14 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
     title: 'Popular Animated TV Shows',
     fetcher: () => discoverTvShows({ with_genres: '16', sort_by: 'popularity.desc' }, 5),
   },
+  'top-rated-indian-cartoons': {
+    title: 'Top-Rated Indian Cartoons',
+    fetcher: () => discoverTvShows({ with_genres: '16', with_origin_country: 'IN', 'vote_count.gte': '5', sort_by: 'vote_average.desc' }, 5),
+  },
+  'latest-indian-cartoons': {
+    title: 'Latest Indian Cartoons',
+    fetcher: () => discoverTvShows({ with_genres: '16', with_origin_country: 'IN', 'vote_count.gte': '5', sort_by: 'first_air_date.desc' }, 5),
+  },
 };
 
 export default async function DiscoverPage({ params }: DiscoverPageProps) {
