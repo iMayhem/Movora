@@ -28,7 +28,7 @@ export function MovieList({ initialMedia, carousel = false }: MovieListProps) {
       >
         <CarouselContent className="-ml-2">
           {items.map((item, index) => (
-            <CarouselItem key={`${item.media_type}-${item.id}-${index}`} className="pl-2 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
+            <CarouselItem key={`${item.media_type}-${item.id}-${index}`} className="pl-2 basis-1/4 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6">
                <MovieCard item={item} />
             </CarouselItem>
           ))}
@@ -40,7 +40,7 @@ export function MovieList({ initialMedia, carousel = false }: MovieListProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
+    <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
       {items.map((item, index) => (
         <MovieCard key={`${item.media_type}-${item.id}-${index}`} item={item} />
       ))}
