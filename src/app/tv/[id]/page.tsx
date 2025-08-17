@@ -39,7 +39,6 @@ export default function TvShowPage({ params }: TvShowPageProps) {
     return <div>Loading...</div>;
   }
 
-  const trailer = show.videos?.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
   const cast = credits?.cast.slice(0, 10) || [];
 
   return (
@@ -47,7 +46,8 @@ export default function TvShowPage({ params }: TvShowPageProps) {
       <VideoPlayer
         isOpen={isVideoPlayerOpen}
         onClose={() => setIsVideoPlayerOpen(false)}
-        videoKey={trailer?.key}
+        mediaId={show.id}
+        mediaType={show.media_type}
       />
       <div className="container mx-auto px-4 py-8 text-white">
         <div className="relative h-[30vh] md:h-[50vh] w-full">
@@ -101,12 +101,10 @@ export default function TvShowPage({ params }: TvShowPageProps) {
               </div>
               <p className="text-base leading-relaxed mb-6">{show.overview}</p>
               <div className="flex items-center gap-4">
-                {trailer && (
-                  <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg">
-                    <PlayCircle className="mr-2" />
-                    Play Trailer
-                  </Button>
-                )}
+                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg">
+                  <PlayCircle className="mr-2" />
+                  Watch Now
+                </Button>
                 <WatchLaterButton item={show} />
               </div>
             </div>

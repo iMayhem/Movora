@@ -40,7 +40,6 @@ export default function MoviePage({ params }: MoviePageProps) {
     return <div>Loading...</div>;
   }
   
-  const trailer = movie.videos?.results.find(v => v.type === 'Trailer' && v.site === 'YouTube');
   const cast = credits?.cast.slice(0, 10) || [];
 
   return (
@@ -48,7 +47,8 @@ export default function MoviePage({ params }: MoviePageProps) {
     <VideoPlayer 
       isOpen={isVideoPlayerOpen}
       onClose={() => setIsVideoPlayerOpen(false)}
-      videoKey={trailer?.key}
+      mediaId={movie.id}
+      mediaType={movie.media_type}
     />
     <div className="container mx-auto px-4 py-8 text-white">
       <div className="relative h-[30vh] md:h-[50vh] w-full">
@@ -102,12 +102,10 @@ export default function MoviePage({ params }: MoviePageProps) {
             </div>
             <p className="text-base leading-relaxed mb-6">{movie.overview}</p>
             <div className="flex items-center gap-4">
-              {trailer && (
                 <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg">
                   <PlayCircle className="mr-2" />
-                  Play Trailer
+                  Watch Now
                 </Button>
-              )}
               <WatchLaterButton item={movie} />
             </div>
           </div>
