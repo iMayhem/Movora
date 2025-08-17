@@ -57,7 +57,19 @@ const featuredTitles = [
   'Swordfish',
   'Basic',
   'Perfect Stranger',
-  'Insomnia'
+  'Insomnia',
+  'Changeling',
+  'The Island',
+  'The Butterfly Effect',
+  'Being John Malkovich',
+  'The Animatrix',
+  'Mind Game',
+  'Mulholland Drive',
+  'Eternal Sunshine of the Spotless Mind',
+  'The Adjustment Bureau',
+  '2001: A Space Odyssey',
+  'Eyes Wide Shut',
+  'Lost Highway'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
