@@ -49,10 +49,10 @@ const tvSections = [
 
 export default async function KoreanPage() {
   const sectionMovies = await Promise.all(
-    movieSections.map(section => discoverMovies(section.params, 3)),
+    movieSections.map(section => discoverMovies(section.params, 6)),
   );
 
-  const sectionTvShows = await Promise.all(tvSections.map(section => discoverTvShows(section.params, 3)))
+  const sectionTvShows = await Promise.all(tvSections.map(section => discoverTvShows(section.params, 6)))
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
