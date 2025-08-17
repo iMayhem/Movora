@@ -6,6 +6,8 @@ type DiscoverPageProps = {
   params: { slug: string };
 };
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 const discoverCategories: Record<string, { title: string; params: Record<string, string> }> = {
   'latest-bollywood': {
     title: 'Latest Bollywood Releases',
@@ -86,6 +88,26 @@ const discoverCategories: Record<string, { title: string; params: Record<string,
   'romance-prime': {
     title: 'Romantic Movies on Prime',
     params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '10749' },
+  },
+  'top-rated-imdb': {
+    title: 'Top Rated of All Time',
+    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc' },
+  },
+  'popular-this-year-imdb': {
+    title: 'Popular This Year',
+    params: { 'vote_count.gte': '250', primary_release_year: String(CURRENT_YEAR) },
+  },
+  'top-rated-action-imdb': {
+    title: 'Top Rated Action Movies',
+    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '28' },
+  },
+  'top-rated-drama-imdb': {
+    title: 'Top Rated Dramas',
+    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '18' },
+  },
+  'top-rated-scifi-imdb': {
+    title: 'Top Rated Sci-Fi & Fantasy',
+    params: { 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '878,14' },
   },
 };
 
