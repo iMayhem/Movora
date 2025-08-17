@@ -76,6 +76,18 @@ const featuredTitles = [
     'The Polar Express',
     'Ice Age: The Meltdown',
     'Rise of the Guardians',
+    'The Jungle Book',
+    'Hercules',
+    'Lilo & Stitch',
+    'The Emoji Movie',
+    'Toy Story 4',
+    'Coraline',
+    'The Adventures of Tintin',
+    'Rango',
+    'Tarzan',
+    'Cinderella',
+    'Ice Age: Continental Drift',
+    'The Emperor\'s New Groove',
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
@@ -93,6 +105,14 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
         movieResults = await searchMedia('The Little Mermaid', 'movie', { year: '1989' });
     } else if (title === 'Mulan') {
         movieResults = await searchMedia('Mulan', 'movie', { year: '1998' });
+    } else if (title === 'The Jungle Book') {
+        movieResults = await searchMedia(title, 'movie', { year: '1967' });
+    } else if (title === 'Hercules') {
+        movieResults = await searchMedia(title, 'movie', { year: '1997' });
+    } else if (title === 'Tarzan') {
+        movieResults = await searchMedia(title, 'movie', { year: '1999' });
+    } else if (title === 'Cinderella') {
+        movieResults = await searchMedia(title, 'movie', { year: '1950' });
     }
     else {
        movieResults = await searchMedia(title, 'movie');
