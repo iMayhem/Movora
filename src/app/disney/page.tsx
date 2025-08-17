@@ -4,7 +4,7 @@ import { MovieList } from '@/components/movies/MovieList';
 import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
 
-const HOTSTAR_PARAMS = {
+const DISNEY_PARAMS = {
   watch_region: 'IN',
   with_watch_monetization_types: 'flatrate',
   with_watch_providers: '122', // 122 is Disney+ Hotstar
@@ -12,30 +12,30 @@ const HOTSTAR_PARAMS = {
 
 const sections = [
   {
-    title: 'Top Rated on Hotstar',
-    slug: 'top-rated-hotstar',
-    params: { ...HOTSTAR_PARAMS, sort_by: 'vote_average.desc', 'vote_count.gte': 100 },
+    title: 'Top Rated on Disney+',
+    slug: 'top-rated-disney',
+    params: { ...DISNEY_PARAMS, sort_by: 'vote_average.desc', 'vote_count.gte': 100 },
   },
   {
     title: 'Action & Adventure',
-    slug: 'action-hotstar',
-    params: { ...HOTSTAR_PARAMS, with_genres: '28' },
+    slug: 'action-disney',
+    params: { ...DISNEY_PARAMS, with_genres: '28' },
   },
   {
     title: 'Comedy',
-    slug: 'comedy-hotstar',
-    params: { ...HOTSTAR_PARAMS, with_genres: '35' },
+    slug: 'comedy-disney',
+    params: { ...DISNEY_PARAMS, with_genres: '35' },
   },
   {
     title: 'Drama',
-    slug: 'drama-hotstar',
-    params: { ...HOTSTAR_PARAMS, with_genres: '18' },
+    slug: 'drama-disney',
+    params: { ...DISNEY_PARAMS, with_genres: '18' },
   },
 ];
 
-export default async function HotstarPage() {
-  const [trendingHotstar, ...sectionMovies] = await Promise.all([
-    discoverMovies({ ...HOTSTAR_PARAMS, sort_by: 'popularity.desc' }, 1),
+export default async function DisneyPage() {
+  const [trendingDisney, ...sectionMovies] = await Promise.all([
+    discoverMovies({ ...DISNEY_PARAMS, sort_by: 'popularity.desc' }, 1),
     ...sections.map(section => discoverMovies(section.params, 1)),
   ]);
 
@@ -45,10 +45,10 @@ export default async function HotstarPage() {
         <h1 className="mb-6 font-headline text-4xl font-bold text-white md:text-5xl">
           Disney+ Hotstar
         </h1>
-        {trendingHotstar.length > 0 ? (
-          <TrendingCarousel items={trendingHotstar} />
+        {trendingDisney.length > 0 ? (
+          <TrendingCarousel items={trendingDisney} />
         ) : (
-          <p>Could not load trending Hotstar content.</p>
+          <p>Could not load trending Disney+ Hotstar content.</p>
         )}
       </section>
 
