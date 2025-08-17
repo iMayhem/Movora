@@ -8,7 +8,7 @@ import { Button } from '../ui/button';
 const cartoonNetworkTitles = [
   'The Powerpuff Girls', 'Dexter\'s Laboratory', 'Courage the Cowardly Dog', 'Johnny Bravo',
   'Samurai Jack', 'Ed, Edd n Eddy', 'Ben 10', 'Ben 10: Alien Force', 'Ben 10: Ultimate Alien',
-  'Ben 10: Omniverse', 'Roll No. 21', 'Teen Titans', 'Justice League',
+  'Ben 10: Omniverse', 'Roll No. 21', 'Teen Titans', 'Justice League', 'Justice League Unlimited',
   'The Grim Adventures of Billy & Mandy', 'Codename: Kids Next Door', 'Tom and Jerry', 'Scooby-Doo, Where Are You!',
   'Looney Tunes', 'Popeye the Sailor', 'Dragon Ball Z', 'Dragon Ball Super', 'Transformers: Prime',
   'Beyblade', 'Pokémon', 'Adventure Time', 'The Amazing World of Gumball', 'Regular Show',
@@ -97,7 +97,7 @@ const disneyXdTitles = [
   'Yin Yang Yo!', 'Super Robot Monkey Team Hyperforce Go!', 'Get Ed', 'W.I.T.C.H.', 'Shaman King',
   'Galactik Football', 'Oban Star-Racers', 'Monster Buster Club', 'Dinosaur King', 'Tutenstein',
   'Kickin\' It', 'Lab Rats', 'Mighty Med', 'Crash & Bernstein', 'Star vs. the Forces of Evil',
-  'Wander Over Yonder', 'Pickle and Peanut', 'Future-Worm!', 'Atomic Puppet'
+  'Wander Over Yonder', 'Pickle and Peanut', 'Future-Worm!', 'Atomic Puppet', 'Doctor Who'
 ];
 
 const otherChannelTitles = [
@@ -109,7 +109,6 @@ const otherChannelTitles = [
   'Oscar\'s Oasis', 'Dumb Bunnies', 'Arthur', 'Chi\'s Sweet Home', 'Let\'s Go! Anpanman',
   'Larva'
 ];
-
 
 const allShows = {
   'cartoon-network': cartoonNetworkTitles,
@@ -155,7 +154,7 @@ export async function fetchIndianCartoonsByChannel(channel: keyof typeof allShow
   const uniqueMedia: Media[] = [];
   const seenIds = new Set<number>();
   for (const media of validResults) {
-    if (!seenIds.has(media.id)) {
+    if (media && !seenIds.has(media.id)) {
       uniqueMedia.push(media);
       seenIds.add(media.id);
     }
@@ -198,3 +197,5 @@ export async function FeaturedIndianCartoons() {
     </>
   );
 }
+
+    
