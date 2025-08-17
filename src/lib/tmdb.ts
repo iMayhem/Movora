@@ -39,8 +39,17 @@ const normalizeMedia = (
   media_type?: 'movie' | 'tv'
 ): Media[] => {
   if (!items) return [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   return items
-    .filter(item => item.poster_path) // Filter out items without a poster_path
+    .filter(item => {
+        if (!item.poster_path) return false;
+        const releaseDate = 'release_date' in item ? item.release_date : item.first_air_date;
+        if (releaseDate) {
+            return new Date(releaseDate) <= today;
+        }
+        return true;
+    })
     .map(item => ({
       ...item,
       media_type: item.media_type || ('title' in item ? 'movie' : 'tv'),
