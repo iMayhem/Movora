@@ -75,18 +75,7 @@ export default async function PrimePage() {
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
-      <section>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <h1 className="font-headline text-4xl font-bold text-white md:text-5xl">
-            Amazon Prime Video
-            </h1>
-            <Link href="https://trakt.tv/users/garycrawfordgc/lists/amazon-prime-shows?sort=rank,asc" target="_blank" rel="noopener noreferrer">
-                <Button variant="outline">
-                    View on Trakt.tv
-                </Button>
-            </Link>
-        </div>
-      </section>
+      
 
       {movieSections.map((section, index) => (
         <section key={section.slug}>
