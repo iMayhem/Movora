@@ -24,7 +24,15 @@ function SearchResults() {
     const fetchResults = async () => {
       const movieResults = await searchMedia(query, 'movie');
       const tvResults = await searchMedia(query, 'tv');
-      setResults([...movieResults, ...tvResults].sort((a,b) => b.popularity - a.popularity));
+      
+      const seen = new Set();
+      const combined = [...movieResults, ...tvResults].filter(item => {
+        const duplicate = seen.has(item.id);
+        seen.add(item.id);
+        return !duplicate;
+      });
+
+      setResults(combined.sort((a,b) => b.popularity - a.popularity));
       setLoading(false);
     };
 

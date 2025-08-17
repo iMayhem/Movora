@@ -4,6 +4,15 @@ import type { Media } from '@/types/tmdb';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+const removeDuplicates = (media: Media[]): Media[] => {
+  const seen = new Set<number>();
+  return media.filter(item => {
+    const duplicate = seen.has(item.id);
+    seen.add(item.id);
+    return !duplicate;
+  });
+}
+
 export default async function Home() {
   const [
     popularMovies, 
@@ -19,11 +28,11 @@ export default async function Home() {
     getTrending('tv', 'week', 1),
   ]);
 
-  const mostViewed: Media[] = [...popularMovies, ...popularTv].sort(
+  const mostViewed: Media[] = removeDuplicates([...popularMovies, ...popularTv]).sort(
     (a, b) => b.popularity - a.popularity
   ).slice(0, 12);
 
-  const topWeekly: Media[] = [...topWeeklyMovies, ...topWeeklyTv].sort(
+  const topWeekly: Media[] = removeDuplicates([...topWeeklyMovies, ...topWeeklyTv]).sort(
     (a, b) => b.popularity - a.popularity
   ).slice(0, 12);
 
