@@ -105,7 +105,8 @@ const featuredTitles = [
   'The Tall Man',
   'Primal Fear',
   'Revolver',
-  '11:14'
+  '11:14',
+  'Predestination'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
