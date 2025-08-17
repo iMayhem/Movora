@@ -6,10 +6,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  DialogTrigger
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { PlayCircle } from 'lucide-react';
 import { VideoPlayer } from './VideoPlayer';
 
 type VideoPlayerContextType = {
@@ -56,17 +53,3 @@ export function VideoPlayerDialog({ children, mediaId, mediaType }: VideoPlayerD
     </VideoPlayerContext.Provider>
   );
 }
-
-function PlayerDialogButton() {
-  const { isPlayable } = useVideoPlayer();
-  return (
-    <DialogTrigger asChild>
-      <Button size="lg" disabled={!isPlayable}>
-        <PlayCircle className="mr-2" />
-        Watch Now
-      </Button>
-    </DialogTrigger>
-  );
-}
-
-VideoPlayerDialog.Button = PlayerDialogButton;

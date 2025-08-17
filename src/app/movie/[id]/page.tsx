@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import { getMovieDetails, getMovieCredits, getSimilarMovies } from '@/lib/tmdb';
-import { Star, Calendar, Clock, PlayCircle } from 'lucide-react';
+import { Star, Calendar, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { WatchLaterButton } from '@/components/movies/WatchLaterButton';
 import { MovieList } from '@/components/movies/MovieList';
 import { VideoPlayerDialog } from '@/components/common/VideoPlayerDialog';
+import { PlayerDialogButton } from '@/components/common/PlayerDialogButton';
 import type { Media } from '@/types/tmdb';
 
 type MoviePageProps = {
@@ -27,11 +28,10 @@ export default async function MoviePage({ params }: MoviePageProps) {
   const cast = credits?.cast.slice(0, 10) || [];
 
   return (
-    <>
-      <VideoPlayerDialog
-        mediaId={movie.id}
-        mediaType={movie.media_type}
-      />
+    <VideoPlayerDialog
+      mediaId={movie.id}
+      mediaType={movie.media_type}
+    >
       <div className="container mx-auto px-4 py-8 text-white">
         <div className="relative h-[30vh] md:h-[50vh] w-full">
           {movie.backdrop_path && (
@@ -86,7 +86,7 @@ export default async function MoviePage({ params }: MoviePageProps) {
               </div>
               <p className="text-base leading-relaxed mb-6">{movie.overview}</p>
               <div className="flex items-center gap-4">
-                <VideoPlayerDialog.Button />
+                <PlayerDialogButton />
                 <WatchLaterButton item={movie} />
               </div>
             </div>
@@ -122,6 +122,6 @@ export default async function MoviePage({ params }: MoviePageProps) {
           )}
         </div>
       </div>
-    </>
+    </VideoPlayerDialog>
   );
 }
