@@ -1,9 +1,9 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { getTvShowDetails, getTvShowCredits, getSimilarTvShows } from '@/lib/tmdb';
+import { getTvShowDetails, getTvShowCredits, getSimilarTvShows, getSeasonDetails } from '@/lib/tmdb';
 import { Star, Calendar, Tv, PlayCircle, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import { VideoPlayer } from '@/components/common/VideoPlayer';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import type { Media, TVShow, Credits } from '@/types/tmdb';
+import type { Media, TVShow, Credits, Episode } from '@/types/tmdb';
 
 type TvShowPageProps = {
   params: { id: string };
@@ -25,15 +25,15 @@ export default function TvShowPage({ params }: TvShowPageProps) {
   const [similarShows, setSimilarShows] = useState<Media[]>([]);
   const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
   const [selectedSeason, setSelectedSeason] = useState<number | undefined>(undefined);
-  const [selectedEpisode, setSelectedEpisode] = useState(1);
-  const [episodesInSeason, setEpisodesInSeason] = useState<number[]>([]);
-  const [isUpcoming, setIsUpcoming] = useState(false);
+  const [selectedEpisode, setSelectedEpisode] = useState<number | undefined>(undefined);
+  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const [isSeasonUpcoming, setIsSeasonUpcoming] = useState(false);
   const [seasonAirDate, setSeasonAirDate] = useState<string | null>(null);
 
+  const tvShowId = Number(params.id);
 
   useEffect(() => {
     const fetchTvShowData = async () => {
-      const tvShowId = Number(params.id);
       const showDetails = await getTvShowDetails(tvShowId);
       setShow(showDetails);
       const showCredits = await getTvShowCredits(tvShowId);
@@ -41,31 +41,49 @@ export default function TvShowPage({ params }: TvShowPageProps) {
       const similar = await getSimilarTvShows(tvShowId);
       setSimilarShows(similar);
       if (showDetails?.seasons && showDetails.seasons.length > 0) {
-        const firstSeason = showDetails.seasons.find(s => s.season_number > 0)?.season_number ?? 1;
-        setSelectedSeason(firstSeason);
+        const firstAiredSeason = showDetails.seasons.find(s => s.season_number > 0);
+        if (firstAiredSeason) {
+          setSelectedSeason(firstAiredSeason.season_number);
+        }
       }
     };
 
     fetchTvShowData();
-  }, [params.id]);
+  }, [tvShowId]);
 
   useEffect(() => {
-    if (show && selectedSeason !== undefined) {
-      const season = show.seasons?.find(s => s.season_number === selectedSeason);
-      if (season) {
-        if (season.air_date && new Date(season.air_date) > new Date()) {
-          setIsUpcoming(true);
-          setSeasonAirDate(new Date(season.air_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
-          setEpisodesInSeason([]);
-        } else {
-          setIsUpcoming(false);
-          setSeasonAirDate(null);
-          setEpisodesInSeason(Array.from({ length: season.episode_count }, (_, i) => i + 1));
-          setSelectedEpisode(1);
-        }
+    const fetchSeasonData = async () => {
+      if (selectedSeason === undefined) return;
+      
+      const season = show?.seasons?.find(s => s.season_number === selectedSeason);
+      if (season && new Date(season.air_date) > new Date()) {
+        setIsSeasonUpcoming(true);
+        setSeasonAirDate(new Date(season.air_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+        setEpisodes([]);
+        setSelectedEpisode(undefined);
+      } else {
+        setIsSeasonUpcoming(false);
+        setSeasonAirDate(null);
+        const seasonDetails = await getSeasonDetails(tvShowId, selectedSeason);
+        setEpisodes(seasonDetails?.episodes || []);
+        setSelectedEpisode(seasonDetails?.episodes?.[0]?.episode_number || 1);
       }
+    };
+
+    if (show) {
+        fetchSeasonData();
     }
-  }, [show, selectedSeason]);
+  }, [show, selectedSeason, tvShowId]);
+
+  const handleSeasonChange = (value: string) => {
+    setSelectedSeason(Number(value));
+  };
+
+  const isEpisodeUpcoming = useCallback((episodeNumber: number | undefined) => {
+    if(episodeNumber === undefined) return true;
+    const episode = episodes.find(e => e.episode_number === episodeNumber);
+    return episode ? new Date(episode.air_date) > new Date() : true;
+  }, [episodes]);
 
   if (!show) {
     return <div>Loading...</div>;
@@ -74,10 +92,6 @@ export default function TvShowPage({ params }: TvShowPageProps) {
   const cast = credits?.cast.slice(0, 10) || [];
   const seasons = show.seasons?.filter(s => s.season_number > 0) || [];
 
-  const handleSeasonChange = (value: string) => {
-    setSelectedSeason(Number(value));
-  };
-  
   return (
     <>
       <VideoPlayer
@@ -162,7 +176,7 @@ export default function TvShowPage({ params }: TvShowPageProps) {
                       </SelectContent>
                     </Select>
                   </div>
-                    {isUpcoming ? (
+                    {isSeasonUpcoming ? (
                          <div className="flex-1 flex items-end">
                             <Alert variant="default" className="border-accent">
                                 <AlertCircle className="h-4 w-4 text-accent" />
@@ -176,19 +190,22 @@ export default function TvShowPage({ params }: TvShowPageProps) {
                         <div className="flex-1">
                             <Label htmlFor="episode-select">Episode</Label>
                             <Select
-                            value={String(selectedEpisode)}
+                            value={selectedEpisode !== undefined ? String(selectedEpisode) : ''}
                             onValueChange={(value) => setSelectedEpisode(Number(value))}
-                            disabled={episodesInSeason.length === 0}
+                            disabled={episodes.length === 0}
                             >
                             <SelectTrigger id="episode-select">
                                 <SelectValue placeholder="Select episode" />
                             </SelectTrigger>
                             <SelectContent>
-                                {episodesInSeason.map(ep => (
-                                <SelectItem key={ep} value={String(ep)}>
-                                    Episode {ep}
-                                </SelectItem>
-                                ))}
+                                {episodes.map(ep => {
+                                    const upcoming = new Date(ep.air_date) > new Date();
+                                    return (
+                                        <SelectItem key={ep.id} value={String(ep.episode_number)} disabled={upcoming}>
+                                            Episode {ep.episode_number} {upcoming ? `(Airs ${new Date(ep.air_date).toLocaleDateString()})` : ''}
+                                        </SelectItem>
+                                    )
+                                })}
                             </SelectContent>
                             </Select>
                         </div>
@@ -197,7 +214,7 @@ export default function TvShowPage({ params }: TvShowPageProps) {
               </div>
               
               <div className="flex items-center gap-4">
-                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg" disabled={!selectedSeason || isUpcoming}>
+                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg" disabled={isSeasonUpcoming || isEpisodeUpcoming(selectedEpisode)}>
                   <PlayCircle className="mr-2" />
                   Watch Now
                 </Button>
@@ -239,6 +256,3 @@ export default function TvShowPage({ params }: TvShowPageProps) {
     </>
   );
 }
-
-
-    

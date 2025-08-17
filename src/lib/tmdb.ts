@@ -1,4 +1,4 @@
-import type { Movie, TVShow, Credits, Media } from '@/types/tmdb';
+import type { Movie, TVShow, Credits, Media, SeasonDetails } from '@/types/tmdb';
 
 const API_KEY = process.env.TMDB_API_KEY;
 const API_BASE_URL = 'https://api.themoviedb.org/3';
@@ -30,20 +30,20 @@ const normalizeMedia = (items: (Movie | TVShow)[], media_type?: 'movie' | 'tv'):
   if (!items) return [];
   return items.map(item => ({ 
     ...item, 
-    media_type: 'title' in item ? 'movie' : 'tv' 
+    media_type: item.media_type || ('title' in item ? 'movie' : 'tv')
   }));
 };
 
 export async function getTrending(media_type: 'movie' | 'tv'): Promise<Media[]> {
   const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/trending/${media_type}/week`);
   if (!data?.results) return [];
-  return normalizeMedia(data.results, media_type);
+  return normalizeMedia(data.results);
 }
 
 export async function getPopular(media_type: 'movie' | 'tv'): Promise<Media[]> {
   const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/${media_type}/popular`);
   if (!data?.results) return [];
-  return normalizeMedia(data.results, media_type);
+  return normalizeMedia(data.results);
 }
 
 export async function searchMedia(query: string, media_type: 'movie' | 'tv'): Promise<Media[]> {
@@ -85,4 +85,8 @@ export async function getSimilarTvShows(id: number): Promise<Media[]> {
     const data = await fetcher<{ results: TVShow[] }>(`/tv/${id}/similar`);
     if (!data?.results) return [];
     return normalizeMedia(data.results, 'tv');
+}
+
+export async function getSeasonDetails(tvId: number, seasonNumber: number): Promise<SeasonDetails | null> {
+  return fetcher<SeasonDetails>(`/tv/${tvId}/season/${seasonNumber}`);
 }
