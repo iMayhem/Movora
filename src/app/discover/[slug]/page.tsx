@@ -31,6 +31,22 @@ const discoverCategories: Record<string, { title: string; params: Record<string,
     title: 'Thrilling Bollywood Rides',
     params: { with_original_language: 'hi', region: 'IN', with_genres: '53', 'vote_count.gte': 25 },
   },
+  'top-rated-netflix': {
+    title: 'Top Rated on Netflix',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', sort_by: 'vote_average.desc', 'vote_count.gte': 300 },
+  },
+  'action-netflix': {
+    title: 'Action & Adventure on Netflix',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '28' },
+  },
+  'comedy-netflix': {
+    title: 'Comedies on Netflix',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '35' },
+  },
+  'scifi-netflix': {
+    title: 'Sci-Fi & Fantasy on Netflix',
+    params: { watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', with_genres: '878,14' },
+  },
 };
 
 export default async function DiscoverPage({ params }: DiscoverPageProps) {

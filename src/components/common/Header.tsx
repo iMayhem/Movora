@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { name: 'Home', href: '/' },
   { name: 'Bollywood', href: '/bollywood' },
-  { name: 'AI Recommendations', href: '/recommendations' },
+  { name: 'Netflix', href: '/netflix' },
 ];
 
 export function Header() {
