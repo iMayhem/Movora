@@ -14,6 +14,10 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
     title: 'Top 250',
     fetcher: () => discoverMovies({ 'sort_by': 'vote_average.desc', 'vote_count.gte': '1000', 'with_original_language': 'en', 'include_adult': 'false', 'without_genres': '99,10751' }, 13),
   },
+  'mindfucks-movies': {
+    title: 'Best Mindfucks',
+    fetcher: () => discoverMovies({ 'sort_by': 'vote_average.desc', 'vote_count.gte': '500', 'with_genres': '53,9648,878', 'without_genres': '16,10751,28', 'include_adult': 'false' }, 10),
+  },
   'latest-bollywood': {
     title: 'Latest Bollywood Releases',
     fetcher: () => discoverMovies({ with_original_language: 'hi', region: 'IN', sort_by: 'primary_release_date.desc', 'vote_count.gte': 25 }, 5),

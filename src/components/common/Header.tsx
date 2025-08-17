@@ -16,6 +16,7 @@ const navItems = [
   { name: 'Top IMDB', href: '/top-imdb' },
   { name: 'Animated', href: '/animated' },
   { name: 'Letterboxd', href: '/letterboxd' },
+  { name: 'Mindfucks', href: '/mindfucks' },
 ];
 
 export function Header() {
