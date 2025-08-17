@@ -1,9 +1,10 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getTvShowDetails, getTvShowCredits, getSimilarTvShows } from '@/lib/tmdb';
-import { Star, Calendar, Tv, PlayCircle } from 'lucide-react';
+import { Star, Calendar, Tv, PlayCircle, AlertCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { WatchLaterButton } from '@/components/movies/WatchLaterButton';
@@ -11,6 +12,7 @@ import { MovieList } from '@/components/movies/MovieList';
 import { VideoPlayer } from '@/components/common/VideoPlayer';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import type { Media, TVShow, Credits } from '@/types/tmdb';
 
 type TvShowPageProps = {
@@ -25,6 +27,8 @@ export default function TvShowPage({ params }: TvShowPageProps) {
   const [selectedSeason, setSelectedSeason] = useState<number | undefined>(undefined);
   const [selectedEpisode, setSelectedEpisode] = useState(1);
   const [episodesInSeason, setEpisodesInSeason] = useState<number[]>([]);
+  const [isUpcoming, setIsUpcoming] = useState(false);
+  const [seasonAirDate, setSeasonAirDate] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -49,8 +53,16 @@ export default function TvShowPage({ params }: TvShowPageProps) {
     if (show && selectedSeason !== undefined) {
       const season = show.seasons?.find(s => s.season_number === selectedSeason);
       if (season) {
-        setEpisodesInSeason(Array.from({ length: season.episode_count }, (_, i) => i + 1));
-        setSelectedEpisode(1);
+        if (season.air_date && new Date(season.air_date) > new Date()) {
+          setIsUpcoming(true);
+          setSeasonAirDate(new Date(season.air_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+          setEpisodesInSeason([]);
+        } else {
+          setIsUpcoming(false);
+          setSeasonAirDate(null);
+          setEpisodesInSeason(Array.from({ length: season.episode_count }, (_, i) => i + 1));
+          setSelectedEpisode(1);
+        }
       }
     }
   }, [show, selectedSeason]);
@@ -150,30 +162,42 @@ export default function TvShowPage({ params }: TvShowPageProps) {
                       </SelectContent>
                     </Select>
                   </div>
-                  <div className="flex-1">
-                    <Label htmlFor="episode-select">Episode</Label>
-                    <Select
-                      value={String(selectedEpisode)}
-                      onValueChange={(value) => setSelectedEpisode(Number(value))}
-                      disabled={episodesInSeason.length === 0}
-                    >
-                      <SelectTrigger id="episode-select">
-                        <SelectValue placeholder="Select episode" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {episodesInSeason.map(ep => (
-                          <SelectItem key={ep} value={String(ep)}>
-                            Episode {ep}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    {isUpcoming ? (
+                         <div className="flex-1 flex items-end">
+                            <Alert variant="default" className="border-accent">
+                                <AlertCircle className="h-4 w-4 text-accent" />
+                                <AlertTitle className="text-accent">Coming Soon!</AlertTitle>
+                                <AlertDescription>
+                                    This season is scheduled to air on {seasonAirDate}.
+                                </AlertDescription>
+                            </Alert>
+                        </div>
+                    ) : (
+                        <div className="flex-1">
+                            <Label htmlFor="episode-select">Episode</Label>
+                            <Select
+                            value={String(selectedEpisode)}
+                            onValueChange={(value) => setSelectedEpisode(Number(value))}
+                            disabled={episodesInSeason.length === 0}
+                            >
+                            <SelectTrigger id="episode-select">
+                                <SelectValue placeholder="Select episode" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {episodesInSeason.map(ep => (
+                                <SelectItem key={ep} value={String(ep)}>
+                                    Episode {ep}
+                                </SelectItem>
+                                ))}
+                            </SelectContent>
+                            </Select>
+                        </div>
+                    )}
                 </div>
               </div>
               
               <div className="flex items-center gap-4">
-                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg" disabled={!selectedSeason}>
+                <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg" disabled={!selectedSeason || isUpcoming}>
                   <PlayCircle className="mr-2" />
                   Watch Now
                 </Button>
@@ -215,3 +239,6 @@ export default function TvShowPage({ params }: TvShowPageProps) {
     </>
   );
 }
+
+
+    

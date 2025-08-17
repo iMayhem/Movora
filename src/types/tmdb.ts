@@ -1,3 +1,4 @@
+
 export interface Movie {
   id: number;
   title: string;
@@ -11,6 +12,7 @@ export interface Movie {
   tagline: string;
   popularity: number;
   videos?: { results: Video[] };
+  media_type: 'movie';
 }
 
 export interface Season {
@@ -37,9 +39,10 @@ export interface TVShow {
   popularity: number;
   videos?: { results: Video[] };
   seasons?: Season[];
+  media_type: 'tv';
 }
 
-export type Media = (Movie & { media_type: 'movie' }) | (TVShow & { media_type: 'tv' });
+export type Media = Movie | TVShow;
 
 export interface CastMember {
   id: number;
@@ -65,3 +68,5 @@ export interface Video {
   published_at: string;
   id: string;
 }
+
+    
