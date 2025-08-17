@@ -5,7 +5,7 @@ import { MovieList } from '@/components/movies/MovieList';
 import { Button } from '@/components/ui/button';
 
 const MINDFUCK_PARAMS = {
-  'sort_by': 'vote_average.desc',
+  'sort_by': 'primary_release_date.desc',
   'vote_count.gte': '500',
   'with_genres': '53,9648,878', // Thriller, Mystery, Sci-Fi
   'without_genres': '16,10751,28', // Exclude Animation, Family, Action
@@ -13,7 +13,7 @@ const MINDFUCK_PARAMS = {
 };
 
 export default async function MindfucksPage() {
-  const mindfuckMovies = await discoverMovies({ ...MINDFUCK_PARAMS }, 10); 
+  const mindfuckMovies = await discoverMovies({ ...MINDFUCK_PARAMS }, 50); 
 
   return (
     <div className="container mx-auto px-4 py-8">
