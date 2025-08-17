@@ -69,7 +69,19 @@ const featuredTitles = [
   'The Adjustment Bureau',
   '2001: A Space Odyssey',
   'Eyes Wide Shut',
-  'Lost Highway'
+  'Lost Highway',
+  'In the Mouth of Madness',
+  'I, Robot',
+  'Mindhunters',
+  'Resolution',
+  'Enter the Void',
+  'The Nines',
+  'Triangle',
+  'The Bone Collector',
+  'Along Came a Spider',
+  'Trance',
+  'Kiss the Girls',
+  'Alex Cross'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
