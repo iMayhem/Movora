@@ -31,7 +31,7 @@ export default async function MoviePage({ params: { id } }: MoviePageProps) {
         <div className="relative h-[30vh] md:h-[50vh] w-full">
           {movie.backdrop_path && (
             <Image
-              src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+              src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
               alt={`${movie.title} backdrop`}
               fill
               style={{ objectFit: 'cover' }}
@@ -47,7 +47,7 @@ export default async function MoviePage({ params: { id } }: MoviePageProps) {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full md:w-1/3 lg:w-1/4">
               <Image
-                src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/500x750.png"}
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w342${movie.poster_path}` : "https://placehold.co/500x750.png"}
                 alt={`${movie.title} poster`}
                 width={500}
                 height={750}

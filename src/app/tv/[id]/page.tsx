@@ -31,7 +31,7 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
         <div className="relative h-[30vh] md:h-[50vh] w-full">
           {show.backdrop_path && (
             <Image
-              src={`https://image.tmdb.org/t/p/original${show.backdrop_path}`}
+              src={`https://image.tmdb.org/t/p/w1280${show.backdrop_path}`}
               alt={`${show.name} backdrop`}
               fill
               style={{ objectFit: 'cover' }}
@@ -47,7 +47,7 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full md:w-1/3 lg:w-1/4">
               <Image
-                src={show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : "https://placehold.co/500x750.png"}
+                src={show.poster_path ? `https://image.tmdb.org/t/p/w342${show.poster_path}` : "https://placehold.co/500x750.png"}
                 alt={`${show.name} poster`}
                 width={500}
                 height={750}
