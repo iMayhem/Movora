@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { WatchLaterButton } from '@/components/movies/WatchLaterButton';
 import { MovieList } from '@/components/movies/MovieList';
 import { VideoPlayer } from '@/components/common/VideoPlayer';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import type { Media, TVShow, Credits } from '@/types/tmdb';
 
 type TvShowPageProps = {
@@ -20,6 +22,10 @@ export default function TvShowPage({ params }: TvShowPageProps) {
   const [credits, setCredits] = useState<Credits | null>(null);
   const [similarShows, setSimilarShows] = useState<Media[]>([]);
   const [isVideoPlayerOpen, setIsVideoPlayerOpen] = useState(false);
+  const [selectedSeason, setSelectedSeason] = useState(1);
+  const [selectedEpisode, setSelectedEpisode] = useState(1);
+  const [episodesInSeason, setEpisodesInSeason] = useState<number[]>([]);
+
 
   useEffect(() => {
     const fetchTvShowData = async () => {
@@ -35,11 +41,22 @@ export default function TvShowPage({ params }: TvShowPageProps) {
     fetchTvShowData();
   }, [params]);
 
+  useEffect(() => {
+    if (show) {
+      const season = show.seasons?.find(s => s.season_number === selectedSeason);
+      if (season) {
+        setEpisodesInSeason(Array.from({ length: season.episode_count }, (_, i) => i + 1));
+        setSelectedEpisode(1);
+      }
+    }
+  }, [show, selectedSeason]);
+
   if (!show) {
     return <div>Loading...</div>;
   }
 
   const cast = credits?.cast.slice(0, 10) || [];
+  const seasons = show.seasons?.filter(s => s.season_number > 0) || [];
 
   return (
     <>
@@ -48,6 +65,8 @@ export default function TvShowPage({ params }: TvShowPageProps) {
         onClose={() => setIsVideoPlayerOpen(false)}
         mediaId={show.id}
         mediaType={show.media_type}
+        season={selectedSeason}
+        episode={selectedEpisode}
       />
       <div className="container mx-auto px-4 py-8 text-white">
         <div className="relative h-[30vh] md:h-[50vh] w-full">
@@ -100,6 +119,50 @@ export default function TvShowPage({ params }: TvShowPageProps) {
                 ))}
               </div>
               <p className="text-base leading-relaxed mb-6">{show.overview}</p>
+              
+              <div className="bg-background/50 backdrop-blur-sm rounded-lg p-4 mb-6">
+                <h3 className="text-xl font-semibold mb-4">Select Episode</h3>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <Label htmlFor="season-select">Season</Label>
+                    <Select
+                      value={String(selectedSeason)}
+                      onValueChange={(value) => setSelectedSeason(Number(value))}
+                    >
+                      <SelectTrigger id="season-select">
+                        <SelectValue placeholder="Select season" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {seasons.map(season => (
+                          <SelectItem key={season.id} value={String(season.season_number)}>
+                            {season.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex-1">
+                    <Label htmlFor="episode-select">Episode</Label>
+                    <Select
+                      value={String(selectedEpisode)}
+                      onValueChange={(value) => setSelectedEpisode(Number(value))}
+                      disabled={episodesInSeason.length === 0}
+                    >
+                      <SelectTrigger id="episode-select">
+                        <SelectValue placeholder="Select episode" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {episodesInSeason.map(ep => (
+                          <SelectItem key={ep} value={String(ep)}>
+                            Episode {ep}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+              
               <div className="flex items-center gap-4">
                 <Button onClick={() => setIsVideoPlayerOpen(true)} size="lg">
                   <PlayCircle className="mr-2" />

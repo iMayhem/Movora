@@ -13,17 +13,25 @@ async function fetcher<T>(path: string, params: Record<string, string> = {}): Pr
   url.searchParams.append('api_key', API_KEY!);
   Object.entries(params).forEach(([key, value]) => url.searchParams.append(key, value));
 
-  const response = await fetch(url.toString());
-  if (!response.ok) {
-    console.error(`Failed to fetch from TMDB: ${response.statusText}`);
+  try {
+    const response = await fetch(url.toString(), { cache: 'no-store' });
+    if (!response.ok) {
+      console.error(`Failed to fetch from TMDB: ${response.statusText}`);
+      return null;
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error fetching from TMDB:', error);
     return null;
   }
-  return response.json();
 }
 
-const normalizeMedia = (items: (Movie | TVShow)[], media_type: 'movie' | 'tv'): Media[] => {
+const normalizeMedia = (items: (Movie | TVShow)[], media_type?: 'movie' | 'tv'): Media[] => {
   if (!items) return [];
-  return items.map(item => ({ ...item, media_type }));
+  return items.map(item => ({ 
+    ...item, 
+    media_type: 'title' in item ? 'movie' : 'tv' 
+  }));
 };
 
 export async function getTrending(media_type: 'movie' | 'tv'): Promise<Media[]> {
@@ -64,7 +72,7 @@ export async function getSimilarMovies(id: number): Promise<Media[]> {
 
 // TV Show specific functions
 export async function getTvShowDetails(id: number): Promise<(TVShow & { media_type: 'tv' }) | null> {
-  const show = await fetcher<TVShow>(`/tv/${id}`, { append_to_response: 'videos' });
+  const show = await fetcher<TVShow>(`/tv/${id}`, { append_to_response: 'videos,season_details' });
   if (!show) return null;
   return { ...show, media_type: 'tv' };
 }

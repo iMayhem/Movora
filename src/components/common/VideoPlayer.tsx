@@ -10,16 +10,18 @@ type VideoPlayerProps = {
   onClose: () => void;
   mediaId?: number;
   mediaType?: 'movie' | 'tv';
+  season?: number;
+  episode?: number;
 };
 
-export function VideoPlayer({ isOpen, onClose, mediaId, mediaType }: VideoPlayerProps) {
+export function VideoPlayer({ isOpen, onClose, mediaId, mediaType, season = 1, episode = 1 }: VideoPlayerProps) {
   if (!mediaId || !mediaType) {
     return null;
   }
   
   const src = mediaType === 'movie' 
     ? `https://player.videasy.net/movie/${mediaId}`
-    : `https://player.videasy.net/tv/${mediaId}/1/1`;
+    : `https://player.videasy.net/tv/${mediaId}/${season}/${episode}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

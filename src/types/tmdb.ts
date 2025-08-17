@@ -13,6 +13,16 @@ export interface Movie {
   videos?: { results: Video[] };
 }
 
+export interface Season {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string | null;
+  season_number: number;
+}
+
 export interface TVShow {
   id: number;
   name: string;
@@ -26,6 +36,7 @@ export interface TVShow {
   tagline: string;
   popularity: number;
   videos?: { results: Video[] };
+  seasons?: Season[];
 }
 
 export type Media = (Movie & { media_type: 'movie' }) | (TVShow & { media_type: 'tv' });
