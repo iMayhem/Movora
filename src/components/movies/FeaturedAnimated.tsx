@@ -15,7 +15,19 @@ const featuredTitles = [
     'WALL-E',
     'Toy Story',
     'Big Hero 6',
-    'The Incredibles'
+    'The Incredibles',
+    'Monsters, Inc.',
+    'Despicable Me',
+    'Finding Dory',
+    'The Boss Baby',
+    'Sing',
+    'Wreck-It Ralph',
+    'How to Train Your Dragon',
+    'Toy Story 3',
+    'Despicable Me 2',
+    'Ratatouille',
+    'Shrek',
+    'Trolls'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
