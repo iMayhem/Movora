@@ -39,7 +39,19 @@ const featuredTitles = [
     'Monsters University',
     'Spider-Man: Into the Spider-Verse',
     'Despicable Me 3',
-    'Sausage Party'
+    'Sausage Party',
+    'Beauty and the Beast',
+    'The Lego Batman Movie',
+    'Incredibles 2',
+    'How to Train Your Dragon 2',
+    'Ice Age',
+    'Shrek 2',
+    'Kung Fu Panda',
+    'The Angry Birds Movie',
+    'Storks',
+    'The Nightmare Before Christmas',
+    'Kung Fu Panda 3',
+    'The Good Dinosaur'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
@@ -51,6 +63,8 @@ async function fetchFeaturedMedia(): Promise<Media[]> {
         movieResults = await searchMedia('WALL-E', 'movie', { year: '2008' });
     } else if (title === 'The Lion King') {
         movieResults = await searchMedia('The Lion King', 'movie', { year: '1994' });
+    } else if (title === 'Beauty and the Beast') {
+        movieResults = await searchMedia('Beauty and the Beast', 'movie', { year: '1991' });
     }
     else {
        movieResults = await searchMedia(title, 'movie');
