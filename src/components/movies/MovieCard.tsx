@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Media } from '@/types/tmdb';
 import { Card, CardContent } from '@/components/ui/card';
-import { WatchLaterButton } from './WatchLaterButton';
 import { Star } from 'lucide-react';
 
 type MovieCardProps = {
@@ -28,9 +27,6 @@ export function MovieCard({ item }: MovieCardProps) {
               data-ai-hint="movie poster"
             />
           </Link>
-          <div className="absolute top-2 right-2 z-10">
-            <WatchLaterButton item={item} />
-          </div>
         </div>
         <div className="pt-3">
           <Link href={href}>

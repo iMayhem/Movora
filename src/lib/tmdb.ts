@@ -40,10 +40,10 @@ export async function getTrending(media_type: 'movie' | 'tv'): Promise<Media[]> 
   return normalizeMedia(data.results);
 }
 
-export async function getPopular(media_type: 'movie' | 'tv'): Promise<Media[]> {
-  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/${media_type}/popular`);
+export async function getPopular(media_type: 'movie' | 'tv', params: Record<string, string> = {}): Promise<Media[]> {
+  const data = await fetcher<{ results: (Movie | TVShow)[] }>(`/${media_type}/popular`, params);
   if (!data?.results) return [];
-  return normalizeMedia(data.results);
+  return normalizeMedia(data.results, media_type);
 }
 
 export async function searchMedia(query: string, media_type: 'movie' | 'tv'): Promise<Media[]> {

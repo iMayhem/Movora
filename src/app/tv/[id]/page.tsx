@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { getTvShowDetails, getTvShowCredits, getSimilarTvShows } from '@/lib/tmdb';
 import { Star, Calendar, Tv } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { WatchLaterButton } from '@/components/movies/WatchLaterButton';
 import { MovieList } from '@/components/movies/MovieList';
 import { EpisodeSelector } from '@/components/tv/EpisodeSelector';
 import { VideoPlayerDialog } from '@/components/common/VideoPlayerDialog';
@@ -87,7 +86,6 @@ export default async function TvShowPage({ params }: TvShowPageProps) {
               
               <div className="flex items-center gap-4 mt-6">
                 <PlayerDialogButton />
-                <WatchLaterButton item={show as TVShow & { media_type: 'tv' }} />
               </div>
             </div>
           </div>

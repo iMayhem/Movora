@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { getMovieDetails, getMovieCredits, getSimilarMovies } from '@/lib/tmdb';
 import { Star, Calendar, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { WatchLaterButton } from '@/components/movies/WatchLaterButton';
 import { MovieList } from '@/components/movies/MovieList';
 import { VideoPlayerDialog } from '@/components/common/VideoPlayerDialog';
 import { PlayerDialogButton } from '@/components/common/PlayerDialogButton';
@@ -87,7 +86,6 @@ export default async function MoviePage({ params }: MoviePageProps) {
               <p className="text-base leading-relaxed mb-6">{movie.overview}</p>
               <div className="flex items-center gap-4">
                 <PlayerDialogButton />
-                <WatchLaterButton item={movie} />
               </div>
             </div>
           </div>
