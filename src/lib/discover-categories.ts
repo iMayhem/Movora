@@ -237,4 +237,8 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         title: 'Disney XD Shows',
         fetcher: () => fetchIndianCartoonsByChannel('disney-xd'),
     },
+    'indian-cartoons-other': {
+        title: 'Sony Yay!, Discovery Kids & More',
+        fetcher: () => fetchIndianCartoonsByChannel('other-channels'),
+    }
 };
