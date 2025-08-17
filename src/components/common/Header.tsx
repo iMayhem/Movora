@@ -3,9 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, FormEvent } from 'react';
-import { Film } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -40,8 +38,7 @@ export function Header() {
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <Film className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block font-headline">Movora</span>
+            <span className="font-bold sm:inline-block font-headline">Movora</span>
           </Link>
           <nav className="hidden gap-6 md:flex">
             {navItems.map(item => (
