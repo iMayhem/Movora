@@ -40,7 +40,7 @@ export function MovieList({ initialMedia, carousel = false }: MovieListProps) {
   }
 
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-10">
+    <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-4 gap-y-8">
       {items.map((item, index) => (
         <MovieCard key={`${item.media_type}-${item.id}-${index}`} item={item} />
       ))}

@@ -59,10 +59,10 @@ export default async function Home() {
   ).slice(0, 12);
 
   return (
-    <div className="container mx-auto px-4 py-8 space-y-12">
+    <div className="container mx-auto px-4 py-6 space-y-10">
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Trending Now</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Trending Now</h2>
             <Link href="/discover/top-weekly">
               <Button variant="outline">More</Button>
             </Link>
@@ -71,8 +71,8 @@ export default async function Home() {
       </section>
       
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Newly Released in Theaters</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Newly Released in Theaters</h2>
             <Link href="/discover/newly-released">
               <Button variant="outline">More</Button>
             </Link>
@@ -81,8 +81,8 @@ export default async function Home() {
       </section>
 
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Most Popular</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Most Popular</h2>
             <Link href="/discover/most-viewed">
               <Button variant="outline">More</Button>
             </Link>
@@ -91,8 +91,8 @@ export default async function Home() {
       </section>
 
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Top Rated Movies</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Top Rated Movies</h2>
             <Link href="/discover/top-rated-hollywood-movies">
               <Button variant="outline">More</Button>
             </Link>
@@ -101,8 +101,8 @@ export default async function Home() {
       </section>
 
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Top Rated TV Shows</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Top Rated TV Shows</h2>
             <Link href="/discover/top-rated-hollywood-tv">
               <Button variant="outline">More</Button>
             </Link>
@@ -111,8 +111,8 @@ export default async function Home() {
       </section>
       
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Action & Adventure</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Action & Adventure</h2>
             <Link href="/discover/action-adventure-hollywood">
               <Button variant="outline">More</Button>
             </Link>
@@ -121,8 +121,8 @@ export default async function Home() {
       </section>
       
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Comedy</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Comedy</h2>
             <Link href="/discover/comedy-hollywood">
               <Button variant="outline">More</Button>
             </Link>
@@ -131,8 +131,8 @@ export default async function Home() {
       </section>
 
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Sci-Fi & Fantasy</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Sci-Fi & Fantasy</h2>
             <Link href="/discover/scifi-fantasy-hollywood">
               <Button variant="outline">More</Button>
             </Link>
@@ -141,8 +141,8 @@ export default async function Home() {
       </section>
 
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Horror</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Horror</h2>
             <Link href="/discover/horror-hollywood">
               <Button variant="outline">More</Button>
             </Link>
@@ -151,8 +151,8 @@ export default async function Home() {
       </section>
 
       <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h2 className="font-headline text-3xl font-bold">Thriller</h2>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 className="font-headline text-2xl font-bold">Thriller</h2>
             <Link href="/discover/thriller-hollywood">
               <Button variant="outline">More</Button>
             </Link>

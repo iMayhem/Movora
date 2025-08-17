@@ -18,10 +18,10 @@ export default async function MindfucksPage() {
   const sortedMovies = mindfuckMovies.sort((a, b) => b.vote_average - a.vote_average);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div className="container mx-auto px-4 py-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h1 className="font-headline text-4xl font-bold text-white md:text-5xl">
+          <h1 className="font-headline text-3xl font-bold text-white md:text-4xl">
             Best Mindfucks
           </h1>
           <p className="text-muted-foreground mt-2">

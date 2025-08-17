@@ -27,7 +27,7 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
 
   return (
     <VideoPlayerDialog mediaId={show.id} mediaType={show.media_type}>
-      <div className="container mx-auto px-4 py-8 text-white">
+      <div className="container mx-auto px-4 py-6 text-white">
         <div className="relative h-[30vh] md:h-[50vh] w-full">
           {show.backdrop_path && (
             <Image
@@ -56,7 +56,7 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
               />
             </div>
             <div className="w-full md:w-2/3 lg:w-3/4 pt-0 md:pt-24">
-              <h1 className="font-headline text-4xl md:text-6xl font-bold mb-2">{show.name}</h1>
+              <h1 className="font-headline text-3xl md:text-5xl font-bold mb-2">{show.name}</h1>
               <p className="text-lg text-muted-foreground mb-4">{show.tagline}</p>
               <div className="flex flex-wrap items-center gap-4 mb-6">
                 <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
         <div className="px-4 md:px-8">
           {similarShows.length > 0 && (
             <section className="mt-12">
-              <h2 className="font-headline text-3xl font-bold mb-6">Similar Shows</h2>
+              <h2 className="font-headline text-2xl font-bold mb-4">Similar Shows</h2>
               <MovieList initialMedia={similarShows as Media[]} />
             </section>
           )}

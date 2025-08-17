@@ -49,7 +49,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-screen-2xl items-center px-4">
+      <div className="container flex h-14 max-w-screen-2xl items-center px-4">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="md:hidden">
@@ -85,8 +85,8 @@ export function Header() {
                 <span className="font-bold">Movora</span>
             </Link>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-            <nav className="hidden gap-6 md:flex">
+        <div className="flex flex-1 items-center justify-end space-x-2">
+            <nav className="hidden gap-4 md:flex">
                 {navItems.map(item => (
                 <Link
                     key={item.name}
@@ -104,7 +104,7 @@ export function Header() {
                 <Input
                 type="search"
                 placeholder="Search..."
-                className="pl-10"
+                className="pl-10 h-9"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 />

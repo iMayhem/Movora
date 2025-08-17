@@ -181,8 +181,8 @@ export async function FeaturedIndianCartoons() {
     <>
         {sections.map((section, index) => (
             <section key={section.slug}>
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="font-headline text-3xl font-bold">{section.title}</h2>
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="font-headline text-2xl font-bold">{section.title}</h2>
                     <Link href={`/discover/${section.slug}`}>
                         <Button variant="outline">More</Button>
                     </Link>

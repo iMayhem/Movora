@@ -42,9 +42,9 @@ export default function RecommendationsPage() {
   }, [state]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-12">
-        <h1 className="font-headline text-4xl md:text-6xl font-bold mb-4">
+    <div className="container mx-auto px-4 py-6">
+      <div className="text-center mb-10">
+        <h1 className="font-headline text-3xl md:text-5xl font-bold mb-4">
           Personalized Recommendations
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -79,7 +79,7 @@ export default function RecommendationsPage() {
             <p>Loading recommendations...</p>
           ) : recommendedMedia.length > 0 ? (
             <div className="w-full">
-              <h2 className="font-headline text-3xl font-bold text-center mb-6">Our Suggestions For You</h2>
+              <h2 className="font-headline text-2xl font-bold text-center mb-6">Our Suggestions For You</h2>
               <MovieList initialMedia={recommendedMedia} />
             </div>
           ) : (

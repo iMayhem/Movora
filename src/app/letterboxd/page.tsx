@@ -16,10 +16,10 @@ export default async function LetterboxdPage() {
   const topMovies = await discoverMovies({ ...LETTERBOXD_PARAMS }, 10); // Fetch 10 pages for ~200 movies
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+    <div className="container mx-auto px-4 py-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div>
-          <h1 className="font-headline text-4xl font-bold text-white md:text-5xl">
+          <h1 className="font-headline text-3xl font-bold text-white md:text-4xl">
             Top 250
           </h1>
           <p className="text-muted-foreground mt-2">

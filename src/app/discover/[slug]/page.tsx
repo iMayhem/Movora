@@ -19,8 +19,8 @@ export default async function DiscoverPage({ params: { slug } }: DiscoverPagePro
   const movies = await category.fetcher();
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-8 font-headline text-4xl font-bold text-white md:text-5xl">
+    <div className="container mx-auto px-4 py-6">
+      <h1 className="mb-6 font-headline text-3xl font-bold text-white md:text-4xl">
         {category.title}
       </h1>
       <MovieList initialMedia={movies} />
