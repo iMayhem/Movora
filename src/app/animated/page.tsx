@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
-import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
 import { FeaturedAnimated } from '@/components/movies/FeaturedAnimated';
 
@@ -55,8 +54,7 @@ const sections = [
 ];
 
 export default async function AnimatedPage() {
-  const [trendingAnimated, ...sectionMedia] = await Promise.all([
-    discoverMovies({ ...ANIMATED_MOVIE_PARAMS, sort_by: 'popularity.desc' }, 1),
+  const sectionMedia = await Promise.all([
     ...sections.map(section => section.fetcher()),
   ]);
 
@@ -68,12 +66,6 @@ export default async function AnimatedPage() {
             World of Animation
           </h1>
         </div>
-        
-        {trendingAnimated.length > 0 ? (
-          <TrendingCarousel items={trendingAnimated} />
-        ) : (
-          <p>Could not load trending animated movies.</p>
-        )}
       </section>
 
       <FeaturedAnimated showMore />

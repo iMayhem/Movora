@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { Button } from '@/components/ui/button';
-import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 
 const DOCUMENTARY_PARAMS = {
   with_genres: '99',
@@ -49,8 +48,7 @@ const sections = [
 ];
 
 export default async function DocumentariesPage() {
-  const [trendingDocs, ...sectionMedia] = await Promise.all([
-    discoverMovies({ ...DOCUMENTARY_PARAMS, sort_by: 'popularity.desc' }, 1),
+  const sectionMedia = await Promise.all([
     ...sections.map(section => section.fetcher()),
   ]);
 
@@ -62,12 +60,6 @@ export default async function DocumentariesPage() {
             Documentaries
           </h1>
         </div>
-        
-        {trendingDocs.length > 0 ? (
-          <TrendingCarousel items={trendingDocs} />
-        ) : (
-          <p>Could not load trending documentaries.</p>
-        )}
       </section>
 
       {sections.map((section, index) => (

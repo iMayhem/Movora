@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
-import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
 import { FeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 
@@ -70,8 +69,7 @@ const tvSections = [
 ];
 
 export default async function BollywoodPage() {
-  const [topBollywood, ...sectionMovies] = await Promise.all([
-    discoverMovies({ ...BOLLYWOOD_PARAMS, sort_by: 'vote_average.desc', 'vote_count.gte': 200 }, 1),
+  const sectionMovies = await Promise.all([
     ...sections.map(section => discoverMovies(section.params, 1)),
   ]);
 
@@ -83,11 +81,6 @@ export default async function BollywoodPage() {
         <h1 className="mb-6 font-headline text-4xl font-bold text-white md:text-5xl">
           Spotlight on Bollywood
         </h1>
-        {topBollywood.length > 0 ? (
-          <TrendingCarousel items={topBollywood} />
-        ) : (
-          <p>Could not load trending movies.</p>
-        )}
       </section>
 
       <FeaturedBollywood showMore />

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { discoverMovies } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
-import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
 
 const NETFLIX_PARAMS = {
@@ -49,8 +48,7 @@ const sections = [
 ];
 
 export default async function NetflixPage() {
-  const [trendingNetflix, ...sectionMovies] = await Promise.all([
-    discoverMovies({ ...NETFLIX_PARAMS, sort_by: 'popularity.desc' }, 3),
+  const sectionMovies = await Promise.all([
     ...sections.map(section => discoverMovies(section.params, 3)),
   ]);
 
@@ -60,11 +58,6 @@ export default async function NetflixPage() {
         <h1 className="mb-6 font-headline text-4xl font-bold text-white md:text-5xl">
           All Things Netflix
         </h1>
-        {trendingNetflix.length > 0 ? (
-          <TrendingCarousel items={trendingNetflix} />
-        ) : (
-          <p>Could not load trending Netflix content.</p>
-        )}
       </section>
 
       {sections.map((section, index) => (

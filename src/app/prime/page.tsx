@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
-import { TrendingCarousel } from '@/components/movies/TrendingCarousel';
 import { Button } from '@/components/ui/button';
 
 const PRIME_PARAMS = {
@@ -68,11 +67,7 @@ const tvSections = [
 ]
 
 export default async function PrimePage() {
-  const [
-    trendingPrime, 
-    ...sectionMovies
-  ] = await Promise.all([
-    discoverMovies({ ...PRIME_PARAMS, sort_by: 'popularity.desc' }, 3),
+  const sectionMovies = await Promise.all([
     ...movieSections.map(section => discoverMovies(section.params, 3)),
   ]);
 
@@ -91,11 +86,6 @@ export default async function PrimePage() {
                 </Button>
             </Link>
         </div>
-        {trendingPrime.length > 0 ? (
-          <TrendingCarousel items={trendingPrime} />
-        ) : (
-          <p>Could not load trending Prime content.</p>
-        )}
       </section>
 
       {movieSections.map((section, index) => (
