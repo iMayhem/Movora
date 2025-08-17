@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from '@/components/ui/dialog';
 
 type VideoPlayerProps = {
@@ -26,6 +27,7 @@ export function VideoPlayer({ isOpen, onClose, mediaId, mediaType, season = 1, e
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl p-0 bg-black border-0">
+         <DialogTitle className="sr-only">VIDEASY Player</DialogTitle>
         <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
           <iframe
             src={src}
