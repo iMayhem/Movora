@@ -4,6 +4,8 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 import { MainLayout } from '@/components/common/MainLayout';
 import { cn } from '@/lib/utils';
+import { Suspense } from 'react';
+import { NavigationEvents } from '@/components/common/NavigationEvents';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
@@ -25,6 +27,9 @@ export default function RootLayout({
           {children}
         </MainLayout>
         <Toaster />
+        <Suspense fallback={null}>
+          <NavigationEvents />
+        </Suspense>
       </body>
     </html>
   );
