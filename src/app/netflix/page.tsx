@@ -50,8 +50,8 @@ const sections = [
 
 export default async function NetflixPage() {
   const [trendingNetflix, ...sectionMovies] = await Promise.all([
-    discoverMovies({ ...NETFLIX_PARAMS, sort_by: 'popularity.desc' }, 1),
-    ...sections.map(section => discoverMovies(section.params, 1)),
+    discoverMovies({ ...NETFLIX_PARAMS, sort_by: 'popularity.desc' }, 3),
+    ...sections.map(section => discoverMovies(section.params, 3)),
   ]);
 
   return (

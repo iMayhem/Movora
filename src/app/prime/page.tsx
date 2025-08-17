@@ -72,11 +72,11 @@ export default async function PrimePage() {
     trendingPrime, 
     ...sectionMovies
   ] = await Promise.all([
-    discoverMovies({ ...PRIME_PARAMS, sort_by: 'popularity.desc' }, 1),
-    ...movieSections.map(section => discoverMovies(section.params, 1)),
+    discoverMovies({ ...PRIME_PARAMS, sort_by: 'popularity.desc' }, 3),
+    ...movieSections.map(section => discoverMovies(section.params, 3)),
   ]);
 
-  const sectionTvShows = await Promise.all(tvSections.map(section => discoverTvShows(section.params, 1)))
+  const sectionTvShows = await Promise.all(tvSections.map(section => discoverTvShows(section.params, 3)))
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-16">
