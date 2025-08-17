@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 import { discoverMovies } from '@/lib/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
 import { Button } from '@/components/ui/button';
@@ -61,11 +60,6 @@ export default function MindfucksPage() {
               <SelectItem value="vote_average.desc">IMDb Rating</SelectItem>
             </SelectContent>
           </Select>
-          <Link href="https://trakt.tv/users/benfranklin/lists/best-mindfucks?sort=rank,asc" target="_blank" rel="noopener noreferrer">
-            <Button variant="outline">
-              View on Trakt.tv
-            </Button>
-          </Link>
         </div>
       </div>
 
