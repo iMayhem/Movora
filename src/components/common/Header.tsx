@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, FormEvent } from 'react';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { Search, PanelLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 const navItems = [
   { name: 'Home', href: '/' },
@@ -27,13 +29,16 @@ export function Header() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('query') || '');
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   useEffect(() => {
     // If we navigate away from search, clear the input
     if (pathname !== '/search') {
       setSearchQuery('');
     }
-  }, [pathname]);
+    // Close sheet on navigation
+    setIsSheetOpen(false);
+  }, [pathname, searchParams]);
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,19 +50,49 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center px-4">
-        <div className="mr-4 flex">
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <PanelLeft />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="pr-0">
+            <Link href="/" className="mr-6 flex items-center space-x-2">
+                <span className="font-bold text-lg">Movora</span>
+            </Link>
+            <div className="my-4 h-[calc(100vh-8rem)] overflow-y-auto pb-10 pl-6">
+                <div className="flex flex-col gap-4">
+                    {navItems.map(item => (
+                        <Link
+                            key={item.name}
+                            href={item.href}
+                            className={cn(
+                                'text-lg font-medium transition-colors hover:text-primary',
+                                pathname === item.href ? 'text-primary' : 'text-muted-foreground'
+                            )}
+                        >
+                            {item.name}
+                        </Link>
+                    ))}
+                </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+        
+        <div className="mr-4 hidden md:flex">
             <Link href="/" className="mr-6 flex items-center space-x-2">
                 <span className="font-bold">Movora</span>
             </Link>
         </div>
-        <div className="flex flex-1 items-center justify-between space-x-4">
+        <div className="flex flex-1 items-center justify-end space-x-4">
             <nav className="hidden gap-6 md:flex">
                 {navItems.map(item => (
                 <Link
                     key={item.name}
                     href={item.href}
                     className={cn(
-                    'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
+                    'flex items-center text-sm font-medium transition-colors hover:text-foreground/80',
                     pathname === item.href ? 'text-foreground' : 'text-foreground/60'
                     )}
                 >
@@ -65,7 +100,7 @@ export function Header() {
                 </Link>
                 ))}
             </nav>
-            <form onSubmit={handleSearch} className="relative ml-auto w-full max-w-[150px]">
+            <form onSubmit={handleSearch} className="relative ml-auto w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
                 <Input
                 type="search"
                 placeholder="Search..."
