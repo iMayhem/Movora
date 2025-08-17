@@ -1,7 +1,7 @@
 
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useRef } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -44,29 +44,50 @@ export function VideoPlayerDialog({ children, mediaId, mediaType }: VideoPlayerD
   const [episode, setEpisode] = useState(1);
   const [isPlayable, setIsPlayable] = useState(mediaType === 'movie');
   const isMobile = useIsMobile();
+  const dialogContentRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
+    const enterFullscreen = async () => {
+        if (dialogContentRef.current) {
+            try {
+                await dialogContentRef.current.requestFullscreen();
+            } catch (error) {
+                console.warn("Fullscreen request failed:", error);
+            }
+        }
+    };
+  
+    const exitFullscreen = () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(err => console.warn("Could not exit fullscreen:", err));
+        }
+    };
+
     if (isMobile) {
       if (open) {
-        try {
-          screen.orientation.lock('landscape').catch(() => {});
-        } catch (error) {
-          console.warn('Screen orientation lock not supported or failed:', error);
-        }
+        screen.orientation.lock('landscape').catch(() => {});
+        enterFullscreen();
       } else {
-        try {
-          screen.orientation.unlock();
-        } catch (error) {
-            console.warn('Screen orientation unlock not supported or failed:', error);
-        }
+        screen.orientation.unlock();
+        exitFullscreen();
       }
     }
+
+    const handleFullscreenChange = () => {
+        if (!document.fullscreenElement) {
+            setOpen(false);
+        }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
     
-    // Cleanup on component unmount
     return () => {
+        document.removeEventListener('fullscreenchange', handleFullscreenChange);
         if (isMobile) {
             try {
                 screen.orientation.unlock();
+                exitFullscreen();
             }
             catch (error) {
                 // Ignore errors on cleanup
@@ -79,7 +100,11 @@ export function VideoPlayerDialog({ children, mediaId, mediaType }: VideoPlayerD
     <VideoPlayerContext.Provider value={{ mediaId, mediaType, season, episode, setSeason, setEpisode, isPlayable, setIsPlayable }}>
       <Dialog open={open} onOpenChange={setOpen}>
         {children}
-        <DialogContent className="max-w-4xl p-0 bg-black border-0">
+        <DialogContent 
+            ref={dialogContentRef}
+            className="max-w-4xl w-full h-full p-0 bg-black border-0"
+            hideCloseButton={isMobile}
+        >
           <DialogTitle className="sr-only">VIDEASY Player</DialogTitle>
           <VideoPlayer mediaId={mediaId} mediaType={mediaType} season={season} episode={episode} />
         </DialogContent>
