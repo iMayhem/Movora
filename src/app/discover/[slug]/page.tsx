@@ -158,6 +158,34 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
       sort_by: 'popularity.desc'
     }, 5),
   },
+  'latest-korean-movies': {
+    title: 'Latest Korean Releases',
+    fetcher: () => discoverMovies({ with_original_language: 'ko', region: 'KR', sort_by: 'primary_release_date.desc', 'vote_count.gte': 10 }, 15),
+  },
+  'top-rated-korean-movies': {
+    title: 'Top-Rated Korean Movies',
+    fetcher: () => discoverMovies({ with_original_language: 'ko', region: 'KR', sort_by: 'vote_average.desc', 'vote_count.gte': 50 }, 15),
+  },
+  'action-korean-movies': {
+    title: 'Korean Action Movies',
+    fetcher: () => discoverMovies({ with_original_language: 'ko', region: 'KR', with_genres: '28' }, 15),
+  },
+  'thriller-korean-movies': {
+    title: 'Korean Thrillers',
+    fetcher: () => discoverMovies({ with_original_language: 'ko', region: 'KR', with_genres: '53' }, 15),
+  },
+  'romance-korean-movies': {
+    title: 'Korean Romance',
+    fetcher: () => discoverMovies({ with_original_language: 'ko', region: 'KR', with_genres: '10749' }, 15),
+  },
+  'popular-korean-tv': {
+    title: 'Popular Korean TV Shows',
+    fetcher: () => discoverTvShows({ with_original_language: 'ko', region: 'KR', sort_by: 'popularity.desc' }, 15),
+  },
+  'top-rated-korean-tv': {
+    title: 'Top-Rated Korean TV Shows',
+    fetcher: () => discoverTvShows({ with_original_language: 'ko', region: 'KR', sort_by: 'vote_average.desc', 'vote_count.gte': 20 }, 15),
+  },
 };
 
 export default async function DiscoverPage({ params }: DiscoverPageProps) {

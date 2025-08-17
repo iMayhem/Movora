@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { name: 'Home', href: '/' },
   { name: 'Bollywood', href: '/bollywood' },
+  { name: 'Korean', href: '/korean' },
   { name: 'Netflix', href: '/netflix' },
   { name: 'Prime', href: '/prime' },
   { name: 'Top 250', href: '/letterboxd' },
