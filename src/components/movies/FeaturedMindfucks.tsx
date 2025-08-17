@@ -81,7 +81,19 @@ const featuredTitles = [
   'Along Came a Spider',
   'Trance',
   'Kiss the Girls',
-  'Alex Cross'
+  'Alex Cross',
+  'High Tension',
+  'Martyrs',
+  'Primer',
+  'Brazil',
+  'Now You See Me',
+  'Déjà Vu',
+  'Minority Report',
+  'Paprika',
+  'Perfect Blue',
+  'The Man from Earth',
+  'Memories',
+  'Stay'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
