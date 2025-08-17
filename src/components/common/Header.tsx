@@ -13,9 +13,8 @@ const navItems = [
   { name: 'Bollywood', href: '/bollywood' },
   { name: 'Netflix', href: '/netflix' },
   { name: 'Prime', href: '/prime' },
-  { name: 'Top IMDB', href: '/top-imdb' },
+  { name: 'Top 250', href: '/letterboxd' },
   { name: 'Animated', href: '/animated' },
-  { name: 'Letterboxd', href: '/letterboxd' },
   { name: 'Mindfucks', href: '/mindfucks' },
 ];
 

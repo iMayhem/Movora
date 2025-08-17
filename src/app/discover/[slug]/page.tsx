@@ -110,26 +110,6 @@ const discoverCategories: Record<string, { title: string; fetcher: () => Promise
     title: 'Gripping Dramas on Prime',
     fetcher: () => discoverTvShows({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', with_genres: '18' }, 5),
   },
-  'top-rated-imdb': {
-    title: 'Top Rated of All Time',
-    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc' }, 5),
-  },
-  'popular-this-year-imdb': {
-    title: 'Popular This Year',
-    fetcher: () => discoverMovies({ 'vote_count.gte': '250', primary_release_year: String(CURRENT_YEAR) }, 5),
-  },
-  'top-rated-action-imdb': {
-    title: 'Top Rated Action Movies',
-    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '28' }, 5),
-  },
-  'top-rated-drama-imdb': {
-    title: 'Top Rated Dramas',
-    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '18' }, 5),
-  },
-  'top-rated-scifi-imdb': {
-    title: 'Top Rated Sci-Fi & Fantasy',
-    fetcher: () => discoverMovies({ 'vote_count.gte': '500', sort_by: 'vote_average.desc', with_genres: '878,14' }, 5),
-  },
   'top-rated-animated': {
     title: 'Top Rated Animated Movies',
     fetcher: () => discoverMovies({ with_genres: '16', sort_by: 'vote_average.desc', 'vote_count.gte': '250' }, 5),
