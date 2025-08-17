@@ -34,6 +34,18 @@ const featuredTitles = [
   'Event Horizon',
   'Source Code',
   'Awake',
+  'Repo Men',
+  'Twelve Monkeys',
+  'eXistenZ',
+  'The Cell',
+  'The Jacket',
+  'The Others',
+  'Identity',
+  'Flightplan',
+  'The Manchurian Candidate',
+  'Breakdown',
+  'K-PAX',
+  'Paycheck'
 ];
 
 async function fetchFeaturedMedia(): Promise<Media[]> {
