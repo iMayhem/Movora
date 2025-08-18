@@ -242,6 +242,11 @@ export async function getSeasonDetails(
   tvId: number,
   seasonNumber: number
 ): Promise<SeasonDetails | null> {
+  // unstable_cache is server-only, so we bypass it on the client
+  if (typeof window !== 'undefined') {
+    return fetcher<SeasonDetails>(`/tv/${tvId}/season/${seasonNumber}`);
+  }
+
   return cachedFetcher<SeasonDetails>(
     `/tv/${tvId}/season/${seasonNumber}`,
     {},
