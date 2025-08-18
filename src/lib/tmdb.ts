@@ -137,6 +137,16 @@ export async function searchMedia(
   media_type: 'movie' | 'tv',
   params: Record<string, string> = {}
 ): Promise<Media[]> {
+  // unstable_cache is server-only, so we bypass it on the client
+  if (typeof window !== 'undefined') {
+    const data = await fetcher<{results: (Movie | TVShow)[]}>(
+      `/search/${media_type}`,
+      {query, ...params}
+    );
+    if (!data?.results) return [];
+    return normalizeMedia(data.results, media_type);
+  }
+
   const data = await cachedFetcher<{results: (Movie | TVShow)[]}>(
     `/search/${media_type}`,
     {query, ...params},
