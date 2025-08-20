@@ -9,9 +9,15 @@ type MovieCardProps = {
 };
 
 export function MovieCard({ item }: MovieCardProps) {
+  if (!item) {
+    return null;
+  }
+  
   const href = item.media_type === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`;
   const title = item.media_type === 'movie' ? item.title : item.name;
   const releaseDate = 'release_date' in item ? item.release_date : item.first_air_date;
+
+  const voteAverage = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
 
   return (
     <Card className="group w-full max-w-sm overflow-hidden bg-transparent border-0 shadow-none">
@@ -20,7 +26,7 @@ export function MovieCard({ item }: MovieCardProps) {
           <Link href={href}>
             <Image
               src={item.poster_path ? `https://image.tmdb.org/t/p/w342${item.poster_path}` : "https://placehold.co/500x750.png"}
-              alt={title}
+              alt={title || ''}
               width={500}
               height={750}
               className="rounded-lg object-cover transition-transform duration-300 ease-in-out group-hover:scale-105"
@@ -36,7 +42,7 @@ export function MovieCard({ item }: MovieCardProps) {
             <span>{releaseDate?.substring(0, 4)}</span>
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4 text-accent" />
-              <span>{item.vote_average.toFixed(1)}</span>
+              <span>{voteAverage}</span>
             </div>
           </div>
         </div>
