@@ -120,7 +120,7 @@ const allShows = {
   'other-channels': otherChannelTitles,
 };
 
-export async function fetchIndianCartoonsByChannel(channel: keyof typeof allShows): Promise<Media[]> {
+export async function fetchCartoonsByChannel(channel: keyof typeof allShows): Promise<Media[]> {
   const titles = allShows[channel];
   if (!titles) return [];
   
@@ -163,18 +163,18 @@ export async function fetchIndianCartoonsByChannel(channel: keyof typeof allShow
 }
 
 const sections = [
-    { title: 'Cartoon Network', slug: 'indian-cartoons-cn', channel: 'cartoon-network' as const },
-    { title: 'Pogo', slug: 'indian-cartoons-pogo', channel: 'pogo' as const },
-    { title: 'Nickelodeon & Nick Jr.', slug: 'indian-cartoons-nick', channel: 'nick' as const },
-    { title: 'The Disney Family', slug: 'indian-cartoons-disney', channel: 'disney' as const },
-    { title: 'Hungama TV', slug: 'indian-cartoons-hungama', channel: 'hungama' as const },
-    { title: 'Disney XD & Jetix', slug: 'indian-cartoons-disney-xd', channel: 'disney-xd' as const },
-    { title: 'Sony Yay!, Discovery Kids & More', slug: 'indian-cartoons-other', channel: 'other-channels' as const },
+    { title: 'Cartoon Network', slug: 'cartoons-cn', channel: 'cartoon-network' as const },
+    { title: 'Pogo', slug: 'cartoons-pogo', channel: 'pogo' as const },
+    { title: 'Nickelodeon & Nick Jr.', slug: 'cartoons-nick', channel: 'nick' as const },
+    { title: 'The Disney Family', slug: 'cartoons-disney', channel: 'disney' as const },
+    { title: 'Hungama TV', slug: 'cartoons-hungama', channel: 'hungama' as const },
+    { title: 'Disney XD & Jetix', slug: 'cartoons-disney-xd', channel: 'disney-xd' as const },
+    { title: 'Sony Yay!, Discovery Kids & More', slug: 'cartoons-other', channel: 'other-channels' as const },
 ]
 
-export async function FeaturedIndianCartoons() {
+export async function FeaturedCartoons() {
   const allSectionMedia = await Promise.all(
-      sections.map(section => fetchIndianCartoonsByChannel(section.channel))
+      sections.map(section => fetchCartoonsByChannel(section.channel))
   )
 
   return (

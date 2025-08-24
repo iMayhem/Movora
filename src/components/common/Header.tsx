@@ -16,10 +16,9 @@ const navItems = [
   { name: 'Korean', href: '/korean' },
   { name: 'Netflix', href: '/netflix' },
   { name: 'Prime', href: '/prime' },
-  { name: 'Top 250', href: '/letterboxd' },
+  { name: 'Cartoons', href: '/cartoons' },
   { name: 'Animated', href: '/animated' },
   { name: 'Mindfucks', href: '/mindfucks' },
-  { name: 'Indian Cartoons', href: '/indian-cartoons' },
   { name: 'Documentaries', href: '/documentaries' },
   { name: 'Adventure', href: '/adventure' },
 ];

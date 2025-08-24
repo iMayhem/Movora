@@ -3,7 +3,7 @@ import { discoverMovies, discoverTvShows, getPopular, getTrending, getNowPlaying
 import { fetchFeaturedBollywood } from '@/components/movies/FeaturedBollywood';
 import { fetchFeaturedAnimated } from '@/components/movies/FeaturedAnimated';
 import { fetchFeaturedKorean } from '@/components/movies/FeaturedKorean';
-import { fetchIndianCartoonsByChannel } from '@/components/movies/FeaturedIndianCartoons';
+import { fetchCartoonsByChannel } from '@/components/movies/FeaturedCartoons';
 import { fetchAllAdventure, fetchMedia, allShows } from '@/components/movies/FeaturedAdventure';
 
 const HOLLYWOOD_PARAMS = { with_original_language: 'en', region: 'US' };
@@ -72,10 +72,6 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
             ]);
             return [...popularMovies, ...popularTv].sort((a,b) => b.popularity - a.popularity);
         }
-    },
-    'letterboxd-top-250': {
-        title: 'Top 250',
-        fetcher: () => discoverMovies({ 'sort_by': 'vote_average.desc', 'vote_count.gte': '1000', 'with_original_language': 'en', 'include_adult': 'false', 'without_genres': '99,10751' }, 13),
     },
     'mindfucks-movies': {
         title: 'Best Mindfucks',
@@ -270,33 +266,33 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         title: 'Top-Rated Korean TV Shows',
         fetcher: () => discoverTvShows({ with_original_language: 'ko', region: 'KR', sort_by: 'vote_average.desc', 'vote_count.gte': 20, include_adult: 'false' }, 20),
     },
-    'indian-cartoons-cn': {
+    'cartoons-cn': {
         title: 'Cartoon Network Shows',
-        fetcher: () => fetchIndianCartoonsByChannel('cartoon-network'),
+        fetcher: () => fetchCartoonsByChannel('cartoon-network'),
     },
-    'indian-cartoons-pogo': {
+    'cartoons-pogo': {
         title: 'Pogo Shows',
-        fetcher: () => fetchIndianCartoonsByChannel('pogo'),
+        fetcher: () => fetchCartoonsByChannel('pogo'),
     },
-    'indian-cartoons-nick': {
+    'cartoons-nick': {
         title: 'Nickelodeon Shows',
-        fetcher: () => fetchIndianCartoonsByChannel('nick'),
+        fetcher: () => fetchCartoonsByChannel('nick'),
     },
-    'indian-cartoons-disney': {
+    'cartoons-disney': {
         title: 'Disney Channel Shows',
-        fetcher: () => fetchIndianCartoonsByChannel('disney'),
+        fetcher: () => fetchCartoonsByChannel('disney'),
     },
-    'indian-cartoons-hungama': {
+    'cartoons-hungama': {
         title: 'Hungama TV Shows',
-        fetcher: () => fetchIndianCartoonsByChannel('hungama'),
+        fetcher: () => fetchCartoonsByChannel('hungama'),
     },
-    'indian-cartoons-disney-xd': {
+    'cartoons-disney-xd': {
         title: 'Disney XD Shows',
-        fetcher: () => fetchIndianCartoonsByChannel('disney-xd'),
+        fetcher: () => fetchCartoonsByChannel('disney-xd'),
     },
-    'indian-cartoons-other': {
+    'cartoons-other': {
         title: 'Sony Yay!, Discovery Kids & More',
-        fetcher: () => fetchIndianCartoonsByChannel('other-channels'),
+        fetcher: () => fetchCartoonsByChannel('other-channels'),
     },
     'top-rated-documentaries': {
         title: 'Top-Rated Documentaries',
