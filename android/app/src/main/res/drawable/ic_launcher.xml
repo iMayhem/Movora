@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Background Circle -->
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M54,54m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0" />
+    
+    <!-- Outer Ring -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M54,54m-44,0a44,44 0,1 1,88 0a44,44 0,1 1,-88 0" />
+    
+    <!-- Inner Background -->
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0" />
+    
+    <!-- Film Reel Left -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M30,54m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    
+    <!-- Film Reel Right -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M78,54m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0" />
+    
+    <!-- Film Reel Holes Left -->
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M30,54m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0" />
+    
+    <!-- Film Reel Holes Right -->
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M78,54m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0" />
+    
+    <!-- Film Strip -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M38,54 L70,54 L70,58 L38,58 Z" />
+    
+    <!-- Film Strip Holes -->
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M42,54m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0" />
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M50,54m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0" />
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M58,54m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0" />
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M66,54m-1.5,0a1.5,1.5 0,1 1,3 0a1.5,1.5 0,1 1,-3 0" />
+    
+    <!-- Letter M -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M48,32 L54,42 L60,32 L66,42 L66,76 L60,76 L60,48 L54,58 L48,48 L48,76 L42,76 L42,42 Z" />
+    
+    <!-- Star Accent -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M54,20 L56,24 L60,24 L57,27 L58,31 L54,29 L50,31 L51,27 L48,24 L52,24 Z" />
+</vector>

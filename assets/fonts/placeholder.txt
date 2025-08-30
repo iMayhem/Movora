@@ -1,0 +1,3 @@
+This directory contains custom fonts.
+Place your Inter and SpaceGrotesk font files here.
+You can download them from Google Fonts or use the system fonts.

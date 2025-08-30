@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    
+    <!-- Background Circle -->
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M24,24m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0" />
+    
+    <!-- Outer Ring -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M24,24m-18,0a18,18 0,1 1,36 0a18,18 0,1 1,-36 0" />
+    
+    <!-- Inner Background -->
+    <path
+        android:fillColor="#1E1E1E"
+        android:pathData="M24,24m-16,0a16,16 0,1 1,32 0a16,16 0,1 1,-32 0" />
+    
+    <!-- Letter M -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,12 L24,18 L30,12 L33,18 L33,36 L30,36 L30,22 L24,26 L18,22 L18,36 L15,36 L15,18 Z" />
+    
+    <!-- Star Accent -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M24,8 L25,10 L28,10 L26,12 L27,14 L24,13 L21,14 L22,12 L20,10 L23,10 Z" />
+</vector>
