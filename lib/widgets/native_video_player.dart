@@ -84,7 +84,7 @@ class _NativeVideoPlayerState extends State<NativeVideoPlayer> {
     } else {
       _vidPlusUrl = VidPlusService.buildMovieUrl(widget.media.id!);
     }
-    print('🎬 Generated VidPlus URL: $_vidPlusUrl');
+    if (kDebugMode) print('🎬 Generated VidPlus URL: $_vidPlusUrl');
   }
 
   void _initializeWebView() {
@@ -101,18 +101,21 @@ class _NativeVideoPlayerState extends State<NativeVideoPlayer> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (String url) {
-            print('📱 Page started loading: $url');
+            if (kDebugMode) print('📱 Page started loading: $url');
           },
           onPageFinished: (String url) {
-            print('✅ Page finished loading: $url');
+            if (kDebugMode) print('✅ Page finished loading: $url');
             _injectVideoEnhancementScript();
           },
           onWebResourceError: (WebResourceError error) {
-            print('❌ WebView Error: ${error.description} (${error.errorCode})');
+            if (kDebugMode) {
+              print(
+                  '❌ WebView Error: ${error.description} (${error.errorCode})');
+            }
             _handleWebViewError(error);
           },
           onNavigationRequest: (NavigationRequest request) {
-            print('🌐 Navigation request: ${request.url}');
+            if (kDebugMode) print('🌐 Navigation request: ${request.url}');
             return NavigationDecision.navigate;
           },
         ),
@@ -198,27 +201,27 @@ class _NativeVideoPlayerState extends State<NativeVideoPlayer> {
   }
 
   void _handleWebViewError(WebResourceError error) {
-    print('❌ WebView Error Details:');
-    print('  Description: ${error.description}');
-    print('  Error Code: ${error.errorCode}');
-    print('  Error Type: ${error.errorType}');
+    if (kDebugMode) print('❌ WebView Error Details:');
+    if (kDebugMode) print('  Description: ${error.description}');
+    if (kDebugMode) print('  Error Code: ${error.errorCode}');
+    if (kDebugMode) print('  Error Type: ${error.errorType}');
 
     // Handle specific error types
     switch (error.errorCode) {
       case -2: // ERROR_HOST_LOOKUP
-        print('Network error: Host lookup failed');
+        if (kDebugMode) print('Network error: Host lookup failed');
         break;
       case -6: // ERROR_CONNECT
-        print('Network error: Connection failed');
+        if (kDebugMode) print('Network error: Connection failed');
         break;
       case -8: // ERROR_TIMEOUT
-        print('Network error: Timeout');
+        if (kDebugMode) print('Network error: Timeout');
         break;
       case -14: // ERROR_FAILED
-        print('Network error: Generic failure');
+        if (kDebugMode) print('Network error: Generic failure');
         break;
       default:
-        print('Unknown error code: ${error.errorCode}');
+        if (kDebugMode) print('Unknown error code: ${error.errorCode}');
     }
   }
 
@@ -280,7 +283,7 @@ class _NativeVideoPlayerState extends State<NativeVideoPlayer> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Column(
@@ -325,7 +328,7 @@ class _NativeVideoPlayerState extends State<NativeVideoPlayer> {
             left: 16,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: IconButton(

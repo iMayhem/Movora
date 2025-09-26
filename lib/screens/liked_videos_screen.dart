@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:movora/models/media.dart';
 import 'package:movora/services/storage_service.dart';
 import 'package:movora/widgets/movie_card.dart';
@@ -39,7 +40,7 @@ class _LikedVideosScreenState extends State<LikedVideosScreen> {
       setState(() {
         _isLoading = false;
       });
-      print('Error loading liked videos: $e');
+      if (kDebugMode) print('Error loading liked videos: $e');
     }
   }
 
@@ -60,7 +61,7 @@ class _LikedVideosScreenState extends State<LikedVideosScreen> {
         );
       }
     } catch (e) {
-      print('Error removing from liked videos: $e');
+      if (kDebugMode) print('Error removing from liked videos: $e');
     }
   }
 

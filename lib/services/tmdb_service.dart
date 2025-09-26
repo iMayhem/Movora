@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:movora/models/media.dart';
 import 'package:movora/services/network_service.dart';
@@ -445,12 +446,13 @@ class TMDBService {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        print('🎬 Fetching details for movie ID: $id');
-        print('🎬 Movie title: ${data['title']}');
+        if (kDebugMode) print('🎬 Fetching details for movie ID: $id');
+        if (kDebugMode) print('🎬 Movie title: ${data['title']}');
 
         return Media.fromJson(data);
       } else {
-        print('❌ Failed to fetch movie details: ${response.statusCode}');
+        if (kDebugMode)
+          print('❌ Failed to fetch movie details: ${response.statusCode}');
         return null;
       }
     } catch (e) {

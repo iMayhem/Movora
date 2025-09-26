@@ -8,6 +8,8 @@ import 'package:movora/services/tmdb_service.dart';
 import 'package:movora/widgets/movie_card.dart';
 import 'package:movora/services/mixpanel_service.dart';
 import 'package:movora/services/storage_service.dart';
+import 'package:movora/models/media.dart';
+import 'package:flutter/foundation.dart';
 
 class DetailScreen extends StatefulWidget {
   final Media media;
@@ -21,7 +23,7 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen>
     with SingleTickerProviderStateMixin {
   tv_service.TvShowDetails? _tvShowDetails;
-  List<tv_service.Season> _seasons = [];
+  List<Season> _seasons = [];
   List<tv_service.Episode> _episodes = [];
   bool _isLoadingTvData = false;
   int _selectedSeason = 1;
@@ -76,7 +78,7 @@ class _DetailScreenState extends State<DetailScreen>
         }
       });
     } catch (e) {
-      print('Error loading TV show data: $e');
+      if (kDebugMode) print('Error loading TV show data: $e');
     } finally {
       setState(() {
         _isLoadingTvData = false;
@@ -95,7 +97,7 @@ class _DetailScreenState extends State<DetailScreen>
         });
       }
     } catch (e) {
-      print('Error loading movie details: $e');
+      if (kDebugMode) print('Error loading movie details: $e');
     }
   }
 
@@ -112,7 +114,7 @@ class _DetailScreenState extends State<DetailScreen>
         }
       });
     } catch (e) {
-      print('Error loading episodes: $e');
+      if (kDebugMode) print('Error loading episodes: $e');
     }
   }
 
@@ -126,7 +128,7 @@ class _DetailScreenState extends State<DetailScreen>
     try {
       _similarContent = await TMDBService.getSimilarMovies(widget.media.id!);
     } catch (e) {
-      print('Error loading similar content: $e');
+      if (kDebugMode) print('Error loading similar content: $e');
     } finally {
       setState(() {
         _isLoadingSimilar = false;

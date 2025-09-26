@@ -98,10 +98,10 @@ class AppDrawer extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.surfaceColor.withOpacity(0.3),
+              color: AppTheme.surfaceColor.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: AppTheme.surfaceColor.withOpacity(0.5),
+                color: AppTheme.surfaceColor.withValues(alpha: 0.5),
                 width: 1,
               ),
             ),
@@ -110,7 +110,7 @@ class AppDrawer extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryColor.withOpacity(0.2),
+                    color: AppTheme.primaryColor.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:movora/services/network_service.dart';
+import 'package:movora/models/media.dart';
 
 class TvShowService {
   static const String _apiKey = 'dfa4c2c7c1de1005adee824dc5593672';
@@ -21,7 +23,7 @@ class TvShowService {
         return TvShowDetails.fromJson(data);
       }
     } catch (e) {
-      print('Error fetching TV show details: $e');
+      if (kDebugMode) print('Error fetching TV show details: $e');
     }
     return null;
   }
@@ -51,7 +53,7 @@ class TvShowService {
         return episodes;
       }
     } catch (e) {
-      print('Error fetching episodes: $e');
+      if (kDebugMode) print('Error fetching episodes: $e');
     }
     return [];
   }
@@ -93,38 +95,6 @@ class TvShowDetails {
       status: json['status'],
       firstAirDate: json['first_air_date'],
       lastAirDate: json['last_air_date'],
-    );
-  }
-}
-
-class Season {
-  final int id;
-  final String name;
-  final String? overview;
-  final String? posterPath;
-  final int seasonNumber;
-  final String? airDate;
-  final int episodeCount;
-
-  Season({
-    required this.id,
-    required this.name,
-    this.overview,
-    this.posterPath,
-    required this.seasonNumber,
-    this.airDate,
-    required this.episodeCount,
-  });
-
-  factory Season.fromJson(Map<String, dynamic> json) {
-    return Season(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-      overview: json['overview'],
-      posterPath: json['poster_path'],
-      seasonNumber: json['season_number'] ?? 0,
-      airDate: json['air_date'],
-      episodeCount: json['episode_count'] ?? 0,
     );
   }
 }

@@ -90,4 +90,35 @@ class AppTheme {
       ),
     );
   }
+
+  // Text styles
+  static const TextStyle headlineMedium = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: textPrimaryColor,
+  );
+
+  static const TextStyle headlineSmall = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: textPrimaryColor,
+  );
+
+  static const TextStyle titleMedium = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: textPrimaryColor,
+  );
+
+  static const TextStyle bodyLarge = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    color: textPrimaryColor,
+  );
+
+  static const TextStyle bodyMedium = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+    color: textPrimaryColor,
+  );
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkService {
@@ -47,11 +48,11 @@ class NetworkService {
         ).timeout(_timeout);
 
         if (response.statusCode == 200) {
-          print('Network connectivity test passed: $url');
+          if (kDebugMode) print('Network connectivity test passed: $url');
           return true;
         }
       } catch (e) {
-        print('Network test failed for $url: $e');
+        if (kDebugMode) print('Network test failed for $url: $e');
       }
     }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:movora/providers/movie_provider.dart';
@@ -80,7 +81,7 @@ class MovoraApp extends StatelessWidget {
                   apiParams = rawParams.map<String, String>((key, value) =>
                       MapEntry(key.toString(), value.toString()));
                 } catch (e) {
-                  print('Error converting apiParams: $e');
+                  if (kDebugMode) print('Error converting apiParams: $e');
                   apiParams = <String, String>{};
                 }
               }

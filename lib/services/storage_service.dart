@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:movora/models/media.dart';
 
@@ -17,7 +18,7 @@ class StorageService {
       final List<dynamic> likedList = json.decode(likedJson);
       return likedList.map((json) => Media.fromJson(json)).toList();
     } catch (e) {
-      print('Error getting liked videos: $e');
+      if (kDebugMode) print('Error getting liked videos: $e');
       return [];
     }
   }
@@ -39,7 +40,7 @@ class StorageService {
 
       return await prefs.setString(_likedVideosKey, likedJson);
     } catch (e) {
-      print('Error adding to liked videos: $e');
+      if (kDebugMode) print('Error adding to liked videos: $e');
       return false;
     }
   }
@@ -56,7 +57,7 @@ class StorageService {
 
       return await prefs.setString(_likedVideosKey, likedJson);
     } catch (e) {
-      print('Error removing from liked videos: $e');
+      if (kDebugMode) print('Error removing from liked videos: $e');
       return false;
     }
   }
@@ -67,7 +68,7 @@ class StorageService {
       final likedVideos = await getLikedVideos();
       return likedVideos.any((video) => video.id == mediaId);
     } catch (e) {
-      print('Error checking if liked: $e');
+      if (kDebugMode) print('Error checking if liked: $e');
       return false;
     }
   }
@@ -83,7 +84,7 @@ class StorageService {
       final List<dynamic> myList = json.decode(myListJson);
       return myList.map((json) => Media.fromJson(json)).toList();
     } catch (e) {
-      print('Error getting my list: $e');
+      if (kDebugMode) print('Error getting my list: $e');
       return [];
     }
   }
@@ -105,7 +106,7 @@ class StorageService {
 
       return await prefs.setString(_myListKey, myListJson);
     } catch (e) {
-      print('Error adding to my list: $e');
+      if (kDebugMode) print('Error adding to my list: $e');
       return false;
     }
   }
@@ -122,7 +123,7 @@ class StorageService {
 
       return await prefs.setString(_myListKey, myListJson);
     } catch (e) {
-      print('Error removing from my list: $e');
+      if (kDebugMode) print('Error removing from my list: $e');
       return false;
     }
   }
@@ -133,7 +134,7 @@ class StorageService {
       final myList = await getMyList();
       return myList.any((video) => video.id == mediaId);
     } catch (e) {
-      print('Error checking if in my list: $e');
+      if (kDebugMode) print('Error checking if in my list: $e');
       return false;
     }
   }

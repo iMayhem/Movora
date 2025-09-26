@@ -88,13 +88,13 @@ class _AnalyticsDashboardState extends State<AnalyticsDashboard> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
-                          AppTheme.primaryColor.withOpacity(0.1),
-                          AppTheme.primaryColor.withOpacity(0.05),
+                          AppTheme.primaryColor.withValues(alpha: 0.1),
+                          AppTheme.primaryColor.withValues(alpha: 0.05),
                         ],
                       ),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: AppTheme.primaryColor.withOpacity(0.3),
+                        color: AppTheme.primaryColor.withValues(alpha: 0.3),
                       ),
                     ),
                     child: Column(
@@ -253,10 +253,10 @@ class _AnalyticsDashboardState extends State<AnalyticsDashboard> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppTheme.surfaceColor.withOpacity(0.3),
+        color: AppTheme.surfaceColor.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppTheme.surfaceColor.withOpacity(0.5),
+          color: AppTheme.surfaceColor.withValues(alpha: 0.5),
         ),
       ),
       child: Column(
