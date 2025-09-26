@@ -1,6 +1,6 @@
 workflows:
   ios-workflow:
-    name: iOS Workflow
+    name: iOS Unsigned Build (AltStore)
     max_build_duration: 60
     environment:
       flutter: stable
@@ -16,11 +16,16 @@ workflows:
       - name: Flutter unit tests
         script: |
           flutter test
-      - name: Build iOS app
+      - name: Build unsigned iOS app for AltStore
         script: |
-          flutter build ipa --release
+          flutter build ios --release --no-codesign
+      - name: Create AltStore-compatible archive
+        script: |
+          cd build/ios/iphoneos
+          zip -r ../../../Movora-AltStore.ipa Runner.app
     artifacts:
-      - build/ios/ipa/*.ipa
+      - Movora-AltStore.ipa
+      - build/ios/iphoneos/Runner.app
       - /tmp/xcodebuild_logs/*.log
       - flutter_drive.log
     publishing:
