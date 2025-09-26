@@ -32,12 +32,6 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  
-  # iOS-specific configurations for video playback
-  pod 'AVFoundation', '~> 2.0'
-  
-  # WebView configurations for better video streaming
-  pod 'WebKit', '~> 1.0'
 end
 
 post_install do |installer|

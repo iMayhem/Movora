@@ -1,55 +1,39 @@
 name: Build iOS App for AltStore
-
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  build-ios:
+  build:
     runs-on: macos-latest
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
+    - uses: actions/checkout@v3
+    
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.16.0'
-        channel: 'stable'
         
     - name: Install dependencies
       run: |
         flutter pub get
         
-    - name: Install iOS dependencies
+    - name: Update CocoaPods specs
       run: |
         cd ios
+        pod repo update
         pod install
         cd ..
         
-    - name: Build iOS app
+    - name: Build iOS Release
       run: flutter build ios --release
       
     - name: Build IPA
       run: flutter build ipa --release
       
-    - name: Upload IPA artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload IPA
+      uses: actions/upload-artifact@v3
       with:
         name: movora-ipa
         path: build/ios/ipa/movora.ipa
-        retention-days: 30
-        
-    - name: Upload build logs
-      uses: actions/upload-artifact@v4
-      if: failure()
-      with:
-        name: build-logs
-        path: |
-          flutter_01.log
-          build/
-        retention-days: 7
