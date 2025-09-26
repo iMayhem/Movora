@@ -8,7 +8,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { VideoPlayer } from './VideoPlayer';
+import { ServerSelector } from './ServerSelector';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { VideoServerType } from '@/lib/video-servers';
 
 
 type VideoPlayerContextType = {
@@ -20,6 +22,8 @@ type VideoPlayerContextType = {
   setEpisode: (episode: number) => void;
   isPlayable: boolean;
   setIsPlayable: (playable: boolean) => void;
+  currentServer: VideoServerType;
+  setCurrentServer: (server: VideoServerType) => void;
 };
 
 const VideoPlayerContext = createContext<VideoPlayerContextType | null>(null);
@@ -43,6 +47,7 @@ export function VideoPlayerDialog({ children, mediaId, mediaType }: VideoPlayerD
   const [season, setSeason] = useState(1);
   const [episode, setEpisode] = useState(1);
   const [isPlayable, setIsPlayable] = useState(mediaType === 'movie');
+  const [currentServer, setCurrentServer] = useState<VideoServerType>(VideoServerType.VIDPLUS);
   const isMobile = useIsMobile();
   const dialogContentRef = useRef<HTMLDivElement>(null);
 
@@ -97,7 +102,20 @@ export function VideoPlayerDialog({ children, mediaId, mediaType }: VideoPlayerD
   }, [open, isMobile]);
 
   return (
-    <VideoPlayerContext.Provider value={{ mediaId, mediaType, season, episode, setSeason, setEpisode, isPlayable, setIsPlayable }}>
+    <VideoPlayerContext.Provider
+      value={{
+        mediaId,
+        mediaType,
+        season,
+        episode,
+        setSeason,
+        setEpisode,
+        isPlayable,
+        setIsPlayable,
+        currentServer,
+        setCurrentServer,
+      }}
+    >
       <Dialog open={open} onOpenChange={setOpen}>
         {children}
         <DialogContent 
@@ -105,8 +123,10 @@ export function VideoPlayerDialog({ children, mediaId, mediaType }: VideoPlayerD
             className="max-w-4xl w-full h-full p-0 bg-black border-0"
             hideCloseButton={isMobile}
         >
-          <DialogTitle className="sr-only">VIDEASY Player</DialogTitle>
-          <VideoPlayer mediaId={mediaId} mediaType={mediaType} season={season} episode={episode} />
+          <DialogTitle className="sr-only">Video Player</DialogTitle>
+          <div className="relative w-full h-full">
+            <VideoPlayer mediaId={mediaId} mediaType={mediaType} season={season} episode={episode} />
+          </div>
         </DialogContent>
       </Dialog>
     </VideoPlayerContext.Provider>

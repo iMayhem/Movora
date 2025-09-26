@@ -47,7 +47,7 @@ export default async function MoviePage({ params: { id } }: MoviePageProps) {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full md:w-1/3 lg:w-1/4">
               <Image
-                src={movie.poster_path ? `https://image.tmdb.org/t/p/w342${movie.poster_path}` : "https://placehold.co/500x750.png"}
+                src={movie.poster_path ? `https://image.tmdb.org/t/p/w780${movie.poster_path}` : "https://placehold.co/500x750.png"}
                 alt={`${movie.title} poster`}
                 width={500}
                 height={750}

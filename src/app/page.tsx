@@ -23,8 +23,6 @@ const HOLLYWOOD_TV_VOTE_COUNT = { 'vote_count.gte': '200' };
 
 export default async function Home() {
   const [
-    popularMovies, 
-    popularTv,
     nowPlayingMovies,
     topWeeklyMovies,
     topWeeklyTv,
@@ -36,8 +34,6 @@ export default async function Home() {
     horrorMovies,
     thrillerMovies,
   ] = await Promise.all([
-    getPopular('movie', HOLLYWOOD_PARAMS, 1),
-    getPopular('tv', HOLLYWOOD_PARAMS, 1),
     getNowPlayingMovies(1, HOLLYWOOD_PARAMS),
     getTrending('movie', 'week', 1), // Trending is global, no region filter needed
     getTrending('tv', 'week', 1),
@@ -49,10 +45,6 @@ export default async function Home() {
     discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '27' }, 1),
     discoverMovies({ ...HOLLYWOOD_PARAMS, with_genres: '53' }, 1),
   ]);
-
-  const mostViewed: Media[] = removeDuplicates([...popularMovies, ...popularTv]).sort(
-    (a, b) => b.popularity - a.popularity
-  ).slice(0, 12);
 
   const topWeekly: Media[] = removeDuplicates([...topWeeklyMovies, ...topWeeklyTv]).sort(
     (a, b) => b.popularity - a.popularity
@@ -78,16 +70,6 @@ export default async function Home() {
             </Link>
         </div>
         <MovieList initialMedia={nowPlayingMovies} carousel />
-      </section>
-
-      <section>
-        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-            <h2 className="font-headline text-2xl font-bold">Most Popular</h2>
-            <Link href="/discover/most-viewed">
-              <Button variant="outline">More</Button>
-            </Link>
-        </div>
-        <MovieList initialMedia={mostViewed} carousel />
       </section>
 
       <section>

@@ -29,8 +29,8 @@ export const discoverCategories: Record<string, { title: string; fetcher: () => 
         title: 'Most Popular',
         fetcher: async () => {
             const [movies, tv] = await Promise.all([
-                getPopular('movie', HOLLYWOOD_PARAMS, 5),
-                getPopular('tv', HOLLYWOOD_PARAMS, 5),
+                discoverMovies({ ...HOLLYWOOD_PARAMS, ...HOLLYWOOD_VOTE_COUNT, sort_by: 'popularity.desc' }, 5),
+                discoverTvShows({ ...HOLLYWOOD_PARAMS, ...HOLLYWOOD_TV_VOTE_COUNT, sort_by: 'popularity.desc' }, 5),
             ]);
             return [...movies, ...tv].sort((a,b) => b.popularity - a.popularity);
         }

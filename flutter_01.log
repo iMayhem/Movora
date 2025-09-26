@@ -1,0 +1,81 @@
+Flutter crash report.
+Please report a bug at https://github.com/flutter/flutter/issues.
+
+## command
+
+flutter run -d chrome -t lib/main.dart
+
+## exception
+
+OutOfMemoryError: Out of Memory
+
+```
+#0      new Uint8List (dart:typed_data-patch/typed_data_patch.dart:2393:3)
+#1      _File.readAsBytesSync (dart:io/file_impl.dart:678:16)
+#2      ForwardingFile.readAsBytesSync (package:file/src/forwarding/forwarding_file.dart:91:43)
+#3      ForwardingFile.readAsBytesSync (package:file/src/forwarding/forwarding_file.dart:91:43)
+#4      WebMemoryFS.write (package:flutter_tools/src/web/memory_fs.dart:29:42)
+#5      WebDevFS.update (package:flutter_tools/src/isolated/devfs_web.dart:1167:45)
+#6      _rootRunUnary (dart:async/zone.dart:1538:47)
+#7      _CustomZone.runUnary (dart:async/zone.dart:1429:19)
+#8      _FutureListener.handleValue (dart:async/future_impl.dart:224:18)
+#9      Future._propagateToListeners.handleValueCallback (dart:async/future_impl.dart:951:45)
+#10     Future._propagateToListeners (dart:async/future_impl.dart:980:13)
+#11     Future._completeWithValue (dart:async/future_impl.dart:723:5)
+#12     Future._asyncCompleteWithValue.<anonymous closure> (dart:async/future_impl.dart:807:7)
+#13     _rootRun (dart:async/zone.dart:1525:13)
+#14     _CustomZone.run (dart:async/zone.dart:1422:19)
+#15     _CustomZone.runGuarded (dart:async/zone.dart:1321:7)
+#16     _CustomZone.bindCallbackGuarded.<anonymous closure> (dart:async/zone.dart:1362:23)
+#17     _microtaskLoop (dart:async/schedule_microtask.dart:40:21)
+#18     _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+#19     _runPendingImmediateCallback (dart:isolate-patch/isolate_patch.dart:127:13)
+#20     _RawReceivePort._handleMessage (dart:isolate-patch/isolate_patch.dart:194:5)
+```
+
+## flutter doctor
+
+```
+[32m[✓][39m Flutter (Channel stable, 3.32.7, on Microsoft Windows [Version 10.0.19045.3324], locale en-US) [1,516ms]
+    [32m•[39m Flutter version 3.32.7 on channel stable at C:\flutter
+    [32m•[39m Upstream repository https://github.com/flutter/flutter.git
+    [32m•[39m Framework revision d7b523b356 (2 months ago), 2025-07-15 17:03:46 -0700
+    [32m•[39m Engine revision 39d6d6e699
+    [32m•[39m Dart version 3.8.1
+    [32m•[39m DevTools version 2.45.1
+
+[32m[✓][39m Windows Version (10 Pro 64-bit, 22H2, 2009) [14.0s]
+
+[33m[!][39m Android toolchain - develop for Android devices (Android SDK version 34.0.0) [900ms]
+    [32m•[39m Android SDK at C:\Android\Sdk
+    [32m•[39m Platform android-35, build-tools 34.0.0
+    [32m•[39m ANDROID_HOME = C:\Android\Sdk
+    [32m•[39m Java binary at: C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot\bin\java
+      This JDK is specified by the JAVA_HOME environment variable.
+      To manually set the JDK path, use: `flutter config --jdk-dir="path/to/jdk"`.
+    [32m•[39m Java version OpenJDK Runtime Environment Temurin-21.0.8+9 (build 21.0.8+9-LTS)
+    [31m✗[39m Android license status unknown.
+      Run `flutter doctor --android-licenses` to accept the SDK licenses.
+      See https://flutter.dev/to/windows-android-setup for more details.
+
+[32m[✓][39m Chrome - develop for the web [28ms]
+    [32m•[39m Chrome at C:\Program Files\Google\Chrome\Application\chrome.exe
+
+[31m[✗][39m Visual Studio - develop Windows apps [26ms]
+    [31m✗[39m Visual Studio not installed; this is necessary to develop Windows apps.
+      Download at https://visualstudio.microsoft.com/downloads/.
+      Please install the "Desktop development with C++" workload, including all of its default components
+
+[33m[!][39m Android Studio (not installed) [16ms]
+    [32m•[39m Android Studio not found; download from https://developer.android.com/studio/index.html
+      (or visit https://flutter.dev/to/windows-android-setup for detailed instructions).
+
+[32m[✓][39m Connected device (2 available) [629ms]
+    [32m•[39m Windows (desktop) • windows • windows-x64    • Microsoft Windows [Version 10.0.19045.3324]
+    [32m•[39m Chrome (web)      • chrome  • web-javascript • Google Chrome 140.0.7339.187
+
+[32m[✓][39m Network resources [1,247ms]
+    [32m•[39m All expected network resources are available.
+
+[33m![39m Doctor found issues in 3 categories.
+```

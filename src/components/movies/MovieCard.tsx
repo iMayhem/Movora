@@ -19,7 +19,7 @@ export function MovieCard({ item }: MovieCardProps) {
         <div className="relative">
           <Link href={href}>
             <Image
-              src={item.poster_path ? `https://image.tmdb.org/t/p/w342${item.poster_path}` : "https://placehold.co/500x750.png"}
+              src={item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : "https://placehold.co/500x750.png"}
               alt={title}
               width={500}
               height={750}

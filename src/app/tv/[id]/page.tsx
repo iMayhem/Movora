@@ -47,7 +47,7 @@ export default async function TvShowPage({ params: { id } }: TvShowPageProps) {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full md:w-1/3 lg:w-1/4">
               <Image
-                src={show.poster_path ? `https://image.tmdb.org/t/p/w342${show.poster_path}` : "https://placehold.co/500x750.png"}
+                src={show.poster_path ? `https://image.tmdb.org/t/p/w780${show.poster_path}` : "https://placehold.co/500x750.png"}
                 alt={`${show.name} poster`}
                 width={500}
                 height={750}
