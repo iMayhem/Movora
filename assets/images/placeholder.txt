@@ -1,2 +1,0 @@
-This directory contains app images and assets.
-Place your app icons, splash screens, and other images here.

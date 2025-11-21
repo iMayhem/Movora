@@ -1,2 +1,0 @@
-This directory contains app icons.
-Place your app icons and vector graphics here.
