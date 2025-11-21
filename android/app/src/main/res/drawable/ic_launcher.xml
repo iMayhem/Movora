@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Moved adaptive icon definition to mipmap-anydpi-v26 for API 26+; keep a simple bitmap here for pre-26 if needed. -->
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@mipmap/ic_launcher"
-    android:antialias="true"/>
