@@ -1,3 +1,9 @@
+import os
+
+# This script fixes the TypeScript error in src/lib/tmdb.ts
+# by adding 'as Media[]' to the return statement of normalizeMedia.
+
+tmdb_content = """
 import {unstable_cache as cache} from 'next/cache';
 import type {Media, Movie, SeasonDetails, TVShow, Video} from '@/types/tmdb';
 import { discoverCategories } from './discover-categories';
@@ -249,3 +255,9 @@ export async function discoverTvShowsPage(
     if (!data?.results) return [];
     return normalizeMedia(data.results, 'tv');
 }
+"""
+
+with open("src/lib/tmdb.ts", "w", encoding="utf-8") as f:
+    f.write(tmdb_content.strip())
+
+print("Fixed src/lib/tmdb.ts successfully.")
