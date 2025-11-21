@@ -1,0 +1,9 @@
+[restore-stream]
+Audio/Sink:node.name:alsa-sink:channelMap=FL;FR;
+Audio/Sink:node.name:alsa-sink:channelVolumes=1.0;1.0;
+Audio/Sink:node.name:alsa-sink:mute=false
+Audio/Sink:node.name:alsa-sink:volume=1.0
+Audio/Source:node.name:alsa-source:channelMap=FL;FR;
+Audio/Source:node.name:alsa-source:channelVolumes=1.0;1.0;
+Audio/Source:node.name:alsa-source:mute=false
+Audio/Source:node.name:alsa-source:volume=1.0
