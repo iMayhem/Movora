@@ -105,7 +105,6 @@ export function MovieList({ initialMedia = [], carousel = false, slug }: MovieLi
   return (
     <>
       {media.length > 0 ? (
-        // GRID OPTIMIZED: grid-cols-3 on mobile, tighter gap (gap-2)
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-2 gap-y-4 animate-fade-in">
             {media.map((item, index) => (
             <MovieCard key={`${item.media_type}-${item.id}-${index}`} item={item} />
