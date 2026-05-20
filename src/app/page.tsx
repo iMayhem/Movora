@@ -29,7 +29,7 @@ const features = [
 ];
 
 export default function LandingPage() {
-  const androidAppLink = "https://github.com/iMayhem/Movora/releases/latest/download/app-release.apk";
+  const androidAppLink = "https://github.com/iMayhem/moovie/releases/latest/download/app-release.apk";
 
   return (
     <div className="bg-background text-foreground min-h-screen flex flex-col">
@@ -121,7 +121,7 @@ export default function LandingPage() {
             <div className="container mx-auto px-4 text-center relative z-10">
                 <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">Ready to Dive In?</h2>
                 <p className="text-muted-foreground text-lg mb-10 max-w-lg mx-auto">
-                Join thousands of users watching their favorite content on Movora.
+                Join thousands of users watching their favorite content on moovie.
                 </p>
                 <Button asChild size="lg" className="h-14 px-10 text-lg rounded-full shadow-2xl shadow-primary/20 hover:scale-105 transition-transform">
                 <a href={androidAppLink}>
