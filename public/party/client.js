@@ -674,9 +674,16 @@ btnBack.addEventListener('click', () => {
 function leaveLobbyAndReturn() {
     disconnectRealtime();
     
-    const url = new URL(window.location);
-    url.searchParams.delete('room');
-    window.history.pushState({}, '', url);
-
-    showRoomSelector();
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomParam = urlParams.get('room');
+    
+    if (roomParam) {
+        // Redirect directly back to the exact movie details page
+        window.location.href = `/movie/${roomParam}`;
+    } else {
+        const url = new URL(window.location);
+        url.searchParams.delete('room');
+        window.history.pushState({}, '', url);
+        showRoomSelector();
+    }
 }
