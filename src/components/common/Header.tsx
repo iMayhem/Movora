@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, FormEvent, useTransition } from 'react';
 import { Input } from '@/components/ui/input';
-import { Search, Menu, Download, Loader2, Heart, Bookmark } from 'lucide-react';
+import { 
+  Search, Menu, Download, Loader2, Heart, Bookmark, LayoutGrid, ChevronDown, ChevronUp,
+  Flame, Palette, Star, Gem, History, Smile, Eye, Compass, Zap, Trophy, Activity, Tv, Sun,
+  Map, Film, Sparkles, Gamepad2, Skull, Music, Newspaper, MessageSquare, MonitorPlay, Flag
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
@@ -14,20 +18,42 @@ import { getCurrentUser, logoutUser, getLikes, getWatchLater } from '@/lib/auth'
 import { AuthModal } from './AuthModal';
 import { PersonalizedListDrawer } from './PersonalizedListDrawer';
 
-const navItems = [
-  { name: 'Hollywood', href: '/home' },
-  { name: 'Bollywood', href: '/bollywood' },
-  { name: 'Korean', href: '/korean' },
-  { name: 'Netflix', href: '/netflix' },
-  { name: 'Prime', href: '/prime' },
-  { name: 'Cartoons', href: '/cartoons' },
-  { name: 'Animated', href: '/animated' },
-  { name: 'Mindfucks', href: '/mindfucks' },
-  { name: 'Docs', href: '/documentaries' },
-  { name: 'Adventure', href: '/adventure' },
+const androidAppLink = "https://github.com/iMayhem/moovie/releases/latest/download/app-release.apk";
+
+// Mapped genres matching Left column of the screenshot
+const leftColumnGenres = [
+  { name: 'Action', slug: 'action', icon: Flame, color: 'text-orange-500' },
+  { name: 'Animation', slug: 'animation', icon: Palette, color: 'text-violet-400' },
+  { name: 'Crime', slug: 'crime', icon: Search, color: 'text-cyan-400' },
+  { name: 'Drama', slug: 'drama', icon: Star, color: 'text-yellow-400' },
+  { name: 'Fantasy', slug: 'fantasy', icon: Gem, color: 'text-purple-400' },
+  { name: 'History', slug: 'history', icon: History, color: 'text-zinc-400' },
+  { name: 'Kids', slug: 'kids', icon: Smile, color: 'text-amber-400' },
+  { name: 'Mystery', slug: 'mystery', icon: Eye, color: 'text-indigo-400' },
+  { name: 'Reality', slug: 'reality', icon: Compass, color: 'text-emerald-400' },
+  { name: 'Science Fiction', slug: 'science-fiction', icon: Zap, color: 'text-amber-500' },
+  { name: 'Sports', slug: 'sports', icon: Trophy, color: 'text-yellow-500' },
+  { name: 'Thriller', slug: 'thriller', icon: Activity, color: 'text-rose-500' },
+  { name: 'Tv Show', slug: 'tv-show', icon: Tv, color: 'text-sky-400' },
+  { name: 'Western', slug: 'western', icon: Sun, color: 'text-yellow-400' }
 ];
 
-const androidAppLink = "https://github.com/iMayhem/moovie/releases/latest/download/app-release.apk";
+// Mapped genres matching Right column of the screenshot
+const rightColumnGenres = [
+  { name: 'Adventure', slug: 'adventure', icon: Compass, color: 'text-emerald-500' },
+  { name: 'Comedy', slug: 'comedy', icon: Smile, color: 'text-yellow-400' },
+  { name: 'Documentary', slug: 'documentary', icon: Film, color: 'text-blue-400' },
+  { name: 'Family', slug: 'family', icon: Sparkles, color: 'text-pink-400' },
+  { name: 'Game Show', slug: 'game-show', icon: Gamepad2, color: 'text-green-400' },
+  { name: 'Horror', slug: 'horror', icon: Skull, color: 'text-red-500' },
+  { name: 'Music', slug: 'music', icon: Music, color: 'text-pink-500' },
+  { name: 'News', slug: 'news', icon: Newspaper, color: 'text-sky-500' },
+  { name: 'Romance', slug: 'romance', icon: Heart, color: 'text-red-400' },
+  { name: 'Sports', slug: 'sports', icon: Trophy, color: 'text-yellow-500' },
+  { name: 'Talk', slug: 'talk', icon: MessageSquare, color: 'text-teal-400' },
+  { name: 'TV Movie', slug: 'tv-movie', icon: MonitorPlay, color: 'text-blue-400' },
+  { name: 'War', slug: 'war', icon: Flag, color: 'text-red-400' }
+];
 
 export function Header() {
   const router = useRouter();
@@ -46,180 +72,375 @@ export function Header() {
   const [likesCount, setLikesCount] = useState(0);
   const [watchlistCount, setWatchlistCount] = useState(0);
 
+  // Genre Menu Hover/Click States
+  const [isGenreOpen, setIsGenreOpen] = useState(false);
+  // Expand mobile genres
+  const [mobileGenresOpen, setMobileGenresOpen] = useState(false);
+
   useEffect(() => {
     const checkSimkl = () => {
       setIsSimklConnected(!!localStorage.getItem('simkl_access_token'));
     };
     checkSimkl();
     
-    window.addEventListener('simkl_sync_complete', checkSimkl);
-    return () => window.removeEventListener('simkl_sync_complete', checkSimkl);
-  }, []);
-
-  const updateCounts = () => {
+    // Check current Supabase auth session
     const user = getCurrentUser();
+    setCurrentUser(user);
     if (user) {
-      setLikesCount(getLikes(user).length);
-      setWatchlistCount(getWatchLater(user).length);
-    } else {
-      setLikesCount(0);
-      setWatchlistCount(0);
+        setLikesCount(getLikes(user).length);
+        setWatchlistCount(getWatchLater(user).length);
     }
-  };
 
-  useEffect(() => {
-    const checkAuth = () => {
-      setCurrentUser(getCurrentUser());
-      updateCounts();
+    // Bind event listeners for real-time updates
+    const handleAuthChange = () => {
+        const u = getCurrentUser();
+        setCurrentUser(u);
+        if (u) {
+            setLikesCount(getLikes(u).length);
+            setWatchlistCount(getWatchLater(u).length);
+        } else {
+            setLikesCount(0);
+            setWatchlistCount(0);
+        }
     };
-    checkAuth();
-    
-    window.addEventListener('movora_auth_change', checkAuth);
-    window.addEventListener('movora_userdata_change', updateCounts);
-    
+
+    const handleUserDataChange = () => {
+        const u = getCurrentUser();
+        if (u) {
+            setLikesCount(getLikes(u).length);
+            setWatchlistCount(getWatchLater(u).length);
+        }
+    };
+
+    window.addEventListener('simkl_sync_complete', checkSimkl);
+    window.addEventListener('movora_auth_change', handleAuthChange);
+    window.addEventListener('movora_userdata_change', handleUserDataChange);
+
     return () => {
-      window.removeEventListener('movora_auth_change', checkAuth);
-      window.removeEventListener('movora_userdata_change', updateCounts);
+      window.removeEventListener('simkl_sync_complete', checkSimkl);
+      window.removeEventListener('movora_auth_change', handleAuthChange);
+      window.removeEventListener('movora_userdata_change', handleUserDataChange);
     };
   }, []);
-
-  const handleLogout = () => {
-    logoutUser();
-  };
 
   useEffect(() => {
     const handleScroll = () => {
-        setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 0);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (!isPending) {
-      hideLoader();
-    }
-  }, [isPending, hideLoader]);
-
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
+  const handleSearch = (e: FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-        showLoader();
-        startTransition(() => {
-            router.push(`/search?query=${encodeURIComponent(searchQuery)}`);
-        });
-    }
+    if (!searchQuery.trim()) return;
+
+    showLoader();
+    startTransition(() => {
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      hideLoader();
+    });
   };
-  
+
+  const handleLogout = () => {
+      logoutUser();
+  };
+
   const handleLinkClick = (href: string) => {
-    if (pathname !== href) showLoader();
-  }
+    if (pathname === href) return;
+    showLoader();
+    setIsGenreOpen(false);
+    startTransition(() => {
+      router.push(href);
+      hideLoader();
+    });
+  };
 
   return (
-    <header 
-        className={cn(
-            "sticky top-0 z-50 w-full transition-all duration-300 border-b border-transparent",
-            isScrolled ? "bg-black/80 backdrop-blur-md border-white/10 shadow-lg" : "bg-transparent"
-        )}
+    <header
+      className={cn(
+        'sticky top-0 z-40 w-full border-b border-white/5 bg-zinc-950/80 backdrop-blur-md transition-all duration-300',
+        isScrolled ? 'h-16 shadow-lg shadow-black/20' : 'h-20'
+      )}
     >
-      <div className="container flex h-16 max-w-screen-2xl items-center px-4 gap-4">
-        
-        {/* Mobile Menu */}
+      <div className="container mx-auto flex h-full items-center px-4 md:px-6">
+        {/* Mobile Nav Drawer */}
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="md:hidden hover:bg-white/10">
+            <Button
+              variant="ghost"
+              className="mr-2 px-0 text-base hover:bg-transparent hover:text-white focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+            >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle Menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[300px] bg-black/95 backdrop-blur-xl border-r border-white/10 p-0">
-             {/* Header of Sidebar: No Icon, No Extra Close Button (Default one is absolute) */}
-             <div className="p-6 border-b border-white/10 flex items-center">
-                <Link href="/home" className="flex items-center gap-2" onClick={() => handleLinkClick('/home')}>
-                    <span className="font-bold text-xl tracking-tight">moovie</span>
-                </Link>
-             </div>
-            
-            <div className="py-4 overflow-y-auto h-[calc(100vh-80px)]">
-                <div className="flex flex-col px-4 space-y-1">
-                    {navItems.map(item => (
-                        <Link
-                            key={item.name}
-                            href={item.href}
-                            onClick={() => handleLinkClick(item.href)}
-                        >
-                             <SheetClose className={cn(
-                                'flex w-full items-center py-3 px-4 rounded-lg text-sm font-medium transition-all',
-                                pathname === item.href ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:bg-white/5 hover:text-white'
-                            )}>
-                                {item.name}
-                            </SheetClose>
-                        </Link>
-                    ))}
-                    <div className="pt-4 mt-4 border-t border-white/10">
-                         <a
-                            href={androidAppLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex w-full items-center justify-center gap-2 py-3 px-4 rounded-lg bg-white/10 text-white font-medium hover:bg-white/20 transition-colors"
-                        >
-                            <Download className="h-4 w-4" />
-                            Download App
-                        </a>
-                    </div>
+          
+          <SheetContent side="left" className="w-[300px] bg-zinc-950 border-zinc-900 text-white p-6 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-8">
+                    <Link href="/home" className="flex items-center" onClick={() => handleLinkClick('/home')}>
+                        <span className="font-bold text-xl tracking-tight text-gradient">moovie</span>
+                    </Link>
                 </div>
-            </div>
+                
+                <div className="overflow-y-auto max-h-[calc(100vh-180px)] space-y-2 pr-1">
+                    <Link href="/discover/tv-show" onClick={() => handleLinkClick('/discover/tv-show')}>
+                        <SheetClose className={cn(
+                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
+                            pathname === '/discover/tv-show' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                        )}>
+                            TV Shows
+                        </SheetClose>
+                    </Link>
+
+                    {/* Expandable Genres Accordion for Mobile */}
+                    <div>
+                        <button 
+                            onClick={() => setMobileGenresOpen(!mobileGenresOpen)}
+                            className="flex w-full items-center justify-between py-2.5 px-4 rounded-xl text-sm font-semibold text-zinc-400 hover:bg-white/5 hover:text-white transition-all"
+                        >
+                            <span className="flex items-center gap-2">
+                                <LayoutGrid className="w-4 h-4 text-violet-400" />
+                                Genres
+                            </span>
+                            {mobileGenresOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        </button>
+                        
+                        {mobileGenresOpen && (
+                            <div className="pl-4 pr-2 py-1 mt-1 grid grid-cols-2 gap-1 animate-fade-in">
+                                {[...leftColumnGenres, ...rightColumnGenres].map((gen, idx) => {
+                                    const Icon = gen.icon;
+                                    const path = `/discover/${gen.slug}`;
+                                    return (
+                                        <Link key={idx} href={path} onClick={() => handleLinkClick(path)}>
+                                            <SheetClose className={cn(
+                                                'flex w-full items-center gap-2 py-2 px-3 rounded-lg text-xs font-medium transition-all text-left',
+                                                pathname === path ? 'bg-violet-950/20 text-violet-400' : 'text-zinc-500 hover:text-zinc-300'
+                                            )}>
+                                                <Icon className={cn("w-3.5 h-3.5", gen.color)} />
+                                                <span className="truncate">{gen.name}</span>
+                                            </SheetClose>
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+
+                    <Link href="/discover/featured-animated" onClick={() => handleLinkClick('/discover/featured-animated')}>
+                        <SheetClose className={cn(
+                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
+                            pathname === '/discover/featured-animated' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                        )}>
+                            Anime
+                        </SheetClose>
+                    </Link>
+
+                    <Link href="/discover/top-weekly" onClick={() => handleLinkClick('/discover/top-weekly')}>
+                        <SheetClose className={cn(
+                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all justify-between',
+                            pathname === '/discover/top-weekly' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                        )}>
+                            <span>Trending</span>
+                            <span className="bg-red-500/10 text-red-500 border border-red-500/20 rounded-full px-2 py-0.5 text-[9px] uppercase tracking-wide font-extrabold">Hot</span>
+                        </SheetClose>
+                    </Link>
+
+                    <Link href="/discover/top-rated-hollywood-movies" onClick={() => handleLinkClick('/discover/top-rated-hollywood-movies')}>
+                        <SheetClose className={cn(
+                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
+                            pathname === '/discover/top-rated-hollywood-movies' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                        )}>
+                            Top IMDb
+                        </SheetClose>
+                    </Link>
+
+                    <Link href="/discover/explorer-docs" onClick={() => handleLinkClick('/discover/explorer-docs')}>
+                        <SheetClose className={cn(
+                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
+                            pathname === '/discover/explorer-docs' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                        )}>
+                            Live IPTV
+                        </SheetClose>
+                    </Link>
+                </div>
+              </div>
+
+              <div className="border-t border-zinc-900 pt-4">
+                  <a
+                     href={androidAppLink}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="flex w-full items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition-colors shadow-lg shadow-violet-600/10"
+                  >
+                     <Download className="h-4 w-4" />
+                     Download App
+                  </a>
+              </div>
           </SheetContent>
         </Sheet>
         
-        {/* Logo (Desktop) */}
-        <div className="hidden md:flex mr-4">
+        {/* Logo (Desktop & Mobile redirection throwbacks to /home) */}
+        <div className="mr-6 flex">
             <Link href="/home" className="flex items-center" onClick={() => handleLinkClick('/home')}>
-                <span className="font-bold text-xl tracking-tight hidden lg:block">moovie</span>
+                <span className="font-bold text-xl tracking-tight text-gradient">moovie</span>
             </Link>
         </div>
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
-             {navItems.slice(0, 5).map(item => (
-                <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => handleLinkClick(item.href)}
-                    className={cn(
-                    'transition-colors hover:text-primary relative py-1 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-primary after:transition-all hover:after:w-full',
-                    pathname === item.href ? 'text-primary after:w-full' : 'text-muted-foreground'
-                    )}
-                >
-                    {item.name}
-                </Link>
-            ))}
-             <div className="relative group">
-                <button className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1">More</button>
-                <div className="absolute top-full left-0 w-48 bg-black/90 border border-white/10 rounded-lg shadow-xl p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-2 group-hover:translate-y-0 backdrop-blur-md">
-                    {navItems.slice(5).map(item => (
-                         <Link
-                            key={item.name}
-                            href={item.href}
-                            onClick={() => handleLinkClick(item.href)}
-                            className="block px-4 py-2 text-sm text-muted-foreground hover:text-white hover:bg-white/10 rounded-md transition-colors"
-                        >
-                            {item.name}
-                        </Link>
-                    ))}
-                </div>
+        {/* Desktop Nav: Aligned to Screenshot */}
+        <nav className="hidden lg:flex items-center gap-6 text-[13px] font-semibold text-zinc-400">
+             {/* TV Shows */}
+             <Link
+                 href="/discover/tv-show"
+                 onClick={() => handleLinkClick('/discover/tv-show')}
+                 className={cn(
+                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full',
+                    pathname === '/discover/tv-show' ? 'text-white after:w-full' : 'text-zinc-400'
+                 )}
+             >
+                 TV Shows
+             </Link>
+
+             {/* Dynamic Genre Dropdown Container */}
+             <div 
+                 className="relative"
+                 onMouseEnter={() => setIsGenreOpen(true)}
+                 onMouseLeave={() => setIsGenreOpen(false)}
+             >
+                 <button 
+                     onClick={() => setIsGenreOpen(!isGenreOpen)}
+                     className={cn(
+                         "transition-all flex items-center gap-2 px-3 py-1.5 rounded-xl border font-bold select-none cursor-pointer",
+                         isGenreOpen 
+                             ? "border-violet-500 bg-violet-600/10 text-violet-400" 
+                             : "border-transparent text-zinc-400 hover:text-white hover:bg-white/5"
+                     )}
+                 >
+                     <LayoutGrid className="w-4 h-4" />
+                     <span>Genre</span>
+                     {isGenreOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                 </button>
+
+                 {/* Dropdown Menu (Premium glassmorphism 2-column layout matching screenshot) */}
+                 {isGenreOpen && (
+                     <div className="absolute top-full left-1/2 -translate-x-[160px] mt-2 w-[520px] bg-zinc-950/95 backdrop-blur-xl border border-zinc-800 rounded-2xl shadow-2xl p-4 flex gap-6 z-50 animate-fade-in">
+                         {/* Left Column */}
+                         <div className="flex-1 flex flex-col gap-0.5">
+                             {leftColumnGenres.map((gen, idx) => {
+                                 const Icon = gen.icon;
+                                 const path = `/discover/${gen.slug}`;
+                                 return (
+                                     <Link 
+                                         key={idx} 
+                                         href={path} 
+                                         onClick={() => handleLinkClick(path)}
+                                         className={cn(
+                                             "flex items-center gap-3 px-3 py-2 rounded-xl transition-all cursor-pointer",
+                                             pathname === path 
+                                                 ? "bg-violet-600/10 text-violet-400 font-bold" 
+                                                 : "text-zinc-400 hover:bg-white/5 hover:text-white hover:translate-x-1"
+                                         )}
+                                     >
+                                         <Icon className={cn("w-4 h-4", gen.color)} />
+                                         <span className="text-[13px]">{gen.name}</span>
+                                     </Link>
+                                 );
+                             })}
+                         </div>
+
+                         {/* Divider line */}
+                         <div className="w-[1px] bg-zinc-800/60 self-stretch"></div>
+
+                         {/* Right Column */}
+                         <div className="flex-1 flex flex-col gap-0.5">
+                             {rightColumnGenres.map((gen, idx) => {
+                                 const Icon = gen.icon;
+                                 const path = `/discover/${gen.slug}`;
+                                 return (
+                                     <Link 
+                                         key={idx} 
+                                         href={path} 
+                                         onClick={() => handleLinkClick(path)}
+                                         className={cn(
+                                             "flex items-center gap-3 px-3 py-2 rounded-xl transition-all cursor-pointer",
+                                             pathname === path 
+                                                 ? "bg-violet-600/10 text-violet-400 font-bold" 
+                                                 : "text-zinc-400 hover:bg-white/5 hover:text-white hover:translate-x-1"
+                                         )}
+                                     >
+                                         <Icon className={cn("w-4 h-4", gen.color)} />
+                                         <span className="text-[13px]">{gen.name}</span>
+                                     </Link>
+                                 );
+                             })}
+                         </div>
+                     </div>
+                 )}
              </div>
+
+             {/* Anime */}
+             <Link
+                 href="/discover/featured-animated"
+                 onClick={() => handleLinkClick('/discover/featured-animated')}
+                 className={cn(
+                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full flex items-center gap-1.5',
+                    pathname === '/discover/featured-animated' ? 'text-white after:w-full' : 'text-zinc-400'
+                 )}
+             >
+                 <Star className="w-3.5 h-3.5 fill-current text-violet-400" />
+                 <span>Anime</span>
+             </Link>
+
+             {/* Trending (with Hot Badge) */}
+             <Link
+                 href="/discover/top-weekly"
+                 onClick={() => handleLinkClick('/discover/top-weekly')}
+                 className={cn(
+                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full flex items-center gap-1.5',
+                    pathname === '/discover/top-weekly' ? 'text-white after:w-full' : 'text-zinc-400'
+                 )}
+             >
+                 <Activity className="w-3.5 h-3.5 text-orange-400" />
+                 <span>Trending</span>
+                 <span className="bg-red-500/10 text-red-500 border border-red-500/20 rounded-full px-1.5 py-0.5 text-[8px] uppercase tracking-wider font-extrabold scale-90 select-none">Hot</span>
+             </Link>
+
+             {/* Top IMDb */}
+             <Link
+                 href="/discover/top-rated-hollywood-movies"
+                 onClick={() => handleLinkClick('/discover/top-rated-hollywood-movies')}
+                 className={cn(
+                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full',
+                    pathname === '/discover/top-rated-hollywood-movies' ? 'text-white after:w-full' : 'text-zinc-400'
+                 )}
+             >
+                 Top IMDb
+             </Link>
+
+             {/* Live IPTV */}
+             <Link
+                 href="/discover/explorer-docs"
+                 onClick={() => handleLinkClick('/discover/explorer-docs')}
+                 className={cn(
+                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full flex items-center gap-1',
+                    pathname === '/discover/explorer-docs' ? 'text-white after:w-full' : 'text-zinc-400'
+                 )}
+             >
+                 <RadioIcon className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+                 <span>Live IPTV</span>
+             </Link>
         </nav>
 
         {/* Search & Actions */}
         <div className="flex flex-1 items-center justify-end gap-4">
-            <form onSubmit={handleSearch} className="relative w-full max-w-[200px] md:max-w-[300px] transition-all focus-within:max-w-[350px]">
+            <form onSubmit={handleSearch} className="relative w-full max-w-[140px] md:max-w-[220px] transition-all focus-within:max-w-[280px]">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                     key={pathname}
                     type="search"
                     placeholder="Search movies..."
-                    className="pl-9 h-10 bg-white/5 border-white/10 focus:bg-black focus:border-primary/50 rounded-full transition-all text-sm"
+                    className="pl-9 h-10 bg-white/5 border-white/10 focus:bg-black focus:border-primary/50 rounded-full transition-all text-xs"
                     defaultValue={pathname === '/search' ? searchQuery : ''}
                     onChange={e => setSearchQuery(e.target.value)}
                 />
@@ -282,7 +503,7 @@ export function Header() {
 
             {/* Auth Session Area */}
             {currentUser ? (
-                <div className="flex items-center gap-2 rounded-full bg-zinc-900 border border-zinc-800 px-3 h-10 backdrop-blur-sm text-xs font-semibold text-zinc-300">
+                <div className="flex items-center gap-2 rounded-full bg-zinc-900 border border-zinc-800 px-3 h-10 backdrop-blur-sm text-xs font-semibold text-zinc-300 animate-fade-in">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                     <span className="capitalize">{currentUser}</span>
                     <button 
@@ -309,5 +530,29 @@ export function Header() {
         </div>
       </div>
     </header>
+  );
+}
+
+// Minimal static radio/signal antenna icon
+function RadioIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
+      <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
+      <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
+    </svg>
   );
 }
