@@ -31,7 +31,7 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const { showLoader } = useLoader();
+  const { showLoader, hideLoader } = useLoader();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,6 +40,12 @@ export function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isPending) {
+      hideLoader();
+    }
+  }, [isPending, hideLoader]);
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
