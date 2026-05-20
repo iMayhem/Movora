@@ -1,5 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { PageLoader } from './PageLoader';
 
@@ -21,10 +22,12 @@ export function useLoader() {
 export function LoaderProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searchParamsString = searchParams.toString();
 
   useEffect(() => {
     setLoading(false);
-  }, [pathname]);
+  }, [pathname, searchParamsString]);
 
   const showLoader = () => setLoading(true);
   const hideLoader = () => setLoading(false);

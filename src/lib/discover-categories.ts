@@ -77,6 +77,46 @@ export const discoverCategories: Record<string, { title: string; fetcher: Fetche
         title: 'Popular Animated TV Shows',
         fetcher: (page = 1) => discoverTvShowsPage({ with_genres: '16,10751', sort_by: 'popularity.desc' }, page),
     },
+    'top-rated-animated': {
+        title: 'Top Rated Animated Movies',
+        fetcher: (page = 1) => discoverMoviesPage({ with_genres: '16', sort_by: 'vote_average.desc', 'vote_count.gte': '100' }, page),
+    },
+    'recent-animated': {
+        title: 'Recent Animated Movies',
+        fetcher: (page = 1) => discoverMoviesPage({ with_genres: '16', 'primary_release_date.gte': '2020-01-01', sort_by: 'popularity.desc' }, page),
+    },
+    'top-rated-documentaries': {
+        title: 'Top-Rated Documentaries',
+        fetcher: (page = 1) => discoverMoviesPage({ with_genres: '99', sort_by: 'vote_average.desc', 'vote_count.gte': '100' }, page),
+    },
+    'recent-documentaries': {
+        title: 'Recent Documentaries',
+        fetcher: (page = 1) => discoverMoviesPage({ with_genres: '99', 'primary_release_date.gte': '2022-01-01', sort_by: 'popularity.desc' }, page),
+    },
+    'popular-docuseries': {
+        title: 'Popular Docuseries',
+        fetcher: (page = 1) => discoverTvShowsPage({ with_genres: '99', sort_by: 'popularity.desc', 'vote_count.gte': '50' }, page),
+    },
+    'action-netflix': {
+        title: 'Action & Adventure on Netflix',
+        fetcher: (page = 1) => discoverMoviesPage({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', 'vote_count.gte': '100', with_genres: '28' }, page),
+    },
+    'scifi-netflix': {
+        title: 'Sci-Fi & Fantasy on Netflix',
+        fetcher: (page = 1) => discoverMoviesPage({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '8', 'vote_count.gte': '100', with_genres: '878,14' }, page),
+    },
+    'top-rated-prime': {
+        title: 'Top Rated on Prime',
+        fetcher: (page = 1) => discoverMoviesPage({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', 'vote_count.gte': '300', sort_by: 'vote_average.desc' }, page),
+    },
+    'action-prime': {
+        title: 'Action & Adventure on Prime',
+        fetcher: (page = 1) => discoverMoviesPage({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', 'vote_count.gte': '100', with_genres: '28' }, page),
+    },
+    'popular-tv-prime': {
+        title: 'Popular TV Shows on Prime',
+        fetcher: (page = 1) => discoverTvShowsPage({ watch_region: 'US', with_watch_monetization_types: 'flatrate', with_watch_providers: '9', 'vote_count.gte': '100', sort_by: 'popularity.desc' }, page),
+    },
     'popular-korean-tv': {
         title: 'Popular Korean TV Shows',
         fetcher: (page = 1) => discoverTvShowsPage({ with_original_language: 'ko', sort_by: 'popularity.desc', 'vote_count.gte': '10', include_adult: 'false' }, page),
