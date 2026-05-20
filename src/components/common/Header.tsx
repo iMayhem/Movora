@@ -216,14 +216,6 @@ export function Header() {
                         )}
                     </div>
 
-                    <Link href="/discover/featured-animated" onClick={() => handleLinkClick('/discover/featured-animated')}>
-                        <SheetClose className={cn(
-                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
-                            pathname === '/discover/featured-animated' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
-                        )}>
-                            Anime
-                        </SheetClose>
-                    </Link>
 
                     <Link href="/discover/top-weekly" onClick={() => handleLinkClick('/discover/top-weekly')}>
                         <SheetClose className={cn(
@@ -348,18 +340,6 @@ export function Header() {
                  )}
              </div>
 
-             {/* Anime */}
-             <Link
-                 href="/discover/featured-animated"
-                 onClick={() => handleLinkClick('/discover/featured-animated')}
-                 className={cn(
-                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full flex items-center gap-1.5',
-                    pathname === '/discover/featured-animated' ? 'text-white after:w-full' : 'text-zinc-400'
-                 )}
-             >
-                 <Star className="w-3.5 h-3.5 fill-current text-violet-400" />
-                 <span>Anime</span>
-             </Link>
 
              {/* Trending (with Hot Badge) */}
              <Link

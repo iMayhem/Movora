@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { MovieList } from '@/components/movies/MovieList';
 import type { Media } from '@/types/tmdb';
 import { useEffect, useState } from 'react';
-import { fetchFeaturedHollywood, fetchFeaturedKorean, fetchFeaturedBollywood, fetchFeaturedAnimated, fetchMedia, allShows, fetchCartoonsByChannel } from '@/lib/featured-media';
+import { fetchFeaturedHollywood, fetchFeaturedKorean, fetchFeaturedBollywood, fetchMedia, allShows, fetchCartoonsByChannel } from '@/lib/featured-media';
 import { PersonalizedDashboard } from '@/components/common/PersonalizedDashboard';
 
 function FeaturedHollywoodSection({ showMore = false }: { showMore?: boolean }) {
@@ -59,22 +59,6 @@ function FeaturedBollywoodSection({ showMore = false }: { showMore?: boolean }) 
     );
 }
 
-function FeaturedAnimatedSection({ showMore = false }: { showMore?: boolean }) {
-    const [featuredMedia, setFeaturedMedia] = useState<Media[]>([]);
-    useEffect(() => {
-        const fetch = async () => { const media = await fetchFeaturedAnimated(); setFeaturedMedia(media); };
-        fetch();
-    }, []);
-    return (
-        <section>
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="font-headline text-3xl font-bold text-gradient">Featured Animated</h2>
-                {showMore && <Link href="/discover/featured-animated"><Button variant="outline">More</Button></Link>}
-            </div>
-            <MovieList initialMedia={featuredMedia} carousel={showMore} />
-        </section>
-    );
-}
 
 const adventureSections = [
     { title: 'The Survivalists', slug: 'survival-docs', titles: allShows.survivalists },
@@ -143,7 +127,7 @@ export default function HomePage() {
             <FeaturedHollywoodSection showMore />
             <FeaturedBollywoodSection showMore />
             <FeaturedKoreanSection showMore />
-            <FeaturedAnimatedSection showMore />
+
             <FeaturedAdventureSection showMore />
             <FeaturedCartoonsSection showMore />
       </main>
