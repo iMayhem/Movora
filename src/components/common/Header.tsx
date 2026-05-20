@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { 
   Search, Menu, Loader2, Heart, Bookmark, LayoutGrid, ChevronDown, ChevronUp,
   Flame, Palette, Star, Gem, History, Smile, Eye, Compass, Zap, Trophy, Activity, Tv, Sun,
-  Film, Sparkles, Gamepad2, Skull, Music, Newspaper, MessageSquare, MonitorPlay, Flag, EyeOff
+  Film, Sparkles, Gamepad2, Skull, Music, Newspaper, MessageSquare, MonitorPlay, Flag, EyeOff, Users
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -246,7 +246,10 @@ export function Header() {
                 <span className="font-bold text-xl tracking-tight text-gradient">moovie</span>
             </Link>
         </div>
-
+<Link href="/party" className="inline-flex items-center gap-2 rounded-full bg-zinc-950 hover:bg-zinc-900 text-zinc-300 hover:text-white font-semibold py-2 px-5 text-xs md:text-sm transition-all border border-zinc-800 hover:border-zinc-700 shadow-md hover:scale-[1.02] active:scale-[0.98] mr-4">
+  <Users className="w-4 h-4 text-violet-500" />
+  <span>Watch Together</span>
+</Link>
         {/* Desktop Nav: Aligned to Screenshot */}
         <nav className="hidden lg:flex items-center gap-6 text-[13px] font-semibold text-zinc-400">
              {/* TV Shows */}
