@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import './globals.css';
 import { Space_Grotesk } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
@@ -24,13 +25,15 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={cn('min-h-screen bg-background font-body antialiased', spaceGrotesk.variable)}>
         <ProgressBarProvider>
-          <LoaderProvider>
-            <MainLayout>
-              {children}
-            </MainLayout>
-            <Toaster />
-            <Analytics />
-          </LoaderProvider>
+          <Suspense fallback={null}>
+            <LoaderProvider>
+              <MainLayout>
+                {children}
+              </MainLayout>
+              <Toaster />
+              <Analytics />
+            </LoaderProvider>
+          </Suspense>
         </ProgressBarProvider>
       </body>
     </html>

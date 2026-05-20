@@ -114,8 +114,7 @@ export function Header() {
         
         {/* Logo (Desktop) */}
         <div className="hidden md:flex mr-4">
-            <Link href="/" className="flex items-center gap-2" onClick={() => handleLinkClick('/')}>
-                <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center font-bold text-white shadow-glow">M</div>
+            <Link href="/" className="flex items-center" onClick={() => handleLinkClick('/')}>
                 <span className="font-bold text-xl tracking-tight hidden lg:block">moovie</span>
             </Link>
         </div>
