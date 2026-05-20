@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moovie Watch Party Lobby</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Screen 1: Room Selector (Shown if no room parameter is in URL) -->
+    <div id="room-selector-screen" class="screen active">
+        <!-- Configuration Trigger Gear Icon -->
+        <button id="btn-config" class="btn-config animate-fade-in" title="Configure Database Connection">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+
+        <div class="glass-card header-banner animate-fade-in">
+            <h1 class="logo">Moovie <span>Watch Party</span></h1>
+            <p class="subtitle">Sync up and watch movies together in real-time, completely bypassing cross-origin restrictions.</p>
+        </div>
+
+        <div class="rooms-container animate-fade-in" style="animation-delay: 0.1s;">
+            <h2 class="section-title">Active Scheduled watch lobbies</h2>
+            <div id="rooms-grid" class="rooms-grid">
+                <!-- Dynamically loaded rooms will go here -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>Fetching active lobby rooms...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Username Prompt Card (For initial setting) -->
+        <div id="username-modal" class="modal-overlay hidden">
+            <div class="glass-card modal-content animate-scale-up">
+                <h3>Set Your Watch Alias</h3>
+                <p>Choose a display name before entering the watch lobby party.</p>
+                <form id="username-form">
+                    <input type="text" id="username-input" placeholder="Enter your username..." maxlength="20" required autocomplete="off">
+                    <button type="submit" class="btn btn-primary">Join Party Lobby</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Screen 2: Watch Lobby Split Screen (Shown if room is selected) -->
+    <div id="watch-lobby-screen" class="screen">
+        <div class="lobby-layout">
+            <!-- Left Column: Video and Sync Status -->
+            <div class="left-column">
+                <header class="lobby-header">
+                    <div class="movie-info">
+                        <button id="btn-back" class="btn btn-icon" title="Go back to lobbies">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                            Leave Lobby
+                        </button>
+                        <h1 id="lobby-movie-title" class="movie-title">Loading Movie...</h1>
+                    </div>
+                    <!-- Premium Player Stream Source Selector -->
+                    <div class="player-select-wrapper">
+                        <span class="player-select-label">Stream:</span>
+                        <div id="player-selector" class="player-selector-pills">
+                            <button class="pill-btn active" data-player="vidplus">VIDPLUS</button>
+                            <button class="pill-btn" data-player="videasy">VIDEASY</button>
+                            <button class="pill-btn" data-player="vidsrc">VIDSRC</button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Dynamic Sync Banner -->
+                <div id="sync-banner" class="sync-banner banner-countdown">
+                    <span id="sync-banner-icon" class="banner-icon">⏳</span>
+                    <div class="banner-text-container">
+                        <span id="sync-banner-text" class="banner-text">Connecting to sync server...</span>
+                        <a href="#" id="sync-manual-btn" class="sync-action-link hidden">Click here to see where to sync your player</a>
+                    </div>
+                </div>
+
+                <!-- Video Frame Area -->
+                <div class="video-container">
+                    <iframe id="video-player" src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+                    <div id="video-overlay" class="video-overlay hidden">
+                        <div class="overlay-content">
+                            <span class="overlay-icon">⏳</span>
+                            <h3>Waiting for Room Startup</h3>
+                            <p>The stream will become active once the countdown reaches zero.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Interactive Social Sidebar (Persistent Chat) -->
+            <div class="right-column">
+                <div class="chat-header">
+                    <div class="chat-title-group">
+                        <div class="active-indicator animate-pulse"></div>
+                        <h2>Lobby Chat</h2>
+                    </div>
+                    <span id="user-count" class="badge">Joined: <span id="lobby-username">Guest</span></span>
+                </div>
+
+                <!-- Chat Log (auto-scroll) -->
+                <div id="chat-messages" class="chat-messages">
+                    <!-- Messages dynamically populated by client.js -->
+                </div>
+
+                <!-- Chat Input Form -->
+                <form id="chat-form" class="chat-input-area">
+                    <input type="text" id="chat-input" placeholder="Say something to the group..." maxlength="200" required autocomplete="off">
+                    <button type="submit" class="btn btn-send" title="Send Message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Sync Modal Prompt -->
+    <div id="sync-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content animate-scale-up">
+            <h3>Player Synchronization</h3>
+            <p>Since third-party video players prevent automated control, please use this window to manually align your progress.</p>
+            <div class="sync-timestamp-box">
+                <span class="sync-label">Seek Your Player To:</span>
+                <span id="sync-timestamp-val" class="sync-value">00:00:00</span>
+            </div>
+            <p class="sync-instructions">Pause your video, seek to the timestamp above, and click Play when the lobby status bar is running.</p>
+            <button id="close-sync-modal" class="btn btn-primary">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Supabase Credentials Modal -->
+    <div id="config-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content animate-scale-up">
+            <h3>Database Configuration</h3>
+            <p>Connect this static application to your own free serverless Supabase backend.</p>
+            <form id="config-form">
+                <div class="form-group" style="text-align: left; margin-bottom: 1.2rem;">
+                    <label for="supabase-url-input" style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px; text-transform: uppercase;">Supabase Project URL</label>
+                    <input type="url" id="supabase-url-input" placeholder="https://your-project.supabase.co" required autocomplete="off" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff;">
+                </div>
+                <div class="form-group" style="text-align: left; margin-bottom: 1.8rem;">
+                    <label for="supabase-key-input" style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px; text-transform: uppercase;">Supabase Anon Key</label>
+                    <input type="text" id="supabase-key-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." required autocomplete="off" style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: #fff;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Save Connection Settings</button>
+            </form>
+            <button id="close-config-modal" class="btn" style="width: 100%; margin-top: 8px; background: transparent; border-color: transparent;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Supabase SDK Library and Client Script -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="client.js"></script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { getMovieDetails, getSimilarMovies } from '@/lib/tmdb';
-import { Star, Calendar, Clock, PlayCircle } from 'lucide-react';
+import { Star, Calendar, Clock, PlayCircle, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { MovieList } from '@/components/movies/MovieList';
 import { VideoPlayer } from '@/components/common/VideoPlayer';
@@ -106,7 +106,17 @@ export default async function MoviePage({ params: { id } }: { params: { id: stri
             {/* Action Area */}
             <div className="max-w-3xl mx-auto md:mx-0 mb-10">
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Watch Now</h3>
-                <VideoPlayer mediaId={movie.id} mediaType="movie" posterPath={movie.backdrop_path} />
+                <div className="space-y-4">
+                    <VideoPlayer mediaId={movie.id} mediaType="movie" posterPath={movie.backdrop_path} />
+                    
+                    <a 
+                      href={`/party/?room=${movie.id}&title=${encodeURIComponent(movie.title)}`}
+                      className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold py-4 px-6 shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] border border-white/10"
+                    >
+                      <Users className="w-5 h-5 text-white/90" />
+                      Watch Together with Friends
+                    </a>
+                </div>
             </div>
           </div>
         </div>
