@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useLoader } from './LoaderProvider';
+import { SimklSyncModal } from './SimklSyncModal';
 
 const navItems = [
   { name: 'Hollywood', href: '/home' },
@@ -32,6 +33,18 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { showLoader, hideLoader } = useLoader();
+  const [isSimklOpen, setIsSimklOpen] = useState(false);
+  const [isSimklConnected, setIsSimklConnected] = useState(false);
+
+  useEffect(() => {
+    const checkSimkl = () => {
+      setIsSimklConnected(!!localStorage.getItem('simkl_access_token'));
+    };
+    checkSimkl();
+    
+    window.addEventListener('simkl_sync_complete', checkSimkl);
+    return () => window.removeEventListener('simkl_sync_complete', checkSimkl);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -178,6 +191,23 @@ export function Header() {
                 App
             </a>
             </Button>
+
+            {/* Simkl Sync Trigger */}
+            <Button 
+                onClick={() => setIsSimklOpen(true)}
+                className={cn(
+                    "hidden sm:inline-flex rounded-full border border-white/5 backdrop-blur-sm text-xs font-semibold px-4 h-10",
+                    isSimklConnected 
+                        ? "bg-emerald-950/40 text-emerald-400 hover:bg-emerald-950/60 border-emerald-500/20" 
+                        : "bg-white/10 text-white hover:bg-white/20"
+                )}
+                variant="ghost"
+            >
+                <span className="mr-1.5">{isSimklConnected ? '✅' : '🔌'}</span>
+                <span>{isSimklConnected ? 'Simkl Synced' : 'Sync Simkl'}</span>
+            </Button>
+
+            <SimklSyncModal isOpen={isSimklOpen} onClose={() => setIsSimklOpen(false)} />
         </div>
       </div>
     </header>

@@ -6,6 +6,7 @@ import { MovieList } from '@/components/movies/MovieList';
 import type { Media } from '@/types/tmdb';
 import { useEffect, useState } from 'react';
 import { fetchFeaturedHollywood, fetchFeaturedKorean, fetchFeaturedBollywood, fetchFeaturedAnimated, fetchMedia, allShows, fetchCartoonsByChannel } from '@/lib/featured-media';
+import { SimklWatchlistSection } from '@/components/common/SimklWatchlistSection';
 
 function FeaturedHollywoodSection({ showMore = false }: { showMore?: boolean }) {
     const [featuredMedia, setFeaturedMedia] = useState<Media[]>([]);
@@ -138,6 +139,7 @@ export default function HomePage() {
   return (
     <div className="bg-background text-foreground min-h-screen">
       <main className="container mx-auto py-10 px-4 space-y-16">
+            <SimklWatchlistSection />
             <FeaturedHollywoodSection showMore />
             <FeaturedBollywoodSection showMore />
             <FeaturedKoreanSection showMore />
