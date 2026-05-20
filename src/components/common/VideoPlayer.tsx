@@ -3,7 +3,7 @@
 import { Play, X, Maximize2 } from 'lucide-react';
 import Image from 'next/image';
 import { Skeleton } from '../ui/skeleton';
-import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogOverlay } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -17,14 +17,25 @@ type VideoPlayerProps = {
 
 export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, posterPath }: VideoPlayerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState<'vidplus' | 'videasy'>('vidplus');
 
   if (!mediaId || !mediaType) {
     return <Skeleton className="w-full aspect-video rounded-xl bg-white/5" />;
   }
 
-  const src = mediaType === 'movie'
-    ? `https://player.vidplus.to/embed/movie/${mediaId}`
-    : `https://player.vidplus.to/embed/tv/${mediaId}/${season}/${episode}`;
+  const playerSources = {
+    vidplus: mediaType === 'movie'
+      ? `https://player.vidplus.to/embed/movie/${mediaId}`
+      : `https://player.vidplus.to/embed/tv/${mediaId}/${season}/${episode}`,
+    videasy: mediaType === 'movie'
+      ? `https://player.videasy.net/movie/${mediaId}`
+      : `https://player.videasy.net/tv/${mediaId}/${season}/${episode}?nextEpisode=true&autoplayNextEpisode=true&episodeSelector=true`,
+  };
+
+  const src = playerSources[selectedPlayer];
+  const posterSrc = posterPath
+    ? `https://images.weserv.nl/?url=${encodeURIComponent(`image.tmdb.org/t/p/original${posterPath}`)}&w=1600&h=900&fit=cover&output=webp&q=80`
+    : null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -32,9 +43,9 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
         <div 
           className="w-full aspect-video relative cursor-pointer group overflow-hidden rounded-xl bg-black shadow-2xl ring-1 ring-white/10"
         >
-          {posterPath && (
+          {posterSrc && (
             <Image
-              src={`https://image.tmdb.org/t/p/original${posterPath}`}
+              src={posterSrc}
               alt="Video thumbnail"
               fill
               sizes="100vw"
@@ -58,7 +69,33 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
       
       <DialogContent className="max-w-screen-xl w-[95vw] h-[80vh] p-0 bg-black border-none shadow-2xl flex flex-col">
          {/* Header inside modal */}
-         <div className="absolute top-0 right-0 z-50 p-4">
+         <div className="absolute top-0 right-0 z-50 p-4 flex items-center gap-2">
+            <div className="flex items-center gap-1 rounded-full border border-white/20 bg-black/50 p-1 backdrop-blur-md">
+              <button
+                type="button"
+                onClick={() => setSelectedPlayer('vidplus')}
+                className={cn(
+                  'rounded-full px-3 py-1 text-xs font-medium transition-colors',
+                  selectedPlayer === 'vidplus'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-white/80 hover:bg-white/10 hover:text-white',
+                )}
+              >
+                VidPlus
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedPlayer('videasy')}
+                className={cn(
+                  'rounded-full px-3 py-1 text-xs font-medium transition-colors',
+                  selectedPlayer === 'videasy'
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-white/80 hover:bg-white/10 hover:text-white',
+                )}
+              >
+                VIDEASY
+              </button>
+            </div>
             <DialogClose className="bg-black/50 hover:bg-white/20 text-white rounded-full p-2 backdrop-blur-md transition-colors">
                 <X className="w-6 h-6" />
             </DialogClose>
