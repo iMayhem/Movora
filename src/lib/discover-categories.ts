@@ -158,4 +158,5 @@ export const discoverCategories: Record<string, { title: string; fetcher: Fetche
     'tv-show': { title: 'TV Shows', fetcher: (page=1) => discoverTvShowsPage({}, page) },
     'war': { title: 'War', fetcher: (page=1) => discoverMoviesPage({ with_genres: '10752' }, page) },
     'western': { title: 'Western', fetcher: (page=1) => discoverMoviesPage({ with_genres: '37' }, page) },
+    'adult': { title: 'Adult (18+)', fetcher: (page=1) => discoverMoviesPage({ include_adult: 'true', certification_country: 'US', certification: 'NC-17', sort_by: 'popularity.desc' }, page) },
 };

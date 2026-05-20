@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { 
   Search, Menu, Loader2, Heart, Bookmark, LayoutGrid, ChevronDown, ChevronUp,
   Flame, Palette, Star, Gem, History, Smile, Eye, Compass, Zap, Trophy, Activity, Tv, Sun,
-  Film, Sparkles, Gamepad2, Skull, Music, Newspaper, MessageSquare, MonitorPlay, Flag
+  Film, Sparkles, Gamepad2, Skull, Music, Newspaper, MessageSquare, MonitorPlay, Flag, EyeOff
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -49,7 +49,8 @@ const rightColumnGenres = [
   { name: 'Sports', slug: 'sports', icon: Trophy, color: 'text-yellow-500' },
   { name: 'Talk', slug: 'talk', icon: MessageSquare, color: 'text-teal-400' },
   { name: 'TV Movie', slug: 'tv-movie', icon: MonitorPlay, color: 'text-blue-400' },
-  { name: 'War', slug: 'war', icon: Flag, color: 'text-red-400' }
+  { name: 'War', slug: 'war', icon: Flag, color: 'text-red-400' },
+  { name: 'Adult (18+)', slug: 'adult', icon: EyeOff, color: 'text-rose-500' }
 ];
 
 export function Header() {
@@ -290,8 +291,9 @@ export function Header() {
 
                  {/* Dropdown Menu (Premium glassmorphism 2-column layout matching screenshot) */}
                  {isGenreOpen && (
-                     <div className="absolute top-full left-1/2 -translate-x-[160px] mt-2 w-[520px] bg-zinc-950/95 backdrop-blur-xl border border-zinc-800 rounded-2xl shadow-2xl p-4 flex gap-6 z-50 animate-fade-in">
-                         {/* Left Column */}
+                     <div className="absolute top-full left-1/2 -translate-x-[160px] pt-4 w-[520px] z-50 animate-fade-in">
+                         <div className="bg-zinc-950/95 backdrop-blur-xl border border-zinc-800 rounded-2xl shadow-2xl p-4 flex gap-6">
+                             {/* Left Column */}
                          <div className="flex-1 flex flex-col gap-0.5">
                              {leftColumnGenres.map((gen, idx) => {
                                  const Icon = gen.icon;
@@ -340,6 +342,7 @@ export function Header() {
                                      </Link>
                                  );
                              })}
+                         </div>
                          </div>
                      </div>
                  )}
