@@ -23,7 +23,7 @@ const navItems = [
   { name: 'Adventure', href: '/adventure' },
 ];
 
-const androidAppLink = "https://github.com/iMayhem/Movora/releases/latest/download/app-release.apk";
+const androidAppLink = "https://github.com/iMayhem/moovie/releases/latest/download/app-release.apk";
 
 export function Header() {
   const router = useRouter();
@@ -76,7 +76,7 @@ export function Header() {
              {/* Header of Sidebar: No Icon, No Extra Close Button (Default one is absolute) */}
              <div className="p-6 border-b border-white/10 flex items-center">
                 <Link href="/" className="flex items-center gap-2" onClick={() => handleLinkClick('/')}>
-                    <span className="font-bold text-xl tracking-tight">Movora</span>
+                    <span className="font-bold text-xl tracking-tight">moovie</span>
                 </Link>
              </div>
             
@@ -116,7 +116,7 @@ export function Header() {
         <div className="hidden md:flex mr-4">
             <Link href="/" className="flex items-center gap-2" onClick={() => handleLinkClick('/')}>
                 <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center font-bold text-white shadow-glow">M</div>
-                <span className="font-bold text-xl tracking-tight hidden lg:block">Movora</span>
+                <span className="font-bold text-xl tracking-tight hidden lg:block">moovie</span>
             </Link>
         </div>
 

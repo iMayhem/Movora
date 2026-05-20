@@ -11,7 +11,7 @@ import { LoaderProvider } from '@/components/common/LoaderProvider';
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' });
 
 export const metadata: Metadata = {
-  title: 'Movora',
+  title: 'moovie',
   description: 'Your ultimate destination for movies and TV shows.',
 };
 

@@ -3,7 +3,7 @@ import os
 files = {
     "package.json": """
 {
-  "name": "movora-optimized",
+  "name": "moovie-optimized",
   "version": "0.1.0",
   "private": true,
   "scripts": {
