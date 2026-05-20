@@ -109,13 +109,15 @@ export default async function MoviePage({ params: { id } }: { params: { id: stri
                 <div className="space-y-4">
                     <VideoPlayer mediaId={movie.id} mediaType="movie" posterPath={movie.backdrop_path} />
                     
-                    <a 
-                      href={`/party/?room=${movie.id}&title=${encodeURIComponent(movie.title)}`}
-                      className="inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold py-4 px-6 shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] border border-white/10"
-                    >
-                      <Users className="w-5 h-5 text-white/90" />
-                      Watch Together with Friends
-                    </a>
+                    <div className="flex justify-start">
+                        <a 
+                          href={`/party/?room=${movie.id}&title=${encodeURIComponent(movie.title)}`}
+                          className="inline-flex items-center gap-2 rounded-lg bg-zinc-950 hover:bg-zinc-900 text-zinc-300 hover:text-white font-medium py-2 px-4 text-xs md:text-sm transition-all duration-200 border border-zinc-800 hover:border-zinc-700 shadow-md hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                          <Users className="w-4 h-4 text-violet-500" />
+                          <span>Watch Together</span>
+                        </a>
+                    </div>
                 </div>
             </div>
           </div>
