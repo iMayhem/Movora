@@ -73,6 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
         lobbyUsernameLabel.textContent = username;
     }
 
+    // Show configuration gear button only to administrators (via ?setup=1 or ?admin=true query parameter)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('setup') === '1' || urlParams.get('admin') === 'true') {
+        btnConfig.classList.remove('hidden');
+    }
+
     // Bind Configuration Gear Button triggers
     btnConfig.addEventListener('click', () => {
         supabaseUrlInput.value = localStorage.getItem('supabase_url') || 'https://ggzuydqfxamvwalbfvyr.supabase.co';
