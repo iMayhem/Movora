@@ -1,21 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getCurrentUser, getHistory, getLikes, getWatchLater, HistoryItem } from '@/lib/auth';
+import { getCurrentUser, getHistory, getLikes, HistoryItem } from '@/lib/auth';
 import { getMovieDetails, getTvShowDetails, discoverMovies, discoverTvShows } from '@/lib/tmdb';
 import type { Media } from '@/types/tmdb';
 import { MovieList } from '@/components/movies/MovieList';
-import { Loader2, Heart, Clock, Compass, Bookmark } from 'lucide-react';
+import { Loader2, Clock, Compass } from 'lucide-react';
 
 export function PersonalizedDashboard() {
     const [username, setUsername] = useState<string | null>(null);
     const [history, setHistory] = useState<HistoryItem[]>([]);
-    const [likedMedia, setLikedMedia] = useState<Media[]>([]);
-    const [watchLaterMedia, setWatchLaterMedia] = useState<Media[]>([]);
     const [recommendations, setRecommendations] = useState<Media[]>([]);
-    
-    const [loadingLikes, setLoadingLikes] = useState(false);
-    const [loadingWatchLater, setLoadingWatchLater] = useState(false);
     const [loadingRecs, setLoadingRecs] = useState(false);
 
     const loadUserData = async () => {
@@ -26,8 +21,6 @@ export function PersonalizedDashboard() {
         
         if (!currentUser) {
             setHistory([]);
-            setLikedMedia([]);
-            setWatchLaterMedia([]);
             setRecommendations([]);
             return;
         }
@@ -36,66 +29,10 @@ export function PersonalizedDashboard() {
         const userHistory = getHistory(currentUser);
         setHistory(userHistory);
 
-        // 2. Liked Items (Resolve TMDB)
-        const likedIds = getLikes(currentUser);
-        if (likedIds.length > 0) {
-            setLoadingLikes(true);
-            try {
-                const resolved = await Promise.all(
-                    likedIds.slice(0, 10).map(async (id) => {
-                        // First try movie, then TV
-                        try {
-                            const movie = await getMovieDetails(id);
-                            if (movie) return movie;
-                        } catch {}
-                        try {
-                            const tv = await getTvShowDetails(id);
-                            if (tv) return tv;
-                        } catch {}
-                        return null;
-                    })
-                );
-                setLikedMedia(resolved.filter((item): item is Media => item !== null));
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setLoadingLikes(false);
-            }
-        } else {
-            setLikedMedia([]);
-        }
-
-        // 3. Watch Later Items (Resolve TMDB)
-        const watchLaterIds = getWatchLater(currentUser);
-        if (watchLaterIds.length > 0) {
-            setLoadingWatchLater(true);
-            try {
-                const resolved = await Promise.all(
-                    watchLaterIds.slice(0, 10).map(async (id) => {
-                        try {
-                            const movie = await getMovieDetails(id);
-                            if (movie) return movie;
-                        } catch {}
-                        try {
-                            const tv = await getTvShowDetails(id);
-                            if (tv) return tv;
-                        } catch {}
-                        return null;
-                    })
-                );
-                setWatchLaterMedia(resolved.filter((item): item is Media => item !== null));
-            } catch (e) {
-                console.error(e);
-            } finally {
-                setLoadingWatchLater(false);
-            }
-        } else {
-            setWatchLaterMedia([]);
-        }
-
-        // 4. Custom Recommendations based on Liked Genres
+        // 2. Custom Recommendations based on Liked Genres
         setLoadingRecs(true);
         try {
+            const likedIds = getLikes(currentUser);
             let genreIds: number[] = [];
             
             // Gather genres from liked media
@@ -182,37 +119,7 @@ export function PersonalizedDashboard() {
                 </section>
             )}
 
-            {/* Row 2: Watch Later */}
-            {watchLaterMedia.length > 0 && (
-                <section>
-                    <div className="flex items-center gap-2 mb-6">
-                        <Bookmark className="w-5 h-5 text-indigo-400" />
-                        <h2 className="font-headline text-2xl font-bold text-gradient">My Watch Later</h2>
-                    </div>
-                    {loadingWatchLater ? (
-                        <div className="flex justify-center py-6"><Loader2 className="w-6 h-6 animate-spin text-indigo-500" /></div>
-                    ) : (
-                        <MovieList initialMedia={watchLaterMedia} carousel />
-                    )}
-                </section>
-            )}
-
-            {/* Row 3: Liked Movies & TV Shows */}
-            {likedMedia.length > 0 && (
-                <section>
-                    <div className="flex items-center gap-2 mb-6">
-                        <Heart className="w-5 h-5 text-rose-400 fill-rose-400/20" />
-                        <h2 className="font-headline text-2xl font-bold text-gradient">My Liked List</h2>
-                    </div>
-                    {loadingLikes ? (
-                        <div className="flex justify-center py-6"><Loader2 className="w-6 h-6 animate-spin text-rose-500" /></div>
-                    ) : (
-                        <MovieList initialMedia={likedMedia} carousel />
-                    )}
-                </section>
-            )}
-
-            {/* Row 4: Customized Recommendations */}
+            {/* Row 2: Customized Recommendations */}
             <section>
                 <div className="flex items-center gap-2 mb-6">
                     <Compass className="w-5 h-5 text-emerald-400" />

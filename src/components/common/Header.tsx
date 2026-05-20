@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, FormEvent, useTransition } from 'react';
 import { Input } from '@/components/ui/input';
-import { Search, Menu, Download, Loader2 } from 'lucide-react';
+import { Search, Menu, Download, Loader2, Heart, Bookmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useLoader } from './LoaderProvider';
 import { SimklSyncModal } from './SimklSyncModal';
-import { getCurrentUser, logoutUser } from '@/lib/auth';
+import { getCurrentUser, logoutUser, getLikes, getWatchLater } from '@/lib/auth';
 import { AuthModal } from './AuthModal';
+import { PersonalizedListDrawer } from './PersonalizedListDrawer';
 
 const navItems = [
   { name: 'Hollywood', href: '/home' },
@@ -39,6 +40,11 @@ export function Header() {
   const [isSimklConnected, setIsSimklConnected] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
+  
+  const [isLikesOpen, setIsLikesOpen] = useState(false);
+  const [isWatchlistOpen, setIsWatchlistOpen] = useState(false);
+  const [likesCount, setLikesCount] = useState(0);
+  const [watchlistCount, setWatchlistCount] = useState(0);
 
   useEffect(() => {
     const checkSimkl = () => {
@@ -50,14 +56,31 @@ export function Header() {
     return () => window.removeEventListener('simkl_sync_complete', checkSimkl);
   }, []);
 
+  const updateCounts = () => {
+    const user = getCurrentUser();
+    if (user) {
+      setLikesCount(getLikes(user).length);
+      setWatchlistCount(getWatchLater(user).length);
+    } else {
+      setLikesCount(0);
+      setWatchlistCount(0);
+    }
+  };
+
   useEffect(() => {
     const checkAuth = () => {
       setCurrentUser(getCurrentUser());
+      updateCounts();
     };
     checkAuth();
     
     window.addEventListener('movora_auth_change', checkAuth);
-    return () => window.removeEventListener('movora_auth_change', checkAuth);
+    window.addEventListener('movora_userdata_change', updateCounts);
+    
+    return () => {
+      window.removeEventListener('movora_auth_change', checkAuth);
+      window.removeEventListener('movora_userdata_change', updateCounts);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -112,7 +135,7 @@ export function Header() {
           <SheetContent side="left" className="w-[300px] bg-black/95 backdrop-blur-xl border-r border-white/10 p-0">
              {/* Header of Sidebar: No Icon, No Extra Close Button (Default one is absolute) */}
              <div className="p-6 border-b border-white/10 flex items-center">
-                <Link href="/" className="flex items-center gap-2" onClick={() => handleLinkClick('/')}>
+                <Link href="/home" className="flex items-center gap-2" onClick={() => handleLinkClick('/home')}>
                     <span className="font-bold text-xl tracking-tight">moovie</span>
                 </Link>
              </div>
@@ -151,7 +174,7 @@ export function Header() {
         
         {/* Logo (Desktop) */}
         <div className="hidden md:flex mr-4">
-            <Link href="/" className="flex items-center" onClick={() => handleLinkClick('/')}>
+            <Link href="/home" className="flex items-center" onClick={() => handleLinkClick('/home')}>
                 <span className="font-bold text-xl tracking-tight hidden lg:block">moovie</span>
             </Link>
         </div>
@@ -203,6 +226,38 @@ export function Header() {
                  {isPending && <div className="absolute right-3 top-1/2 -translate-y-1/2"><Loader2 className="h-4 w-4 animate-spin text-primary" /></div>}
             </form>
             
+            {/* Liked List Shortcut */}
+            <Button 
+                onClick={() => currentUser ? setIsLikesOpen(true) : setIsAuthOpen(true)}
+                variant="ghost"
+                size="icon"
+                className="relative rounded-full bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 text-zinc-300 hover:text-rose-400 transition-all w-10 h-10 flex items-center justify-center"
+                title="My Liked List"
+            >
+                <Heart className={cn("w-4 h-4", likesCount > 0 && "fill-rose-500 text-rose-500")} />
+                {likesCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-rose-500 text-white font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px] border border-zinc-950 font-sans">
+                        {likesCount}
+                    </span>
+                )}
+            </Button>
+
+            {/* Watchlist Shortcut */}
+            <Button 
+                onClick={() => currentUser ? setIsWatchlistOpen(true) : setIsAuthOpen(true)}
+                variant="ghost"
+                size="icon"
+                className="relative rounded-full bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 text-zinc-300 hover:text-indigo-400 transition-all w-10 h-10 flex items-center justify-center mr-1"
+                title="My Watchlist"
+            >
+                <Bookmark className={cn("w-4 h-4", watchlistCount > 0 && "fill-indigo-500 text-indigo-500")} />
+                {watchlistCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-indigo-500 text-white font-bold rounded-full w-4 h-4 flex items-center justify-center text-[8px] border border-zinc-950 font-sans">
+                        {watchlistCount}
+                    </span>
+                )}
+            </Button>
+
             <Button asChild className="hidden sm:inline-flex rounded-full bg-white/10 text-white hover:bg-white/20 border border-white/5 backdrop-blur-sm" variant="ghost">
             <a href={androidAppLink} target="_blank" rel="noopener noreferrer">
                 <Download className="mr-2 h-4 w-4" />
@@ -247,8 +302,10 @@ export function Header() {
                 </Button>
             )}
 
-            <SimklSyncModal isOpen={isSimklOpen} onClose={() => setIsSimklOpen(false)} />
-            <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+             <SimklSyncModal isOpen={isSimklOpen} onClose={() => setIsSimklOpen(false)} />
+             <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+             <PersonalizedListDrawer type="likes" isOpen={isLikesOpen} onClose={() => setIsLikesOpen(false)} />
+             <PersonalizedListDrawer type="watchlater" isOpen={isWatchlistOpen} onClose={() => setIsWatchlistOpen(false)} />
         </div>
       </div>
     </header>
