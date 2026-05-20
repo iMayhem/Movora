@@ -56,3 +56,19 @@ CREATE POLICY "Allow public insert access to rooms"
 ON public.rooms 
 FOR INSERT 
 WITH CHECK (true);
+
+-- 5. Create the Movora Users table for username/password authentication
+CREATE TABLE IF NOT EXISTS public.movora_users (
+    username TEXT PRIMARY KEY,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS and public policies for users
+ALTER TABLE public.movora_users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access to users" 
+ON public.movora_users FOR SELECT USING (true);
+
+CREATE POLICY "Allow public insert access to users" 
+ON public.movora_users FOR INSERT WITH CHECK (true);

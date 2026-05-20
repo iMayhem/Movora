@@ -6,6 +6,7 @@ import { Skeleton } from '../ui/skeleton';
 import { Dialog, DialogContent, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { getCurrentUser, addToHistory } from '@/lib/auth';
 
 type VideoPlayerProps = {
   mediaId?: number;
@@ -13,13 +14,29 @@ type VideoPlayerProps = {
   season?: number;
   episode?: number;
   posterPath?: string | null;
+  title?: string;
 };
 
 type PlayerKey = 'vidplus' | 'videasy' | 'vidsrc';
 
-export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, posterPath }: VideoPlayerProps) {
+export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, posterPath, title }: VideoPlayerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerKey>('vidplus');
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (open && mediaId && mediaType) {
+      const currentUser = getCurrentUser();
+      if (currentUser) {
+        addToHistory(currentUser, {
+          id: mediaId,
+          title: title || 'Media Item',
+          poster_path: posterPath || null,
+          media_type: mediaType,
+        });
+      }
+    }
+  };
 
   if (!mediaId || !mediaType) {
     return <Skeleton className="w-full aspect-video rounded-xl bg-white/5" />;
@@ -43,7 +60,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     : null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <div
           className="w-full aspect-video relative cursor-pointer group overflow-hidden rounded-xl bg-black shadow-2xl ring-1 ring-white/10"

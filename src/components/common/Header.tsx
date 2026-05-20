@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useLoader } from './LoaderProvider';
 import { SimklSyncModal } from './SimklSyncModal';
+import { getCurrentUser, logoutUser } from '@/lib/auth';
+import { AuthModal } from './AuthModal';
 
 const navItems = [
   { name: 'Hollywood', href: '/home' },
@@ -35,6 +37,8 @@ export function Header() {
   const { showLoader, hideLoader } = useLoader();
   const [isSimklOpen, setIsSimklOpen] = useState(false);
   const [isSimklConnected, setIsSimklConnected] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
 
   useEffect(() => {
     const checkSimkl = () => {
@@ -45,6 +49,20 @@ export function Header() {
     window.addEventListener('simkl_sync_complete', checkSimkl);
     return () => window.removeEventListener('simkl_sync_complete', checkSimkl);
   }, []);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setCurrentUser(getCurrentUser());
+    };
+    checkAuth();
+    
+    window.addEventListener('movora_auth_change', checkAuth);
+    return () => window.removeEventListener('movora_auth_change', checkAuth);
+  }, []);
+
+  const handleLogout = () => {
+    logoutUser();
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -207,7 +225,30 @@ export function Header() {
                 <span>{isSimklConnected ? 'Simkl Synced' : 'Sync Simkl'}</span>
             </Button>
 
+            {/* Auth Session Area */}
+            {currentUser ? (
+                <div className="flex items-center gap-2 rounded-full bg-zinc-900 border border-zinc-800 px-3 h-10 backdrop-blur-sm text-xs font-semibold text-zinc-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span className="capitalize">{currentUser}</span>
+                    <button 
+                        onClick={handleLogout} 
+                        className="text-zinc-500 hover:text-rose-400 font-bold ml-2 transition-colors text-[9px] uppercase tracking-wider"
+                        title="Logout"
+                    >
+                        Sign Out
+                    </button>
+                </div>
+            ) : (
+                <Button 
+                    onClick={() => setIsAuthOpen(true)}
+                    className="rounded-full bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs px-4 h-10 shadow-lg shadow-violet-600/10 border border-violet-500/20"
+                >
+                    Sign In
+                </Button>
+            )}
+
             <SimklSyncModal isOpen={isSimklOpen} onClose={() => setIsSimklOpen(false)} />
+            <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
         </div>
       </div>
     </header>

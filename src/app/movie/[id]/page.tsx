@@ -4,6 +4,7 @@ import { Star, Calendar, Clock, PlayCircle, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { MovieList } from '@/components/movies/MovieList';
 import { VideoPlayer } from '@/components/common/VideoPlayer';
+import { DetailsActions } from '@/components/common/DetailsActions';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -107,17 +108,19 @@ export default async function MoviePage({ params: { id } }: { params: { id: stri
             <div className="max-w-3xl mx-auto md:mx-0 mb-10">
                 <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3">Watch Now</h3>
                 <div className="space-y-4">
-                    <VideoPlayer mediaId={movie.id} mediaType="movie" posterPath={movie.backdrop_path} />
+                    <VideoPlayer 
+                      mediaId={movie.id} 
+                      mediaType="movie" 
+                      posterPath={movie.backdrop_path} 
+                      title={movie.title}
+                    />
                     
-                    <div className="flex justify-start">
-                        <a 
-                          href={`/party/?room=${movie.id}&title=${encodeURIComponent(movie.title)}`}
-                          className="inline-flex items-center gap-2 rounded-lg bg-zinc-950 hover:bg-zinc-900 text-zinc-300 hover:text-white font-medium py-2 px-4 text-xs md:text-sm transition-all duration-200 border border-zinc-800 hover:border-zinc-700 shadow-md hover:scale-[1.02] active:scale-[0.98]"
-                        >
-                          <Users className="w-4 h-4 text-violet-500" />
-                          <span>Watch Together</span>
-                        </a>
-                    </div>
+                    <DetailsActions 
+                      mediaId={movie.id} 
+                      mediaType="movie" 
+                      title={movie.title} 
+                      posterPath={movie.poster_path} 
+                    />
                 </div>
             </div>
           </div>

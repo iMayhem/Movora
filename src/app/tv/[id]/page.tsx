@@ -4,6 +4,7 @@ import { Star, Calendar, Tv as TvIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { MovieList } from '@/components/movies/MovieList';
 import { EpisodeSelector } from '@/components/tv/EpisodeSelector';
+import { DetailsActions } from '@/components/common/DetailsActions';
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -99,6 +100,15 @@ export default async function TvShowPage({ params: { id } }: { params: { id: str
                 <p className="text-sm md:text-base leading-relaxed text-gray-300 text-justify md:text-left">
                     {show.overview}
                 </p>
+            </div>
+
+            <div className="max-w-3xl mx-auto md:mx-0 mb-6">
+                <DetailsActions 
+                  mediaId={show.id} 
+                  mediaType="tv" 
+                  title={show.name} 
+                  posterPath={show.poster_path} 
+                />
             </div>
 
             <div className="max-w-3xl mx-auto md:mx-0 mb-10">
