@@ -5,20 +5,17 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect, FormEvent, useTransition } from 'react';
 import { Input } from '@/components/ui/input';
 import { 
-  Search, Menu, Download, Loader2, Heart, Bookmark, LayoutGrid, ChevronDown, ChevronUp,
+  Search, Menu, Loader2, Heart, Bookmark, LayoutGrid, ChevronDown, ChevronUp,
   Flame, Palette, Star, Gem, History, Smile, Eye, Compass, Zap, Trophy, Activity, Tv, Sun,
-  Map, Film, Sparkles, Gamepad2, Skull, Music, Newspaper, MessageSquare, MonitorPlay, Flag
+  Film, Sparkles, Gamepad2, Skull, Music, Newspaper, MessageSquare, MonitorPlay, Flag
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useLoader } from './LoaderProvider';
-import { SimklSyncModal } from './SimklSyncModal';
 import { getCurrentUser, logoutUser, getLikes, getWatchLater } from '@/lib/auth';
 import { AuthModal } from './AuthModal';
 import { PersonalizedListDrawer } from './PersonalizedListDrawer';
-
-const androidAppLink = "https://github.com/iMayhem/moovie/releases/latest/download/app-release.apk";
 
 // Mapped genres matching Left column of the screenshot
 const leftColumnGenres = [
@@ -62,8 +59,6 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { showLoader, hideLoader } = useLoader();
-  const [isSimklOpen, setIsSimklOpen] = useState(false);
-  const [isSimklConnected, setIsSimklConnected] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<string | null>(null);
   
@@ -72,17 +67,11 @@ export function Header() {
   const [likesCount, setLikesCount] = useState(0);
   const [watchlistCount, setWatchlistCount] = useState(0);
 
-  // Genre Menu Hover/Click States
+  // Genre Dropdown Menu States
   const [isGenreOpen, setIsGenreOpen] = useState(false);
-  // Expand mobile genres
   const [mobileGenresOpen, setMobileGenresOpen] = useState(false);
 
   useEffect(() => {
-    const checkSimkl = () => {
-      setIsSimklConnected(!!localStorage.getItem('simkl_access_token'));
-    };
-    checkSimkl();
-    
     // Check current Supabase auth session
     const user = getCurrentUser();
     setCurrentUser(user);
@@ -112,12 +101,10 @@ export function Header() {
         }
     };
 
-    window.addEventListener('simkl_sync_complete', checkSimkl);
     window.addEventListener('movora_auth_change', handleAuthChange);
     window.addEventListener('movora_userdata_change', handleUserDataChange);
 
     return () => {
-      window.removeEventListener('simkl_sync_complete', checkSimkl);
       window.removeEventListener('movora_auth_change', handleAuthChange);
       window.removeEventListener('movora_userdata_change', handleUserDataChange);
     };
@@ -184,7 +171,7 @@ export function Header() {
                     </Link>
                 </div>
                 
-                <div className="overflow-y-auto max-h-[calc(100vh-180px)] space-y-2 pr-1">
+                <div className="overflow-y-auto max-h-[calc(100vh-120px)] space-y-2 pr-1">
                     <Link href="/discover/tv-show" onClick={() => handleLinkClick('/discover/tv-show')}>
                         <SheetClose className={cn(
                             'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
@@ -255,28 +242,7 @@ export function Header() {
                             Top IMDb
                         </SheetClose>
                     </Link>
-
-                    <Link href="/discover/explorer-docs" onClick={() => handleLinkClick('/discover/explorer-docs')}>
-                        <SheetClose className={cn(
-                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
-                            pathname === '/discover/explorer-docs' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
-                        )}>
-                            Live IPTV
-                        </SheetClose>
-                    </Link>
                 </div>
-              </div>
-
-              <div className="border-t border-zinc-900 pt-4">
-                  <a
-                     href={androidAppLink}
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     className="flex w-full items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition-colors shadow-lg shadow-violet-600/10"
-                  >
-                     <Download className="h-4 w-4" />
-                     Download App
-                  </a>
               </div>
           </SheetContent>
         </Sheet>
@@ -417,19 +383,6 @@ export function Header() {
              >
                  Top IMDb
              </Link>
-
-             {/* Live IPTV */}
-             <Link
-                 href="/discover/explorer-docs"
-                 onClick={() => handleLinkClick('/discover/explorer-docs')}
-                 className={cn(
-                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full flex items-center gap-1',
-                    pathname === '/discover/explorer-docs' ? 'text-white after:w-full' : 'text-zinc-400'
-                 )}
-             >
-                 <RadioIcon className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-                 <span>Live IPTV</span>
-             </Link>
         </nav>
 
         {/* Search & Actions */}
@@ -479,28 +432,6 @@ export function Header() {
                 )}
             </Button>
 
-            <Button asChild className="hidden sm:inline-flex rounded-full bg-white/10 text-white hover:bg-white/20 border border-white/5 backdrop-blur-sm" variant="ghost">
-            <a href={androidAppLink} target="_blank" rel="noopener noreferrer">
-                <Download className="mr-2 h-4 w-4" />
-                App
-            </a>
-            </Button>
-
-            {/* Simkl Sync Trigger */}
-            <Button 
-                onClick={() => setIsSimklOpen(true)}
-                className={cn(
-                    "hidden sm:inline-flex rounded-full border border-white/5 backdrop-blur-sm text-xs font-semibold px-4 h-10",
-                    isSimklConnected 
-                        ? "bg-emerald-950/40 text-emerald-400 hover:bg-emerald-950/60 border-emerald-500/20" 
-                        : "bg-white/10 text-white hover:bg-white/20"
-                )}
-                variant="ghost"
-            >
-                <span className="mr-1.5">{isSimklConnected ? '✅' : '🔌'}</span>
-                <span>{isSimklConnected ? 'Simkl Synced' : 'Sync Simkl'}</span>
-            </Button>
-
             {/* Auth Session Area */}
             {currentUser ? (
                 <div className="flex items-center gap-2 rounded-full bg-zinc-900 border border-zinc-800 px-3 h-10 backdrop-blur-sm text-xs font-semibold text-zinc-300 animate-fade-in">
@@ -523,36 +454,11 @@ export function Header() {
                 </Button>
             )}
 
-             <SimklSyncModal isOpen={isSimklOpen} onClose={() => setIsSimklOpen(false)} />
              <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
              <PersonalizedListDrawer type="likes" isOpen={isLikesOpen} onClose={() => setIsLikesOpen(false)} />
              <PersonalizedListDrawer type="watchlater" isOpen={isWatchlistOpen} onClose={() => setIsWatchlistOpen(false)} />
         </div>
       </div>
     </header>
-  );
-}
-
-// Minimal static radio/signal antenna icon
-function RadioIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
-      <path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" />
-      <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" />
-      <circle cx="12" cy="12" r="2" />
-      <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" />
-      <path d="M19.1 4.9C23 8.8 23 15.2 19.1 19.1" />
-    </svg>
   );
 }
