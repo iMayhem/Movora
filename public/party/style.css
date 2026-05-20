@@ -861,3 +861,42 @@ body {
     transform: rotate(45deg);
 }
 
+/* Cinema Lights Out Mode */
+.lobby-header, #sync-banner {
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), var(--transition-smooth);
+}
+
+.lights-out-active .lobby-header,
+.lights-out-active #sync-banner {
+    opacity: 0.04; /* Extra dim for maximum focus */
+}
+.lights-out-active .lobby-header:hover,
+.lights-out-active #sync-banner:hover {
+    opacity: 1;
+}
+
+#btn-lights-out {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 99px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+#btn-lights-out:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.04);
+}
+#btn-lights-out.active {
+    color: #fbbf24 !important;
+    background: rgba(245, 158, 11, 0.15) !important;
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+

@@ -49,6 +49,7 @@ const chatInput = document.getElementById('chat-input');
 const lobbyUsernameLabel = document.getElementById('lobby-username');
 
 const btnBack = document.getElementById('btn-back');
+const btnLightsOut = document.getElementById('btn-lights-out');
 
 const syncModal = document.getElementById('sync-modal');
 const syncTimestampVal = document.getElementById('sync-timestamp-val');
@@ -104,8 +105,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Lights Out Cinema Mode toggler
+    if (btnLightsOut) {
+        const savedLightsOut = localStorage.getItem('watch_lights_out') === 'true';
+        if (savedLightsOut) {
+            document.body.classList.add('lights-out-active');
+            btnLightsOut.classList.add('active');
+            btnLightsOut.innerHTML = '💡 Lights On';
+        }
+
+        btnLightsOut.addEventListener('click', () => {
+            const isActive = document.body.classList.toggle('lights-out-active');
+            btnLightsOut.classList.toggle('active', isActive);
+            localStorage.setItem('watch_lights_out', isActive);
+            if (isActive) {
+                btnLightsOut.innerHTML = '💡 Lights On';
+            } else {
+                btnLightsOut.innerHTML = '💡 Lights Out';
+            }
+        });
+    }
+
     // Parse URL room parameters
-    const urlParams = new URLSearchParams(window.location.search);
     const roomParam = urlParams.get('room');
 
     if (roomParam) {
