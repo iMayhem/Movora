@@ -3,13 +3,13 @@ let currentRoomId = null;
 let username = null;
 
 // Supabase client instance and config keys
-let supabase = null;
+let supabaseClient = null;
 const savedUrl = localStorage.getItem('supabase_url') || 'https://ggzuydqfxamvwalbfvyr.supabase.co';
 const savedKey = localStorage.getItem('supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnenV5ZHFmeGFtdndhbGJmdnlyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyODk3MzQsImV4cCI6MjA5NDg2NTczNH0.B6A0oTZmds2vSrrKbfd0Nb1_Dal1pUnJutigiRZda2I';
 
 if (savedUrl && savedKey) {
     try {
-        supabase = window.supabase.createClient(savedUrl, savedKey);
+        supabaseClient = window.supabase.createClient(savedUrl, savedKey);
     } catch (e) {
         console.error("Failed to initialize Supabase client:", e);
     }
@@ -140,7 +140,7 @@ async function showRoomSelector() {
     watchLobbyScreen.classList.remove('active');
     disconnectRealtime();
 
-    if (!supabase) {
+    if (!supabaseClient) {
         roomsGrid.innerHTML = `
             <div class="loading-state" style="padding: 3rem 1.5rem; border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; margin-top: 1rem;">
                 <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.5;">Welcome to Moovie Watch Party!</p>
@@ -282,7 +282,7 @@ async function enterLobby(roomId, userAlias) {
     videoOverlay.classList.add('hidden');
     chatMessages.innerHTML = '';
 
-    if (!supabase) {
+    if (!supabaseClient) {
         lobbyMovieTitle.textContent = "Configuration Missing";
         alert("Please set up your Supabase connection parameters on the Room selector first!");
         leaveLobbyAndReturn();
@@ -373,7 +373,7 @@ function initializeSupabaseRealtime(roomId, userAlias) {
     disconnectRealtime();
 
     const channelName = `watch_lobby_${roomId}`;
-    realtimeChannel = supabase.channel(channelName, {
+    realtimeChannel = supabaseClient.channel(channelName, {
         config: {
             presence: {
                 key: userAlias,
@@ -429,7 +429,7 @@ function disconnectRealtime() {
         syncInterval = null;
     }
     if (realtimeChannel) {
-        supabase.removeChannel(realtimeChannel);
+        supabaseClient.removeChannel(realtimeChannel);
         realtimeChannel = null;
     }
 }
