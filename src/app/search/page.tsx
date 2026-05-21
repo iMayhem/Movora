@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 function SearchResults() {
   const searchParams = useSearchParams();
-  const query = searchParams.get('query') || '';
+  const query = searchParams.get('query') || searchParams.get('q') || '';
   const [results, setResults] = useState<Media[]>([]);
   const [loading, setLoading] = useState(true);
 
