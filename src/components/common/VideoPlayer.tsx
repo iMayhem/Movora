@@ -65,6 +65,29 @@ const parseVtt = (vttText: string): Cue[] => {
   return cues;
 };
 
+const ISO_MAP: Record<string, { label: string; code: string }> = {
+  eng: { label: 'English', code: 'en' },
+  spa: { label: 'Spanish', code: 'es' },
+  fre: { label: 'French', code: 'fr' },
+  ger: { label: 'German', code: 'de' },
+  ita: { label: 'Italian', code: 'it' },
+  por: { label: 'Portuguese', code: 'pt' },
+  pob: { label: 'Portuguese (BR)', code: 'pt-br' },
+  rus: { label: 'Russian', code: 'ru' },
+  tur: { label: 'Turkish', code: 'tr' },
+  chi: { label: 'Chinese', code: 'zh' },
+  zho: { label: 'Chinese', code: 'zh' },
+  ell: { label: 'Greek', code: 'el' },
+  dut: { label: 'Dutch', code: 'nl' },
+  ara: { label: 'Arabic', code: 'ar' },
+  kor: { label: 'Korean', code: 'ko' },
+  jpn: { label: 'Japanese', code: 'ja' },
+  hin: { label: 'Hindi', code: 'hi' },
+  ind: { label: 'Indonesian', code: 'id' },
+  vie: { label: 'Vietnamese', code: 'vi' },
+  tha: { label: 'Thai', code: 'th' },
+};
+
 export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, posterPath, title }: VideoPlayerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerKey>('moviebox');
@@ -106,6 +129,48 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     setResolveError(null);
     setFallbackMessage(null);
     try {
+      // 1. Fetch TMDb External IDs to get the IMDb ID
+      let imdbId = '';
+      try {
+        const tmdbRes = await fetch(
+          `https://api.themoviedb.org/3/${mediaType === 'movie' ? 'movie' : 'tv'}/${mediaId}/external_ids?api_key=dfa4c2c7c1de1005adee824dc5593672`
+        );
+        if (tmdbRes.ok) {
+          const tmdbData = await tmdbRes.json();
+          imdbId = tmdbData.imdb_id || '';
+        }
+      } catch (err) {
+        console.error('Failed to fetch IMDb ID from TMDb:', err);
+      }
+
+      // 2. Fetch Stremio Cloud OpenSubtitles in parallel/ahead
+      const cloudSubtitles: { label: string; src: string; lang: string }[] = [];
+      if (imdbId) {
+        try {
+          const stremioUrl = mediaType === 'movie'
+            ? `https://opensubtitles-v3.strem.io/subtitles/movie/${imdbId}.json`
+            : `https://opensubtitles-v3.strem.io/subtitles/series/${imdbId}:${season}:${episode}.json`;
+            
+          const stremioRes = await fetch(stremioUrl);
+          if (stremioRes.ok) {
+            const stremioData = await stremioRes.json();
+            if (stremioData && stremioData.subtitles) {
+              stremioData.subtitles.forEach((s: any) => {
+                const mapped = ISO_MAP[s.lang] || { label: s.lang.toUpperCase(), code: s.lang };
+                cloudSubtitles.push({
+                  label: `${mapped.label} (Cloud)`,
+                  src: s.url,
+                  lang: `${mapped.code}-cloud-${s.id}` // Unique language code
+                });
+              });
+            }
+          }
+        } catch (err) {
+          console.error('Failed to fetch cloud subtitles from Stremio:', err);
+        }
+      }
+
+      // 3. Query Moviebox API for stream URLs and subtitles
       const url = `/api/moviebox?title=${encodeURIComponent(title)}&type=${mediaType}&season=${season}&episode=${episode}`;
       const res = await fetch(url);
       if (!res.ok) {
@@ -115,16 +180,33 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
       if (!data || !data.streamUrl) {
         throw new Error('No working stream found on Moviebox.');
       }
-      setMovieboxData(data);
+
+      // Merge Moviebox subtitles with Stremio cloud subtitles
+      const mergedSubtitles = [
+        ...(data.subtitles || []).map((sub: any) => ({
+          ...sub,
+          label: `${sub.label} (Moviebox)`
+        })),
+        ...cloudSubtitles
+      ];
+
+      const enrichedData = {
+        ...data,
+        subtitles: mergedSubtitles
+      };
+      setMovieboxData(enrichedData);
       
       const streamUrlWithProxy = `https://proxy.moovie.fun/${encodeURIComponent(data.streamUrl)}`;
       setResolvedStreamUrl(streamUrlWithProxy);
       
       // Auto-enable English captions if available
-      if (data.subtitles && data.subtitles.length > 0) {
-        const hasEn = data.subtitles.some((sub: any) => sub.lang === 'en');
+      if (enrichedData.subtitles && enrichedData.subtitles.length > 0) {
+        const hasEn = enrichedData.subtitles.some((sub: any) => sub.lang === 'en' || sub.lang.startsWith('en-cloud') || sub.lang.startsWith('eng-cloud'));
         if (hasEn) {
-          setActiveSubtitle('en');
+          const enSub = enrichedData.subtitles.find((sub: any) => sub.lang === 'en' || sub.lang.startsWith('en-cloud') || sub.lang.startsWith('eng-cloud'));
+          if (enSub) {
+            setActiveSubtitle(enSub.lang);
+          }
         }
       }
     } catch (err: any) {
