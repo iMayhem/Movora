@@ -1,12 +1,19 @@
 import { getPopular, getTrending, discoverMoviesPage, discoverTvShowsPage } from '@/lib/tmdb';
 import { fetchFeaturedBollywood, fetchFeaturedAnimated, fetchFeaturedKorean, fetchAllAdventure, fetchMedia, allShows, fetchFeaturedHollywood, fetchCartoonsByChannel, fetchFeaturedMindfucks } from '@/lib/featured-media';
 import { getTrendingAnime, getPopularAnime } from '@/lib/anilist';
+import type { Media } from '@/types/tmdb';
 
 const HOLLYWOOD_PARAMS = { with_original_language: 'en', region: 'US' };
 const HOLLYWOOD_VOTE_COUNT = { 'vote_count.gte': '300' };
 const HOLLYWOOD_POPULAR_VOTE_COUNT = { 'vote_count.gte': '150' };
 
 type Fetcher = (page?: number) => Promise<any>;
+
+export async function fetchPage(page: number, slug: string): Promise<Media[]> {
+    const category = discoverCategories[slug];
+    if (!category) return [];
+    return category.fetcher(page);
+}
 
 export const discoverCategories: Record<string, { title: string; fetcher: Fetcher }> = {
     'top-weekly': {

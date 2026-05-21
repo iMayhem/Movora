@@ -1,6 +1,5 @@
 import {unstable_cache as cache} from 'next/cache';
 import type {Media, Movie, SeasonDetails, TVShow, Video} from '@/types/tmdb';
-import { discoverCategories } from './discover-categories';
 
 // Use NEXT_PUBLIC_ prefix so it's available in the browser
 const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'dfa4c2c7c1de1005adee824dc5593672';
@@ -59,12 +58,6 @@ const cachedFetcher = <T>(
     {revalidate, tags}
   );
 };
-
-export async function fetchPage(page: number, slug: string): Promise<Media[]> {
-    const category = discoverCategories[slug];
-    if (!category) return [];
-    return category.fetcher(page);
-}
 
 export async function getTrending(
   media_type: 'movie' | 'tv' | 'all',

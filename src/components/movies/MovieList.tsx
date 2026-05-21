@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { fetchPage } from '@/lib/tmdb';
+import { fetchPage } from '@/lib/discover-categories';
 import { Skeleton } from '../ui/skeleton';
 
 type MovieListProps = {
