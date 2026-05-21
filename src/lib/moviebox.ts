@@ -5,8 +5,22 @@ const session = new MovieboxSession({
   mirrorHosts: ['h5.aoneroom.com', 'movieboxapp.in'],
   fetch: (url, init) => {
     const proxyUrl = 'https://proxy.moovie.fun/';
-    const proxiedUrl = `${proxyUrl}${url.toString()}`;
-    return fetch(proxiedUrl, init);
+    const originalUrl = url.toString();
+    const proxiedUrl = `${proxyUrl}${originalUrl}`;
+    
+    // Preserve the original aoneroom.com URL as Referer so the API returns streams.
+    // If we pass the proxy URL as Referer, aoneroom.com returns hasResource:false.
+    const headers = new Headers(init?.headers);
+    const existingReferer = headers.get('referer') || headers.get('Referer');
+    if (existingReferer && existingReferer.startsWith(proxyUrl)) {
+      // Strip the proxy prefix to recover the real aoneroom.com referer
+      headers.set('referer', existingReferer.replace(proxyUrl, ''));
+    } else if (!existingReferer) {
+      // Default to aoneroom.com as origin referer
+      headers.set('referer', 'https://h5.aoneroom.com');
+    }
+    
+    return fetch(proxiedUrl, { ...init, headers });
   }
 });
 
