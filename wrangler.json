@@ -4,6 +4,10 @@
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-05-20",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "NEXT_PUBLIC_TMDB_API_KEY": "dfa4c2c7c1de1005adee824dc5593672",
+    "TMDB_API_KEY": "dfa4c2c7c1de1005adee824dc5593672"
+  },
   "build": {
     "command": "npx @opennextjs/cloudflare build --dangerouslyUseUnsupportedNextVersion"
   },

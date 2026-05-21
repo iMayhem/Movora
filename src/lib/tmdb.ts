@@ -3,7 +3,7 @@ import type {Media, Movie, SeasonDetails, TVShow, Video} from '@/types/tmdb';
 import { discoverCategories } from './discover-categories';
 
 // Use NEXT_PUBLIC_ prefix so it's available in the browser
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.TMDB_API_KEY || 'dfa4c2c7c1de1005adee824dc5593672';
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 
 async function fetcher<T>(
