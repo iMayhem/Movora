@@ -2,7 +2,12 @@ import { MovieboxSession, search, getMovieStreamUrl, getEpisodeStreamUrl } from 
 
 const session = new MovieboxSession({
   host: 'h5.aoneroom.com',
-  mirrorHosts: ['h5.aoneroom.com', 'movieboxapp.in']
+  mirrorHosts: ['h5.aoneroom.com', 'movieboxapp.in'],
+  fetch: (url, init) => {
+    const proxyUrl = 'http://161.118.191.46:8080/';
+    const proxiedUrl = `${proxyUrl}${url.toString()}`;
+    return fetch(proxiedUrl, init);
+  }
 });
 
 export interface MovieboxStreamResponse {
