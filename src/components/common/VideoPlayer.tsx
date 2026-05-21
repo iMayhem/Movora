@@ -53,7 +53,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     if (!movieboxData || !movieboxData.streamUrl) return '';
     if (typeof window === 'undefined') return movieboxData.streamUrl;
     
-    const proxy = localStorage.getItem('moviebox_proxy');
+    const proxy = localStorage.getItem('moviebox_proxy') || 'http://161.118.191.46:8080/';
     if (!proxy) return movieboxData.streamUrl;
     
     const cleanProxy = proxy.trim();
@@ -69,7 +69,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     if (!subUrl) return '';
     if (typeof window === 'undefined') return subUrl;
     
-    const proxy = localStorage.getItem('moviebox_proxy');
+    const proxy = localStorage.getItem('moviebox_proxy') || 'http://161.118.191.46:8080/';
     if (!proxy) return subUrl;
     
     const cleanProxy = proxy.trim();
