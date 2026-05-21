@@ -22,6 +22,49 @@ type VideoPlayerProps = {
 
 type PlayerKey = 'vidplus' | 'videasy' | 'vidsrc' | 'moviebox';
 
+interface Cue {
+  start: number;
+  end: number;
+  text: string;
+}
+
+const parseVtt = (vttText: string): Cue[] => {
+  const cues: Cue[] = [];
+  const blocks = vttText.split(/\r?\n\r?\n/);
+  
+  const parseTime = (timeStr: string): number => {
+    const parts = timeStr.trim().split(':');
+    let seconds = 0;
+    if (parts.length === 3) {
+      seconds += parseFloat(parts[0]) * 3600;
+      seconds += parseFloat(parts[1]) * 60;
+      seconds += parseFloat(parts[2].replace(',', '.'));
+    } else if (parts.length === 2) {
+      seconds += parseFloat(parts[0]) * 60;
+      seconds += parseFloat(parts[1].replace(',', '.'));
+    }
+    return seconds;
+  };
+
+  for (const block of blocks) {
+    if (block.includes('-->')) {
+      const lines = block.split(/\r?\n/);
+      const timeLineIndex = lines.findIndex(l => l.includes('-->'));
+      if (timeLineIndex !== -1) {
+        const [startStr, endStr] = lines[timeLineIndex].split('-->');
+        const start = parseTime(startStr);
+        const end = parseTime(endStr);
+        const textLines = lines.slice(timeLineIndex + 1);
+        const text = textLines.filter(l => l.trim() !== '').join('\n').replace(/<[^>]*>/g, '');
+        if (!isNaN(start) && !isNaN(end) && text) {
+          cues.push({ start, end, text });
+        }
+      }
+    }
+  }
+  return cues;
+};
+
 export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, posterPath, title }: VideoPlayerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<PlayerKey>('moviebox');
@@ -33,6 +76,10 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
   const [isResolving, setIsResolving] = useState(false);
   const [resolveError, setResolveError] = useState<string | null>(null);
   const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
+
+  // Stable stream and subtitle states
+  const [resolvedStreamUrl, setResolvedStreamUrl] = useState<string>('');
+  const [subtitleCues, setSubtitleCues] = useState<Cue[]>([]);
 
   // Modern Netflix player controls state
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -70,20 +117,14 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
       }
       setMovieboxData(data);
       
+      const streamUrlWithProxy = `https://proxy.moovie.fun/${encodeURIComponent(data.streamUrl)}`;
+      setResolvedStreamUrl(streamUrlWithProxy);
+      
       // Auto-enable English captions if available
       if (data.subtitles && data.subtitles.length > 0) {
         const hasEn = data.subtitles.some((sub: any) => sub.lang === 'en');
         if (hasEn) {
           setActiveSubtitle('en');
-          // Give text tracks time to bind, then enable it
-          setTimeout(() => {
-            if (videoRef.current) {
-              const tracks = videoRef.current.textTracks;
-              for (let i = 0; i < tracks.length; i++) {
-                tracks[i].mode = tracks[i].language === 'en' ? 'showing' : 'disabled';
-              }
-            }
-          }, 500);
         }
       }
     } catch (err: any) {
@@ -104,9 +145,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
 
   const getStreamUrlWithProxy = () => {
     if (!movieboxData || !movieboxData.streamUrl) return '';
-    if (typeof window === 'undefined') return movieboxData.streamUrl;
-    const proxy = 'https://proxy.moovie.fun/';
-    return `${proxy}${encodeURIComponent(movieboxData.streamUrl)}`;
+    return resolvedStreamUrl;
   };
 
   const getSubUrlWithProxy = (subUrl: string) => {
@@ -149,8 +188,41 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
       setPlaybackRate(1);
       setActiveSubtitle('disabled');
       setShowSettingsPanel(false);
+      setResolvedStreamUrl('');
+      setSubtitleCues([]);
     }
   };
+
+  // Fetch and parse WebVTT subtitles on active subtitle language selection changes
+  useEffect(() => {
+    if (!movieboxData || activeSubtitle === 'disabled') {
+      setSubtitleCues([]);
+      return;
+    }
+    
+    const sub = movieboxData.subtitles.find(s => s.lang === activeSubtitle);
+    if (!sub) {
+      setSubtitleCues([]);
+      return;
+    }
+
+    const fetchSubtitle = async () => {
+      try {
+        const proxy = 'https://proxy.moovie.fun/';
+        const proxiedUrl = `${proxy}${encodeURIComponent(sub.src)}`;
+        const res = await fetch(proxiedUrl);
+        if (!res.ok) throw new Error('Failed to load subtitle');
+        const vttText = await res.text();
+        const parsed = parseVtt(vttText);
+        setSubtitleCues(parsed);
+      } catch (e) {
+        console.error('Failed to load subtitle:', e);
+        setSubtitleCues([]);
+      }
+    };
+
+    fetchSubtitle();
+  }, [activeSubtitle, movieboxData]);
 
   // Autohide controls utility
   const resetControlsTimeout = () => {
@@ -255,17 +327,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
   };
 
   const handleSubtitleChange = (lang: string) => {
-    if (!videoRef.current) return;
     setActiveSubtitle(lang);
-
-    const tracks = videoRef.current.textTracks;
-    for (let i = 0; i < tracks.length; i++) {
-      if (lang === 'disabled') {
-        tracks[i].mode = 'disabled';
-      } else {
-        tracks[i].mode = tracks[i].language === lang ? 'showing' : 'disabled';
-      }
-    }
     resetControlsTimeout();
   };
 
@@ -632,6 +694,21 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
                             />
                           ))}
                         </video>
+
+                        {/* Beautiful Netflix-style Custom React Subtitles Overlay */}
+                        {activeSubtitle !== 'disabled' && subtitleCues.length > 0 && (() => {
+                          const activeCue = subtitleCues.find(
+                            cue => currentTime >= cue.start && currentTime <= cue.end
+                          );
+                          if (!activeCue) return null;
+                          return (
+                            <div className="absolute bottom-[16%] left-1/2 -translate-x-1/2 z-30 pointer-events-none px-4 py-2.5 bg-black/80 rounded border border-white/5 text-white text-center text-base md:text-lg font-sans font-medium tracking-wide max-w-[85%] leading-relaxed shadow-2xl backdrop-blur-sm select-none">
+                              {activeCue.text.split('\n').map((line, idx) => (
+                                <div key={idx} className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)]">{line}</div>
+                              ))}
+                            </div>
+                          );
+                        })()}
 
                         {/* Large Centered Play/Pause/Buffer overlay */}
                         {isBuffering && (
