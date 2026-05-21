@@ -49,6 +49,38 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     }
   };
 
+  const getStreamUrlWithProxy = () => {
+    if (!movieboxData || !movieboxData.streamUrl) return '';
+    if (typeof window === 'undefined') return movieboxData.streamUrl;
+    
+    const proxy = localStorage.getItem('moviebox_proxy');
+    if (!proxy) return movieboxData.streamUrl;
+    
+    const cleanProxy = proxy.trim();
+    if (cleanProxy.includes('corsproxy.io')) {
+      const baseProxy = cleanProxy.endsWith('?url=') ? cleanProxy : 'https://corsproxy.io/?url=';
+      return `${baseProxy}${encodeURIComponent(movieboxData.streamUrl)}&reqHeaders=referer:${encodeURIComponent('https://h5.aoneroom.com')}`;
+    }
+    
+    return `${cleanProxy}${encodeURIComponent(movieboxData.streamUrl)}`;
+  };
+
+  const getSubUrlWithProxy = (subUrl: string) => {
+    if (!subUrl) return '';
+    if (typeof window === 'undefined') return subUrl;
+    
+    const proxy = localStorage.getItem('moviebox_proxy');
+    if (!proxy) return subUrl;
+    
+    const cleanProxy = proxy.trim();
+    if (cleanProxy.includes('corsproxy.io')) {
+      const baseProxy = cleanProxy.endsWith('?url=') ? cleanProxy : 'https://corsproxy.io/?url=';
+      return `${baseProxy}${encodeURIComponent(subUrl)}&reqHeaders=referer:${encodeURIComponent('https://h5.aoneroom.com')}`;
+    }
+    
+    return `${cleanProxy}${encodeURIComponent(subUrl)}`;
+  };
+
   const handlePlayerSelect = (player: PlayerKey) => {
     setSelectedPlayer(player);
     if (player === 'moviebox' && !movieboxData) {
@@ -235,11 +267,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
                   <div className="flex-1 w-full flex items-center justify-center relative overflow-hidden rounded-lg bg-black">
                     {movieboxData.streamUrl ? (
                       <video
-                        src={
-                          typeof window !== 'undefined' && localStorage.getItem('moviebox_proxy')
-                            ? `${localStorage.getItem('moviebox_proxy')}${encodeURIComponent(movieboxData.streamUrl)}`
-                            : movieboxData.streamUrl
-                        }
+                        src={getStreamUrlWithProxy()}
                         controls
                         className="w-full max-h-full aspect-video rounded bg-black"
                         crossOrigin="anonymous"
@@ -249,7 +277,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
                             key={i}
                             kind="subtitles"
                             label={sub.label}
-                            src={sub.src}
+                            src={getSubUrlWithProxy(sub.src)}
                             srcLang={sub.lang}
                             default={sub.lang === 'en'}
                           />
