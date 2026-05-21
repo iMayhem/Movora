@@ -38,14 +38,15 @@ export function PersonalizedDashboard() {
             // Gather genres from liked media
             if (likedIds.length > 0) {
                 const details = await Promise.all(
-                    likedIds.slice(0, 3).map(async (id) => {
+                    likedIds.slice(0, 3).map(async (item) => {
                         try {
-                            const movie = await getMovieDetails(id);
-                            if (movie) return movie;
-                        } catch {}
-                        try {
-                            const tv = await getTvShowDetails(id);
-                            if (tv) return tv;
+                            if (item.type === 'movie') {
+                                const movie = await getMovieDetails(item.id);
+                                if (movie) return movie;
+                            } else {
+                                const tv = await getTvShowDetails(item.id);
+                                if (tv) return tv;
+                            }
                         } catch {}
                         return null;
                     })

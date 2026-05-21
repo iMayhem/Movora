@@ -114,16 +114,11 @@ export async function loginUser(username: string, password: string): Promise<{ s
         localStorage.setItem('watch_username', cleanUsername); // Seamless Watch Together sync!
         
         // Sync lists from retrieved Supabase record to LocalStorage
-        if (user.liked_list) {
-            localStorage.setItem(`movora_liked_${cleanUsername}`, JSON.stringify(user.liked_list));
-        } else {
-            localStorage.setItem(`movora_liked_${cleanUsername}`, '[]');
-        }
-        if (user.watchlist) {
-            localStorage.setItem(`movora_watchlater_${cleanUsername}`, JSON.stringify(user.watchlist));
-        } else {
-            localStorage.setItem(`movora_watchlater_${cleanUsername}`, '[]');
-        }
+        const sanitizedLikes = sanitizePlaylist(user.liked_list);
+        const sanitizedWatchlist = sanitizePlaylist(user.watchlist);
+        
+        localStorage.setItem(`movora_liked_${cleanUsername}`, JSON.stringify(sanitizedLikes));
+        localStorage.setItem(`movora_watchlater_${cleanUsername}`, JSON.stringify(sanitizedWatchlist));
 
         window.dispatchEvent(new Event('movora_auth_change'));
         return { success: true };
