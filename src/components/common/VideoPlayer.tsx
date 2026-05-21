@@ -51,15 +51,16 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
 
   const getStreamUrlWithProxy = () => {
     if (!movieboxData || !movieboxData.streamUrl) return '';
-    // CDN stream URLs (hakunaymatata.com, etc.) are public — load directly, no proxy needed.
-    // Only aoneroom.com API calls need the proxy (handled server-side in moviebox.ts).
-    return movieboxData.streamUrl;
+    if (typeof window === 'undefined') return movieboxData.streamUrl;
+    const proxy = 'https://proxy.moovie.fun/';
+    return `${proxy}${encodeURIComponent(movieboxData.streamUrl)}`;
   };
 
   const getSubUrlWithProxy = (subUrl: string) => {
     if (!subUrl) return '';
-    // CDN subtitle URLs (cacdn.hakunaymatata.com, etc.) are public — load directly, no proxy needed.
-    return subUrl;
+    if (typeof window === 'undefined') return subUrl;
+    const proxy = 'https://proxy.moovie.fun/';
+    return `${proxy}${encodeURIComponent(subUrl)}`;
   };
 
   const handlePlayerSelect = (player: PlayerKey) => {
