@@ -9,6 +9,7 @@
     "lint": "next lint",
     "cf:build": "npx @opennextjs/cloudflare build --dangerouslyUseUnsupportedNextVersion",
     "deploy": "npm run cf:build && npx wrangler deploy",
+    "deploy:clean": "rm -rf .next .open-next .wrangler && npm run cf:build && npx wrangler deploy",
     "preview": "npm run cf:build && npx wrangler dev"
   },
   "dependencies": {
