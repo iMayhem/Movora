@@ -26,7 +26,9 @@ export interface AnimeMedia {
 
 async function fetchAniList<T>(query: string, variables: Record<string, any> = {}): Promise<T | null> {
   try {
-    const response = await fetch(ANILIST_API_URL, {
+    const proxyUrl = 'https://proxy.moovie.fun/';
+    const targetUrl = `${proxyUrl}${ANILIST_API_URL}`;
+    const response = await fetch(targetUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
