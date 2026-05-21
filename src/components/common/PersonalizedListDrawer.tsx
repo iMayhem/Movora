@@ -8,6 +8,7 @@ import type { Media } from '@/types/tmdb';
 import { Loader2, Heart, Bookmark, Trash2, Play } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { getOptimizedImageUrl } from '@/lib/images';
 
 interface PersonalizedListDrawerProps {
     type: 'likes' | 'watchlater';
@@ -114,9 +115,7 @@ export function PersonalizedListDrawer({ type, isOpen, onClose }: PersonalizedLi
                             const href = mediaType === 'anime' ? `/anime/${item.id}` : (mediaType === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`);
                             const title = mediaType === 'movie' ? (item as any).title : (item as any).name;
                             const rating = item.vote_average ? item.vote_average.toFixed(1) : null;
-                            const poster = item.poster_path 
-                                ? (item.poster_path.startsWith('http') ? item.poster_path : `https://image.tmdb.org/t/p/w92${item.poster_path}`)
-                                : 'https://placehold.co/92x138/202020/FFFFFF.png?text=No+Image';
+                            const poster = getOptimizedImageUrl(item.poster_path, 92);
 
                             return (
                                 <div 

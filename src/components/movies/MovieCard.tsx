@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Media } from '@/types/tmdb';
 import { Card, CardContent } from '@/components/ui/card';
+import { getOptimizedImageUrl } from '@/lib/images';
 import { Star } from 'lucide-react';
 
 type MovieCardProps = {
@@ -19,9 +20,7 @@ export function MovieCard({ item, compact }: MovieCardProps) {
     ? item.vote_average.toFixed(1)
     : (item.vote_average && !isNaN(Number(item.vote_average)) ? Number(item.vote_average).toFixed(1) : null);
 
-  const posterSrc = item.poster_path
-    ? (item.poster_path.startsWith('http') ? item.poster_path : `https://image.tmdb.org/t/p/w342${item.poster_path}`)
-    : "https://placehold.co/342x513/202020/FFFFFF.png?text=No+Image";
+  const posterSrc = getOptimizedImageUrl(item.poster_path, 342);
 
   return (
     <Card className="group w-full h-full bg-transparent border-0 shadow-none">
@@ -35,7 +34,7 @@ export function MovieCard({ item, compact }: MovieCardProps) {
               sizes="(max-width: 640px) 33vw, (max-width: 1024px) 20vw, 15vw"
               className="object-cover transition-opacity duration-300 hover:opacity-90"
               loading="lazy"
-              unoptimized={item.poster_path ? item.poster_path.startsWith('http') : false}
+              unoptimized={true} // Weserv is already fully optimized to webp!
             />
             
             {/* Rating Badge - Simplified for performance */}

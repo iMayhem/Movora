@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { getOptimizedImageUrl } from '@/lib/images';
 import { getTvShowDetails, getSimilarTvShows } from '@/lib/tmdb';
 import { Star, Calendar, Tv as TvIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -32,11 +33,12 @@ export default async function TvShowPage({ params: { id } }: { params: { id: str
       <div className="relative w-full h-[45vh] md:h-[60vh]">
         {show.backdrop_path ? (
           <Image 
-            src={`https://image.tmdb.org/t/p/original${show.backdrop_path}`} 
+            src={getOptimizedImageUrl(show.backdrop_path, 780)} 
             alt={show.name} 
             fill 
             className="object-cover" 
             priority 
+            unoptimized
           />
         ) : (
            <div className="w-full h-full bg-zinc-900" />
@@ -51,11 +53,12 @@ export default async function TvShowPage({ params: { id } }: { params: { id: str
           <div className="shrink-0 mx-auto md:mx-0 w-40 md:w-72 lg:w-80 relative group">
             <div className="aspect-[2/3] relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10 bg-zinc-800">
                 <Image 
-                    src={show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : "https://placehold.co/500x750.png"} 
+                    src={getOptimizedImageUrl(show.poster_path, 500)} 
                     alt={show.name} 
                     fill 
                     className="object-cover" 
                     priority 
+                    unoptimized
                 />
             </div>
           </div>

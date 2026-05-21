@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { getOptimizedImageUrl } from '@/lib/images';
 import { getMovieDetails, getSimilarMovies } from '@/lib/tmdb';
 import { Star, Calendar, Clock, PlayCircle, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -30,11 +31,12 @@ export default async function MoviePage({ params: { id } }: { params: { id: stri
       <div className="relative w-full h-[45vh] md:h-[60vh]">
         {movie.backdrop_path ? (
           <Image 
-            src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`} 
+            src={getOptimizedImageUrl(movie.backdrop_path, 780)} 
             alt={movie.title} 
             fill 
             className="object-cover" 
             priority 
+            unoptimized
           />
         ) : (
            <div className="w-full h-full bg-zinc-900" />
@@ -50,11 +52,12 @@ export default async function MoviePage({ params: { id } }: { params: { id: stri
           <div className="shrink-0 mx-auto md:mx-0 w-40 md:w-72 lg:w-80 relative group">
             <div className="aspect-[2/3] relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-white/10 bg-zinc-800">
                 <Image 
-                    src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "https://placehold.co/500x750.png"} 
+                    src={getOptimizedImageUrl(movie.poster_path, 500)} 
                     alt={movie.title} 
                     fill 
                     className="object-cover" 
                     priority 
+                    unoptimized
                 />
             </div>
           </div>
