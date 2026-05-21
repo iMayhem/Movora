@@ -494,6 +494,20 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
           <div className="flex items-center gap-1 rounded-full border border-white/10 bg-zinc-950/40 p-1 backdrop-blur-md">
             <button
               type="button"
+              onClick={() => handlePlayerSelect('moviebox')}
+              className={cn(
+                'rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-all relative overflow-hidden',
+                selectedPlayer === 'moviebox'
+                  ? 'bg-[#E50914] text-white shadow-md'
+                  : 'text-red-400 hover:text-red-300 hover:bg-red-950/20 border border-red-500/20',
+              )}
+            >
+              <span className="flex items-center gap-1.5">
+                Moviebox <span className="text-[9px] bg-black/40 px-1 py-0.5 rounded text-white font-bold uppercase tracking-widest">Direct</span>
+              </span>
+            </button>
+            <button
+              type="button"
               onClick={() => handlePlayerSelect('vidplus')}
               className={cn(
                 'rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-all',
@@ -527,20 +541,6 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
               )}
             >
               VIDSRC
-            </button>
-            <button
-              type="button"
-              onClick={() => handlePlayerSelect('moviebox')}
-              className={cn(
-                'rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-all relative overflow-hidden',
-                selectedPlayer === 'moviebox'
-                  ? 'bg-[#E50914] text-white shadow-md'
-                  : 'text-red-400 hover:text-red-300 hover:bg-red-950/20 border border-red-500/20',
-              )}
-            >
-              <span className="flex items-center gap-1.5">
-                Moviebox <span className="text-[9px] bg-black/40 px-1 py-0.5 rounded text-white font-bold uppercase tracking-widest">Direct</span>
-              </span>
             </button>
           </div>
           <DialogClose className="bg-zinc-950/40 hover:bg-white/20 text-white rounded-full p-2.5 backdrop-blur-md transition-colors border border-white/5">
@@ -682,18 +682,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
                               setFallbackMessage(null);
                             }, 2000);
                           }}
-                        >
-                          {movieboxData.subtitles.map((sub, i) => (
-                            <track
-                              key={i}
-                              kind="subtitles"
-                              label={sub.label}
-                              src={getSubUrlWithProxy(sub.src)}
-                              srcLang={sub.lang}
-                              default={sub.lang === 'en'}
-                            />
-                          ))}
-                        </video>
+                        />
 
                         {/* Beautiful Netflix-style Custom React Subtitles Overlay */}
                         {activeSubtitle !== 'disabled' && subtitleCues.length > 0 && (() => {
