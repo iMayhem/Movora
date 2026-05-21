@@ -3,12 +3,20 @@ import { useState, useEffect } from 'react';
 import { getSeasonDetails } from '@/lib/tmdb';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { AlertCircle, Play } from 'lucide-react';
 import type { Season, Episode } from '@/types/tmdb';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { VideoPlayer } from '@/components/common/VideoPlayer';
 
-export function EpisodeSelector({ tvId, seasons }: { tvId: number; seasons: Season[] }) {
+export function EpisodeSelector({ 
+  tvId, 
+  seasons, 
+  title, 
+  posterPath 
+}: { 
+  tvId: number; 
+  seasons: Season[]; 
+  title?: string; 
+  posterPath?: string | null;
+}) {
   const [selectedSeason, setSelectedSeasonState] = useState<number | undefined>(seasons.length > 0 ? seasons[0].season_number : undefined);
   const [selectedEpisode, setSelectedEpisodeState] = useState<number | undefined>(undefined);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
@@ -23,6 +31,12 @@ export function EpisodeSelector({ tvId, seasons }: { tvId: number; seasons: Seas
     };
     fetchSeasonData();
   }, [tvId, selectedSeason]);
+
+  // Generate dynamic title representing the selected episode
+  const activeEpisode = episodes.find(e => e.episode_number === selectedEpisode);
+  const playTitle = activeEpisode 
+    ? `${title || 'TV Show'} - S${selectedSeason}E${selectedEpisode}: ${activeEpisode.name}`
+    : `${title || 'TV Show'} - Season ${selectedSeason} Episode ${selectedEpisode}`;
 
   return (
     <div className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
@@ -44,11 +58,16 @@ export function EpisodeSelector({ tvId, seasons }: { tvId: number; seasons: Seas
             </div>
       </div>
       <div className="flex justify-end">
-        <Link href={`/watch/tv/${tvId}?s=${selectedSeason}&e=${selectedEpisode}`}>
-            <Button size="lg" className="w-full sm:w-auto gap-2 text-lg h-12 px-8 rounded-full shadow-lg shadow-primary/20">
-                <Play className="fill-current w-5 h-5" /> Watch Now
-            </Button>
-        </Link>
+        {selectedSeason !== undefined && selectedEpisode !== undefined && (
+          <VideoPlayer 
+            mediaId={tvId}
+            mediaType="tv"
+            season={selectedSeason}
+            episode={selectedEpisode}
+            posterPath={posterPath}
+            title={playTitle}
+          />
+        )}
       </div>
     </div>
   );

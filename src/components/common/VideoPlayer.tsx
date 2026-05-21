@@ -1,10 +1,8 @@
 'use client';
 
 import { 
-  Play, X, AlertCircle, Download, RefreshCw, Loader2, Info, Film
+  Play, X, AlertCircle, Download, RefreshCw, Loader2, Info
 } from 'lucide-react';
-import Image from 'next/image';
-import { Skeleton } from '../ui/skeleton';
 import { Dialog, DialogContent, DialogTrigger, DialogClose, DialogTitle } from '@/components/ui/dialog';
 import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
@@ -139,7 +137,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     } catch (err: any) {
       const errMsg = err.message || 'Stream link resolution failed.';
       setResolveError(errMsg);
-      setFallbackMessage('Movie not found on Moviebox. Automatically switching to secondary server (VidPlus) in 2 seconds...');
+      setFallbackMessage('Content not found on Moviebox. Automatically switching to secondary server (VidPlus) in 2 seconds...');
       
       // Automatically switch to secondary server after 2 seconds!
       setTimeout(() => {
@@ -152,7 +150,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     }
   };
 
-  // Scrape stream links immediately upon dialog opening
+  // Scrape stream links immediately upon dialog opening or episode/season changes
   useEffect(() => {
     if (isOpen) {
       setSelectedPlayer('moviebox');
@@ -170,7 +168,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
         artInstanceRef.current = null;
       }
     }
-  }, [isOpen]);
+  }, [isOpen, season, episode]);
 
   // ArtPlayer Instantiation Hook
   useEffect(() => {
@@ -333,11 +331,11 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
         </button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-screen-xl w-[95vw] h-[82vh] p-0 bg-black border-none shadow-2xl flex flex-col overflow-hidden">
+      <DialogContent className="max-w-screen-xl w-[95vw] h-[85vh] p-0 bg-black border border-white/10 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         <DialogTitle className="sr-only">{title || 'Video Player'}</DialogTitle>
 
-        {/* Header Controls */}
-        <div className="absolute top-0 left-0 w-full p-4 z-45 bg-gradient-to-b from-black/90 to-transparent flex items-center justify-between pointer-events-auto">
+        {/* Row 1: Header Bar (Always visible at the top, holds server switcher and close button) */}
+        <div className="w-full p-4 bg-zinc-950/90 border-b border-white/5 flex flex-wrap items-center justify-between gap-4 shrink-0 z-20 relative">
           <div className="flex items-center gap-2 bg-black/60 border border-white/5 rounded-full p-1.5 backdrop-blur-md">
             <button
               type="button"
@@ -393,21 +391,21 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
           </DialogClose>
         </div>
 
-        {/* Video Player Main Viewport */}
-        <div className="w-full h-full relative bg-black flex-1">
+        {/* Row 2: Video Player Main Viewport (Fills all remaining vertical space) */}
+        <div className="flex-1 w-full relative bg-black min-h-0 flex items-center justify-center overflow-hidden">
           {selectedPlayer !== 'moviebox' ? (
             <iframe
               src={getIframeSource()}
-              className="w-full h-full rounded-md"
+              className="w-full h-full"
               frameBorder="0"
               allowFullScreen
               allow="autoplay; encrypted-media"
               title="Video Player"
             ></iframe>
           ) : (
-            <div className="w-full h-full flex flex-col justify-between bg-black rounded-md overflow-hidden relative">
+            <div className="w-full h-full relative bg-black flex items-center justify-center">
               {isResolving && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-45 gap-4 text-center p-6">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-20 gap-4 text-center p-6">
                   <Loader2 className="w-12 h-12 text-[#E50914] animate-spin" />
                   <div>
                     <h4 className="text-white font-medium text-lg tracking-wide">Resolving Stream</h4>
@@ -417,7 +415,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
               )}
 
               {resolveError && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-45 gap-4 text-center p-6 text-white">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-20 gap-4 text-center p-6 text-white">
                   <AlertCircle className="w-14 h-14 text-[#E50914]" />
                   <div>
                     <h4 className="text-white font-semibold text-lg">Failed to Resolve Moviebox Source</h4>
@@ -441,69 +439,67 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
 
               {/* ArtPlayer Container Mount point */}
               {resolvedStreamUrl && (
-                <div className="flex-1 w-full h-full relative overflow-hidden bg-black flex items-center justify-center">
-                  <div ref={artRef} className="w-full h-full aspect-video bg-black z-0 rounded-md overflow-hidden" />
-                </div>
-              )}
-
-              {/* Action and Download bar below the player */}
-              {movieboxData && (
-                <div className="absolute bottom-2 left-6 right-6 flex flex-col md:flex-row items-center justify-between gap-4 p-3.5 rounded-xl bg-zinc-900/80 border border-white/5 backdrop-blur-md z-10 shadow-lg">
-                  <div className="text-left">
-                    <h4 className="text-white font-semibold text-sm truncate max-w-[280px]">{title}</h4>
-                    <p className="text-zinc-500 text-[10px] font-mono mt-0.5 flex items-center gap-1">
-                      <Info className="w-3.5 h-3.5 text-[#E50914]" /> Subtitles parsed in real-time. Built-in quality switcher loaded!
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-2">
-                    {/* Quality option label indicator */}
-                    {movieboxData.options && movieboxData.options.length > 0 && (
-                      <div className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-950 px-2.5 py-1.5 text-xs text-zinc-300 font-mono">
-                        <span className="text-zinc-500 font-bold uppercase tracking-wider text-[9px]">Default:</span>
-                        <span className="text-[#E50914] font-semibold">{movieboxData.options[0].label}</span>
-                      </div>
-                    )}
-
-                    {/* Direct Video Download link */}
-                    {movieboxData.streamUrl && (
-                      <a
-                        href={movieboxData.streamUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 bg-red-700/80 hover:bg-[#E50914] text-white rounded-lg px-4 py-2 text-xs font-bold transition-all shadow-md active:scale-95"
-                      >
-                        <Download className="w-3.5 h-3.5" /> Download MP4
-                      </a>
-                    )}
-
-                    {/* Subtitle direct download options */}
-                    {movieboxData.subtitles && movieboxData.subtitles.length > 0 && (
-                      <div className="relative group">
-                        <button className="flex items-center gap-1.5 border border-white/10 hover:bg-white/5 text-zinc-300 rounded-lg px-4 py-2 text-xs font-semibold transition-all">
-                          <Download className="w-3.5 h-3.5 text-zinc-500" /> Subtitles ({movieboxData.subtitles.length})
-                        </button>
-                        <div className="absolute bottom-full right-0 mb-2 w-48 rounded-lg border border-white/10 bg-zinc-950 p-1 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all shadow-xl z-55 max-h-48 overflow-y-auto">
-                          {movieboxData.subtitles.map((sub, i) => (
-                            <a
-                              key={i}
-                              href={sub.src}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="block rounded px-2.5 py-1.5 text-left text-[11px] text-zinc-300 hover:bg-red-950/20 hover:text-red-400 transition-colors"
-                            >
-                              {sub.label}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <div ref={artRef} className="w-full h-full bg-black z-0" />
               )}
             </div>
           )}
         </div>
+
+        {/* Row 3: Footer bar (Always visible at the bottom when moviebox resolves, never overlaps!) */}
+        {selectedPlayer === 'moviebox' && movieboxData && (
+          <div className="w-full p-4 bg-zinc-950/90 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 shrink-0 z-20 relative">
+            <div className="text-left">
+              <h4 className="text-white font-semibold text-sm truncate max-w-[280px] md:max-w-[400px]">{title}</h4>
+              <p className="text-zinc-500 text-[10px] font-mono mt-0.5 flex items-center gap-1">
+                <Info className="w-3.5 h-3.5 text-[#E50914]" /> Subtitles parsed in real-time. Built-in quality switcher loaded!
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Quality option label indicator */}
+              {movieboxData.options && movieboxData.options.length > 0 && (
+                <div className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-950 px-2.5 py-1.5 text-xs text-zinc-300 font-mono">
+                  <span className="text-zinc-500 font-bold uppercase tracking-wider text-[9px]">Default:</span>
+                  <span className="text-[#E50914] font-semibold">{movieboxData.options[0].label}</span>
+                </div>
+              )}
+
+              {/* Direct Video Download link */}
+              {movieboxData.streamUrl && (
+                <a
+                  href={movieboxData.streamUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 bg-red-700/80 hover:bg-[#E50914] text-white rounded-lg px-4 py-2 text-xs font-bold transition-all shadow-md active:scale-95"
+                >
+                  <Download className="w-3.5 h-3.5" /> Download MP4
+                </a>
+              )}
+
+              {/* Subtitle direct download options */}
+              {movieboxData.subtitles && movieboxData.subtitles.length > 0 && (
+                <div className="relative group">
+                  <button className="flex items-center gap-1.5 border border-white/10 hover:bg-white/5 text-zinc-300 rounded-lg px-4 py-2 text-xs font-semibold transition-all">
+                    <Download className="w-3.5 h-3.5 text-zinc-500" /> Subtitles ({movieboxData.subtitles.length})
+                  </button>
+                  <div className="absolute bottom-full right-0 mb-2 w-48 rounded-lg border border-white/10 bg-zinc-950 p-1 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all shadow-xl z-50 max-h-48 overflow-y-auto">
+                    {movieboxData.subtitles.map((sub, i) => (
+                      <a
+                        key={i}
+                        href={sub.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block rounded px-2.5 py-1.5 text-left text-[11px] text-zinc-300 hover:bg-red-950/20 hover:text-red-400 transition-colors"
+                      >
+                        {sub.label}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

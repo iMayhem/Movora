@@ -115,7 +115,12 @@ export default async function TvShowPage({ params: { id } }: { params: { id: str
             </div>
 
             <div className="max-w-3xl mx-auto md:mx-0 mb-10">
-                <EpisodeSelector tvId={tvShowId} seasons={seasons} />
+                <EpisodeSelector 
+                  tvId={tvShowId} 
+                  seasons={seasons} 
+                  title={show.name} 
+                  posterPath={show.backdrop_path} 
+                />
             </div>
           </div>
         </div>
