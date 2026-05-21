@@ -137,14 +137,14 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     } catch (err: any) {
       const errMsg = err.message || 'Stream link resolution failed.';
       setResolveError(errMsg);
-      setFallbackMessage('Content not found on Moviebox. Automatically switching to secondary server (VidPlus) in 2 seconds...');
+      setFallbackMessage('Content not found on Moviebox. Automatically switching to high-reliability server (VIDSRC) in 2.5 seconds...');
       
-      // Automatically switch to secondary server after 2 seconds!
+      // Automatically switch to backup server after 2.5 seconds!
       setTimeout(() => {
-        setSelectedPlayer('vidplus');
+        setSelectedPlayer('vidsrc');
         setResolveError(null);
         setFallbackMessage(null);
-      }, 2000);
+      }, 2500);
     } finally {
       setIsResolving(false);
     }
@@ -286,12 +286,12 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     // Handle stream playback issues
     art.on('error', () => {
       setResolveError('Video stream failed due to direct server target connection loss.');
-      setFallbackMessage('Switching to secondary VidPlus stream server in 2 seconds...');
+      setFallbackMessage('Switching to high-reliability backup stream server (VIDSRC) in 2.5 seconds...');
       setTimeout(() => {
-        setSelectedPlayer('vidplus');
+        setSelectedPlayer('vidsrc');
         setResolveError(null);
         setFallbackMessage(null);
-      }, 2000);
+      }, 2500);
     });
 
     return () => {
@@ -394,14 +394,32 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
         {/* Row 2: Video Player Main Viewport (Fills all remaining vertical space) */}
         <div className="flex-1 w-full relative bg-black min-h-0 flex items-center justify-center overflow-hidden">
           {selectedPlayer !== 'moviebox' ? (
-            <iframe
-              src={getIframeSource()}
-              className="w-full h-full"
-              frameBorder="0"
-              allowFullScreen
-              allow="autoplay; encrypted-media"
-              title="Video Player"
-            ></iframe>
+            <>
+              {/* Smart Fallback Assist floating pill */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-black/85 border border-white/10 backdrop-blur-md rounded-full px-4.5 py-2.5 flex items-center gap-3 animate-fade-in shadow-2xl pointer-events-auto">
+                <span className="text-zinc-400 text-xs font-semibold tracking-wide">Not playing or showing 404?</span>
+                <div className="flex gap-2">
+                  {(['moviebox', 'vidplus', 'videasy', 'vidsrc'] as PlayerKey[]).filter(p => p !== selectedPlayer).map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => handlePlayerSelect(p)}
+                      className="bg-white/10 hover:bg-[#E50914] text-white rounded-full px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-widest transition-all"
+                    >
+                      Try {p === 'moviebox' ? 'Moviebox' : (p === 'vidplus' ? 'VidPlus' : p.toUpperCase())}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <iframe
+                src={getIframeSource()}
+                className="w-full h-full"
+                frameBorder="0"
+                allowFullScreen
+                allow="autoplay; encrypted-media"
+                title="Video Player"
+              ></iframe>
+            </>
           ) : (
             <div className="w-full h-full relative bg-black flex items-center justify-center">
               {isResolving && (
