@@ -110,10 +110,13 @@ export function PersonalizedListDrawer({ type, isOpen, onClose }: PersonalizedLi
                         </div>
                     ) : (
                         items.map((item) => {
-                            const href = item.media_type === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`;
-                            const title = item.media_type === 'movie' ? item.title : item.name;
+                            const mediaType = item.media_type as string;
+                            const href = mediaType === 'anime' ? `/anime/${item.id}` : (mediaType === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`);
+                            const title = mediaType === 'movie' ? (item as any).title : (item as any).name;
                             const rating = item.vote_average ? item.vote_average.toFixed(1) : null;
-                            const poster = item.poster_path ? `https://image.tmdb.org/t/p/w92${item.poster_path}` : 'https://placehold.co/92x138/202020/FFFFFF.png?text=No+Image';
+                            const poster = item.poster_path 
+                                ? (item.poster_path.startsWith('http') ? item.poster_path : `https://image.tmdb.org/t/p/w92${item.poster_path}`)
+                                : 'https://placehold.co/92x138/202020/FFFFFF.png?text=No+Image';
 
                             return (
                                 <div 

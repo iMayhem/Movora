@@ -12,16 +12,21 @@ type MovieCardProps = {
 export function MovieCard({ item, compact }: MovieCardProps) {
   if (!item) return null;
   
-  const href = item.media_type === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`;
-  const title = item.media_type === 'movie' ? item.title : item.name;
+  const mediaType = item.media_type as string;
+  const href = mediaType === 'anime' ? `/anime/${item.id}` : (mediaType === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`);
+  const title = mediaType === 'movie' ? (item as any).title : (item as any).name;
   const voteAverage = item.vote_average ? item.vote_average.toFixed(1) : null;
+
+  const posterSrc = item.poster_path
+    ? (item.poster_path.startsWith('http') ? item.poster_path : `https://image.tmdb.org/t/p/w342${item.poster_path}`)
+    : "https://placehold.co/342x513/202020/FFFFFF.png?text=No+Image";
 
   return (
     <Card className="group w-full h-full bg-transparent border-0 shadow-none">
       <CardContent className="p-0 relative h-full flex flex-col">
         <Link href={href} prefetch={false} className="relative block aspect-[2/3] overflow-hidden rounded-lg bg-secondary/30">
             <Image
-              src={item.poster_path ? `https://image.tmdb.org/t/p/w342${item.poster_path}` : "https://placehold.co/342x513/202020/FFFFFF.png?text=No+Image"}
+              src={posterSrc}
               alt={title || 'Poster'}
               fill
               // PERF: 33vw on mobile means browser downloads smaller images. Critical for speed.

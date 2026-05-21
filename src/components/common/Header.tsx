@@ -184,6 +184,15 @@ export function Header() {
                         </SheetClose>
                     </Link>
 
+                    <Link href="/discover/anime" onClick={() => handleLinkClick('/discover/anime')}>
+                        <SheetClose className={cn(
+                            'flex w-full items-center py-2.5 px-4 rounded-xl text-sm font-semibold transition-all',
+                            pathname === '/discover/anime' ? 'bg-violet-950/40 text-violet-400 border border-violet-500/20' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
+                        )}>
+                            Anime
+                        </SheetClose>
+                    </Link>
+
                     {/* Expandable Genres Accordion for Mobile */}
                     <div>
                         <button 
@@ -264,6 +273,17 @@ export function Header() {
                  )}
              >
                  TV Shows
+             </Link>
+
+             <Link
+                 href="/discover/anime"
+                 onClick={() => handleLinkClick('/discover/anime')}
+                 className={cn(
+                    'transition-colors hover:text-white py-1 relative after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-violet-500 after:transition-all hover:after:w-full',
+                    pathname === '/discover/anime' ? 'text-white after:w-full' : 'text-zinc-400'
+                 )}
+             >
+                 Anime
              </Link>
 
              {/* Dynamic Genre Dropdown Container */}

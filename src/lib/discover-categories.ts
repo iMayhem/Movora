@@ -1,5 +1,6 @@
 import { getPopular, getTrending, discoverMoviesPage, discoverTvShowsPage } from '@/lib/tmdb';
 import { fetchFeaturedBollywood, fetchFeaturedAnimated, fetchFeaturedKorean, fetchAllAdventure, fetchMedia, allShows, fetchFeaturedHollywood, fetchCartoonsByChannel, fetchFeaturedMindfucks } from '@/lib/featured-media';
+import { getTrendingAnime, getPopularAnime } from '@/lib/anilist';
 
 const HOLLYWOOD_PARAMS = { with_original_language: 'en', region: 'US' };
 const HOLLYWOOD_VOTE_COUNT = { 'vote_count.gte': '300' };
@@ -156,6 +157,9 @@ export const discoverCategories: Record<string, { title: string; fetcher: Fetche
     'thriller': { title: 'Thriller', fetcher: (page=1) => discoverMoviesPage({ with_genres: '53' }, page) },
     'tv-movie': { title: 'TV Movies', fetcher: (page=1) => discoverMoviesPage({ with_genres: '10770' }, page) },
     'tv-show': { title: 'TV Shows', fetcher: (page=1) => discoverTvShowsPage({ sort_by: 'popularity.desc' }, page) },
+    'anime': { title: 'Explore Anime', fetcher: (page=1) => getTrendingAnime(page) },
+    'trending-anime': { title: 'Trending Anime', fetcher: (page=1) => getTrendingAnime(page) },
+    'popular-anime': { title: 'Popular Anime', fetcher: (page=1) => getPopularAnime(page) },
     'war': { title: 'War', fetcher: (page=1) => discoverMoviesPage({ with_genres: '10752' }, page) },
     'western': { title: 'Western', fetcher: (page=1) => discoverMoviesPage({ with_genres: '37' }, page) },
     'adult': { title: 'Adult (18+)', fetcher: (page=1) => discoverMoviesPage({ include_adult: 'true', certification_country: 'US', certification: 'NC-17', sort_by: 'popularity.desc' }, page) },
