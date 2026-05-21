@@ -4,6 +4,8 @@ import { MovieList } from '@/components/movies/MovieList';
 import { Button } from '@/components/ui/button';
 import { fetchFeaturedAnimated } from '@/lib/featured-media';
 
+export const dynamic = 'force-dynamic';
+
 const sections = [
   { title: 'Top Rated Animated Movies', slug: 'top-rated-animated', fetcher: () => discoverMovies({ with_genres: '16', sort_by: 'vote_average.desc', 'vote_count.gte': '100' }, 1) },
   { title: 'Recent Animated Movies', slug: 'recent-animated', fetcher: () => discoverMovies({ with_genres: '16', 'primary_release_date.gte': '2020-01-01', sort_by: 'popularity.desc' }, 1) },
