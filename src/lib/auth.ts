@@ -59,7 +59,7 @@ export async function registerUser(username: string, password: string): Promise<
         // Insert new user record
         const { error: insertError } = await supabase
             .from('movora_users')
-            .insert([{ username: cleanUsername, password_hash: passwordHash }]);
+            .insert([{ username: cleanUsername, password_hash: passwordHash, liked_list: [], watchlist: [] }]);
 
         if (insertError) {
             console.error('Error inserting user:', insertError);
@@ -69,6 +69,8 @@ export async function registerUser(username: string, password: string): Promise<
         // Auto-login after registration
         localStorage.setItem('movora_current_user', cleanUsername);
         localStorage.setItem('watch_username', cleanUsername); // Seamless Watch Together sync!
+        localStorage.setItem(`movora_liked_${cleanUsername}`, '[]');
+        localStorage.setItem(`movora_watchlater_${cleanUsername}`, '[]');
 
         window.dispatchEvent(new Event('movora_auth_change'));
         return { success: true };
@@ -105,6 +107,18 @@ export async function loginUser(username: string, password: string): Promise<{ s
 
         localStorage.setItem('movora_current_user', cleanUsername);
         localStorage.setItem('watch_username', cleanUsername); // Seamless Watch Together sync!
+        
+        // Sync lists from retrieved Supabase record to LocalStorage
+        if (user.liked_list) {
+            localStorage.setItem(`movora_liked_${cleanUsername}`, JSON.stringify(user.liked_list));
+        } else {
+            localStorage.setItem(`movora_liked_${cleanUsername}`, '[]');
+        }
+        if (user.watchlist) {
+            localStorage.setItem(`movora_watchlater_${cleanUsername}`, JSON.stringify(user.watchlist));
+        } else {
+            localStorage.setItem(`movora_watchlater_${cleanUsername}`, '[]');
+        }
 
         window.dispatchEvent(new Event('movora_auth_change'));
         return { success: true };
@@ -129,6 +143,52 @@ export function getCurrentUser(): string | null {
     return localStorage.getItem('movora_current_user');
 }
 
+// Helper to push user lists to Supabase
+async function pushUserDataToSupabase(username: string, likes: number[] | null, watchlist: number[] | null) {
+    try {
+        const supabase = getSupabaseClient();
+        const updateData: any = {};
+        if (likes !== null) updateData.liked_list = likes;
+        if (watchlist !== null) updateData.watchlist = watchlist;
+        
+        const { error } = await supabase
+            .from('movora_users')
+            .update(updateData)
+            .eq('username', username.toLowerCase());
+            
+        if (error) {
+            console.error('Error updating user lists in Supabase:', error);
+        }
+    } catch (e) {
+        console.error('Failed to update lists in Supabase:', e);
+    }
+}
+
+// Helper to fetch user lists from Supabase
+export async function syncUserDataWithSupabase(username: string) {
+    if (typeof window === 'undefined' || !username) return;
+    try {
+        const supabase = getSupabaseClient();
+        const { data: user, error } = await supabase
+            .from('movora_users')
+            .select('liked_list, watchlist')
+            .eq('username', username.toLowerCase())
+            .maybeSingle();
+
+        if (!error && user) {
+            if (user.liked_list) {
+                localStorage.setItem(`movora_liked_${username}`, JSON.stringify(user.liked_list));
+            }
+            if (user.watchlist) {
+                localStorage.setItem(`movora_watchlater_${username}`, JSON.stringify(user.watchlist));
+            }
+            window.dispatchEvent(new Event('movora_userdata_change'));
+        }
+    } catch (e) {
+        console.error('Failed to sync user data from Supabase:', e);
+    }
+}
+
 // 6. User Scoped Likes
 export function getLikes(username: string): number[] {
     if (typeof window === 'undefined') return [];
@@ -147,6 +207,10 @@ export function toggleLike(username: string, mediaId: number): boolean {
     }
     localStorage.setItem(`movora_liked_${username}`, JSON.stringify(likes));
     window.dispatchEvent(new Event('movora_userdata_change'));
+    
+    // Async save to Supabase
+    pushUserDataToSupabase(username, likes, null);
+    
     return liked;
 }
 
@@ -168,6 +232,10 @@ export function toggleWatchLater(username: string, mediaId: number): boolean {
     }
     localStorage.setItem(`movora_watchlater_${username}`, JSON.stringify(list));
     window.dispatchEvent(new Event('movora_userdata_change'));
+    
+    // Async save to Supabase
+    pushUserDataToSupabase(username, null, list);
+    
     return added;
 }
 

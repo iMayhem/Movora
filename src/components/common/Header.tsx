@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { useLoader } from './LoaderProvider';
-import { getCurrentUser, logoutUser, getLikes, getWatchLater } from '@/lib/auth';
+import { getCurrentUser, logoutUser, getLikes, getWatchLater, syncUserDataWithSupabase } from '@/lib/auth';
 import { AuthModal } from './AuthModal';
 import { PersonalizedListDrawer } from './PersonalizedListDrawer';
 
@@ -79,6 +79,7 @@ export function Header() {
     if (user) {
         setLikesCount(getLikes(user).length);
         setWatchlistCount(getWatchLater(user).length);
+        syncUserDataWithSupabase(user);
     }
 
     // Bind event listeners for real-time updates
@@ -88,6 +89,7 @@ export function Header() {
         if (u) {
             setLikesCount(getLikes(u).length);
             setWatchlistCount(getWatchLater(u).length);
+            syncUserDataWithSupabase(u);
         } else {
             setLikesCount(0);
             setWatchlistCount(0);

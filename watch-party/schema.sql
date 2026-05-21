@@ -61,7 +61,9 @@ WITH CHECK (true);
 CREATE TABLE IF NOT EXISTS public.movora_users (
     username TEXT PRIMARY KEY,
     password_hash TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    liked_list JSONB DEFAULT '[]'::jsonb,
+    watchlist JSONB DEFAULT '[]'::jsonb
 );
 
 -- Enable RLS and public policies for users
@@ -72,3 +74,6 @@ ON public.movora_users FOR SELECT USING (true);
 
 CREATE POLICY "Allow public insert access to users" 
 ON public.movora_users FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Allow public update access to users" 
+ON public.movora_users FOR UPDATE USING (true) WITH CHECK (true);
