@@ -239,7 +239,7 @@ export async function discoverTvShowsPage(
         `/discover/tv`,
         {...params, page: String(page)},
         3600,
-        [`discover-tv-page-${page}`]
+        [`discover-tv-page-${page}`, ...Object.values(params)]
     )();
     if (!data?.results) return [];
     return normalizeMedia(data.results, 'tv');

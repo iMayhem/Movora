@@ -155,7 +155,7 @@ export const discoverCategories: Record<string, { title: string; fetcher: Fetche
     'talk': { title: 'Talk Shows', fetcher: (page=1) => discoverTvShowsPage({ with_genres: '10767' }, page) },
     'thriller': { title: 'Thriller', fetcher: (page=1) => discoverMoviesPage({ with_genres: '53' }, page) },
     'tv-movie': { title: 'TV Movies', fetcher: (page=1) => discoverMoviesPage({ with_genres: '10770' }, page) },
-    'tv-show': { title: 'TV Shows', fetcher: (page=1) => discoverTvShowsPage({}, page) },
+    'tv-show': { title: 'TV Shows', fetcher: (page=1) => discoverTvShowsPage({ sort_by: 'popularity.desc' }, page) },
     'war': { title: 'War', fetcher: (page=1) => discoverMoviesPage({ with_genres: '10752' }, page) },
     'western': { title: 'Western', fetcher: (page=1) => discoverMoviesPage({ with_genres: '37' }, page) },
     'adult': { title: 'Adult (18+)', fetcher: (page=1) => discoverMoviesPage({ include_adult: 'true', certification_country: 'US', certification: 'NC-17', sort_by: 'popularity.desc' }, page) },
