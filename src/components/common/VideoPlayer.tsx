@@ -24,7 +24,7 @@ type PlayerKey = 'vidplus' | 'videasy' | 'vidsrc' | 'moviebox';
 
 export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, posterPath, title }: VideoPlayerProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedPlayer, setSelectedPlayer] = useState<PlayerKey>('vidplus');
+  const [selectedPlayer, setSelectedPlayer] = useState<PlayerKey>('moviebox');
   const [movieboxData, setMovieboxData] = useState<{
     streamUrl: string | null;
     subtitles: { label: string; src: string; lang: string }[];
@@ -32,6 +32,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
   } | null>(null);
   const [isResolving, setIsResolving] = useState(false);
   const [resolveError, setResolveError] = useState<string | null>(null);
+  const [fallbackMessage, setFallbackMessage] = useState<string | null>(null);
 
   // Modern Netflix player controls state
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -56,6 +57,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
     if (!title || isResolving) return;
     setIsResolving(true);
     setResolveError(null);
+    setFallbackMessage(null);
     try {
       const url = `/api/moviebox?title=${encodeURIComponent(title)}&type=${mediaType}&season=${season}&episode=${episode}`;
       const res = await fetch(url);
@@ -63,6 +65,9 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
         throw new Error('Failed to resolve stream link from Moviebox.');
       }
       const data = await res.json();
+      if (!data || !data.streamUrl) {
+        throw new Error('No working stream found on Moviebox.');
+      }
       setMovieboxData(data);
       
       // Auto-enable English captions if available
@@ -82,7 +87,16 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
         }
       }
     } catch (err: any) {
-      setResolveError(err.message || 'Stream link resolution failed.');
+      const errMsg = err.message || 'Stream link resolution failed.';
+      setResolveError(errMsg);
+      setFallbackMessage('Movie not found on Moviebox. Automatically switching to secondary server (VidPlus) in 2 seconds...');
+      
+      // Automatically switch to secondary server after 2 seconds!
+      setTimeout(() => {
+        setSelectedPlayer('vidplus');
+        setResolveError(null);
+        setFallbackMessage(null);
+      }, 2000);
     } finally {
       setIsResolving(false);
     }
@@ -552,18 +566,25 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
               )}
 
               {resolveError && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-45 gap-4 text-center p-6">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/95 z-45 gap-4 text-center p-6 text-white">
                   <AlertCircle className="w-14 h-14 text-[#E50914]" />
                   <div>
                     <h4 className="text-white font-semibold text-lg">Failed to Resolve Moviebox Source</h4>
                     <p className="text-zinc-500 text-sm max-w-md mt-2 font-mono text-xs bg-zinc-900 border border-white/5 p-3 rounded-lg">{resolveError}</p>
+                    {fallbackMessage && (
+                      <p className="text-yellow-400 text-xs font-semibold mt-4 tracking-wide animate-pulse">
+                        ⚠️ {fallbackMessage}
+                      </p>
+                    )}
                   </div>
-                  <button 
-                    onClick={fetchMoviebox} 
-                    className="flex items-center gap-2 bg-[#E50914] hover:bg-red-700 text-white rounded-lg px-6 py-3 text-xs font-bold transition-all shadow-md active:scale-95"
-                  >
-                    <RefreshCw className="w-3.5 h-3.5" /> Retry Connection
-                  </button>
+                  {!fallbackMessage && (
+                    <button 
+                      onClick={fetchMoviebox} 
+                      className="flex items-center gap-2 bg-[#E50914] hover:bg-red-700 text-white rounded-lg px-6 py-3 text-xs font-bold transition-all shadow-md active:scale-95"
+                    >
+                      <RefreshCw className="w-3.5 h-3.5" /> Retry Connection
+                    </button>
+                  )}
                 </div>
               )}
 
@@ -581,6 +602,7 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
                         <video
                           ref={videoRef}
                           src={getStreamUrlWithProxy()}
+                          autoPlay
                           className="w-full max-h-full aspect-video bg-black z-0"
                           crossOrigin="anonymous"
                           onTimeUpdate={handleTimeUpdate}
@@ -589,6 +611,15 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
                           onPlaying={() => { setIsBuffering(false); setIsPlaying(true); }}
                           onPause={() => setIsPlaying(false)}
                           onSeeked={() => setIsBuffering(false)}
+                          onError={() => {
+                            setResolveError('Video playback failed due to target stream server error.');
+                            setFallbackMessage('Video stream broke. Automatically switching to secondary server (VidPlus) in 2 seconds...');
+                            setTimeout(() => {
+                              setSelectedPlayer('vidplus');
+                              setResolveError(null);
+                              setFallbackMessage(null);
+                            }, 2000);
+                          }}
                         >
                           {movieboxData.subtitles.map((sub, i) => (
                             <track
