@@ -51,34 +51,15 @@ export function VideoPlayer({ mediaId, mediaType, season = 1, episode = 1, poste
 
   const getStreamUrlWithProxy = () => {
     if (!movieboxData || !movieboxData.streamUrl) return '';
-    if (typeof window === 'undefined') return movieboxData.streamUrl;
-    
-    const proxy = localStorage.getItem('moviebox_proxy') || 'https://proxy.moovie.fun/';
-    if (!proxy) return movieboxData.streamUrl;
-    
-    const cleanProxy = proxy.trim();
-    if (cleanProxy.includes('corsproxy.io')) {
-      const baseProxy = cleanProxy.endsWith('?url=') ? cleanProxy : 'https://corsproxy.io/?url=';
-      return `${baseProxy}${encodeURIComponent(movieboxData.streamUrl)}&reqHeaders=referer:${encodeURIComponent('https://h5.aoneroom.com')}`;
-    }
-    
-    return `${cleanProxy}${encodeURIComponent(movieboxData.streamUrl)}`;
+    // CDN stream URLs (hakunaymatata.com, etc.) are public — load directly, no proxy needed.
+    // Only aoneroom.com API calls need the proxy (handled server-side in moviebox.ts).
+    return movieboxData.streamUrl;
   };
 
   const getSubUrlWithProxy = (subUrl: string) => {
     if (!subUrl) return '';
-    if (typeof window === 'undefined') return subUrl;
-    
-    const proxy = localStorage.getItem('moviebox_proxy') || 'https://proxy.moovie.fun/';
-    if (!proxy) return subUrl;
-    
-    const cleanProxy = proxy.trim();
-    if (cleanProxy.includes('corsproxy.io')) {
-      const baseProxy = cleanProxy.endsWith('?url=') ? cleanProxy : 'https://corsproxy.io/?url=';
-      return `${baseProxy}${encodeURIComponent(subUrl)}&reqHeaders=referer:${encodeURIComponent('https://h5.aoneroom.com')}`;
-    }
-    
-    return `${cleanProxy}${encodeURIComponent(subUrl)}`;
+    // CDN subtitle URLs (cacdn.hakunaymatata.com, etc.) are public — load directly, no proxy needed.
+    return subUrl;
   };
 
   const handlePlayerSelect = (player: PlayerKey) => {
