@@ -24,8 +24,8 @@ export function DetailsActions({ mediaId, mediaType, title, posterPath }: Detail
         const user = getCurrentUser();
         setUsername(user);
         if (user) {
-            setIsLiked(getLikes(user).includes(mediaId));
-            setIsWatchLater(getWatchLater(user).includes(mediaId));
+            setIsLiked(getLikes(user).some(item => item.id === mediaId && item.type === mediaType));
+            setIsWatchLater(getWatchLater(user).some(item => item.id === mediaId && item.type === mediaType));
         } else {
             setIsLiked(false);
             setIsWatchLater(false);
@@ -43,7 +43,7 @@ export function DetailsActions({ mediaId, mediaType, title, posterPath }: Detail
             setIsAuthOpen(true);
             return;
         }
-        const state = toggleLike(username, mediaId);
+        const state = toggleLike(username, mediaId, mediaType);
         setIsLiked(state);
     };
 
@@ -52,7 +52,7 @@ export function DetailsActions({ mediaId, mediaType, title, posterPath }: Detail
             setIsAuthOpen(true);
             return;
         }
-        const state = toggleWatchLater(username, mediaId);
+        const state = toggleWatchLater(username, mediaId, mediaType);
         setIsWatchLater(state);
     };
 

@@ -7,6 +7,11 @@ export interface UserAccount {
     createdAt: string;
 }
 
+export interface PlaylistItem {
+    id: number;
+    type: 'movie' | 'tv';
+}
+
 export interface HistoryItem {
     id: number;
     title: string;
@@ -143,8 +148,24 @@ export function getCurrentUser(): string | null {
     return localStorage.getItem('movora_current_user');
 }
 
+function sanitizePlaylist(arr: any): PlaylistItem[] {
+    if (!Array.isArray(arr)) return [];
+    return arr.map(item => {
+        if (typeof item === 'number') {
+            return { id: item, type: 'movie' }; // legacy fallback
+        }
+        if (item && typeof item === 'object' && typeof item.id === 'number') {
+            return {
+                id: item.id,
+                type: item.type === 'tv' ? 'tv' : 'movie'
+            };
+        }
+        return null;
+    }).filter((item): item is PlaylistItem => item !== null);
+}
+
 // Helper to push user lists to Supabase
-async function pushUserDataToSupabase(username: string, likes: number[] | null, watchlist: number[] | null) {
+async function pushUserDataToSupabase(username: string, likes: PlaylistItem[] | null, watchlist: PlaylistItem[] | null) {
     try {
         const supabase = getSupabaseClient();
         const updateData: any = {};
@@ -176,12 +197,12 @@ export async function syncUserDataWithSupabase(username: string) {
             .maybeSingle();
 
         if (!error && user) {
-            if (user.liked_list) {
-                localStorage.setItem(`movora_liked_${username}`, JSON.stringify(user.liked_list));
-            }
-            if (user.watchlist) {
-                localStorage.setItem(`movora_watchlater_${username}`, JSON.stringify(user.watchlist));
-            }
+            const sanitizedLikes = sanitizePlaylist(user.liked_list);
+            const sanitizedWatchlist = sanitizePlaylist(user.watchlist);
+            
+            localStorage.setItem(`movora_liked_${username}`, JSON.stringify(sanitizedLikes));
+            localStorage.setItem(`movora_watchlater_${username}`, JSON.stringify(sanitizedWatchlist));
+            
             window.dispatchEvent(new Event('movora_userdata_change'));
         }
     } catch (e) {
@@ -190,19 +211,20 @@ export async function syncUserDataWithSupabase(username: string) {
 }
 
 // 6. User Scoped Likes
-export function getLikes(username: string): number[] {
+export function getLikes(username: string): PlaylistItem[] {
     if (typeof window === 'undefined') return [];
-    return JSON.parse(localStorage.getItem(`movora_liked_${username}`) || '[]');
+    const raw = localStorage.getItem(`movora_liked_${username}`) || '[]';
+    return sanitizePlaylist(JSON.parse(raw));
 }
 
-export function toggleLike(username: string, mediaId: number): boolean {
+export function toggleLike(username: string, mediaId: number, mediaType: 'movie' | 'tv'): boolean {
     const likes = getLikes(username);
-    const index = likes.indexOf(mediaId);
+    const index = likes.findIndex(item => item.id === mediaId && item.type === mediaType);
     let liked = false;
     if (index > -1) {
         likes.splice(index, 1);
     } else {
-        likes.push(mediaId);
+        likes.push({ id: mediaId, type: mediaType });
         liked = true;
     }
     localStorage.setItem(`movora_liked_${username}`, JSON.stringify(likes));
@@ -215,19 +237,20 @@ export function toggleLike(username: string, mediaId: number): boolean {
 }
 
 // 7. User Scoped Watch Later
-export function getWatchLater(username: string): number[] {
+export function getWatchLater(username: string): PlaylistItem[] {
     if (typeof window === 'undefined') return [];
-    return JSON.parse(localStorage.getItem(`movora_watchlater_${username}`) || '[]');
+    const raw = localStorage.getItem(`movora_watchlater_${username}`) || '[]';
+    return sanitizePlaylist(JSON.parse(raw));
 }
 
-export function toggleWatchLater(username: string, mediaId: number): boolean {
+export function toggleWatchLater(username: string, mediaId: number, mediaType: 'movie' | 'tv'): boolean {
     const list = getWatchLater(username);
-    const index = list.indexOf(mediaId);
+    const index = list.findIndex(item => item.id === mediaId && item.type === mediaType);
     let added = false;
     if (index > -1) {
         list.splice(index, 1);
     } else {
-        list.push(mediaId);
+        list.push({ id: mediaId, type: mediaType });
         added = true;
     }
     localStorage.setItem(`movora_watchlater_${username}`, JSON.stringify(list));

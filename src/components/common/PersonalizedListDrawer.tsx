@@ -41,14 +41,15 @@ export function PersonalizedListDrawer({ type, isOpen, onClose }: PersonalizedLi
 
         try {
             const resolved = await Promise.all(
-                ids.map(async (id) => {
+                ids.map(async (item) => {
                     try {
-                        const movie = await getMovieDetails(id);
-                        if (movie) return movie;
-                    } catch {}
-                    try {
-                        const tv = await getTvShowDetails(id);
-                        if (tv) return tv;
+                        if (item.type === 'movie') {
+                            const movie = await getMovieDetails(item.id);
+                            if (movie) return { ...movie, media_type: 'movie' };
+                        } else {
+                            const tv = await getTvShowDetails(item.id);
+                            if (tv) return { ...tv, media_type: 'tv' };
+                        }
                     } catch {}
                     return null;
                 })
@@ -65,17 +66,17 @@ export function PersonalizedListDrawer({ type, isOpen, onClose }: PersonalizedLi
         loadItems();
     }, [isOpen, type]);
 
-    const handleRemove = (id: number) => {
+    const handleRemove = (id: number, mediaType: 'movie' | 'tv') => {
         if (!username) return;
         
         if (type === 'likes') {
-            toggleLike(username, id);
+            toggleLike(username, id, mediaType);
         } else {
-            toggleWatchLater(username, id);
+            toggleWatchLater(username, id, mediaType);
         }
         
         // Optimistic UI removal update
-        setItems(prev => prev.filter(item => item.id !== id));
+        setItems(prev => prev.filter(item => !(item.id === id && item.media_type === mediaType)));
     };
 
     const titleText = type === 'likes' ? 'My Liked List' : 'My Watchlist';
@@ -158,7 +159,7 @@ export function PersonalizedListDrawer({ type, isOpen, onClose }: PersonalizedLi
                                             <Play className="w-4 h-4 fill-current" />
                                         </Link>
                                         <button 
-                                            onClick={() => handleRemove(item.id)}
+                                            onClick={() => handleRemove(item.id, item.media_type)}
                                             className="p-2 rounded-full hover:bg-rose-950/20 text-zinc-500 hover:text-rose-400 transition-colors"
                                             title="Remove Item"
                                         >
