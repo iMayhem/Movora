@@ -15,7 +15,9 @@ export function MovieCard({ item, compact }: MovieCardProps) {
   const mediaType = item.media_type as string;
   const href = mediaType === 'anime' ? `/anime/${item.id}` : (mediaType === 'movie' ? `/movie/${item.id}` : `/tv/${item.id}`);
   const title = mediaType === 'movie' ? (item as any).title : (item as any).name;
-  const voteAverage = item.vote_average ? item.vote_average.toFixed(1) : null;
+  const voteAverage = typeof item.vote_average === 'number'
+    ? item.vote_average.toFixed(1)
+    : (item.vote_average && !isNaN(Number(item.vote_average)) ? Number(item.vote_average).toFixed(1) : null);
 
   const posterSrc = item.poster_path
     ? (item.poster_path.startsWith('http') ? item.poster_path : `https://image.tmdb.org/t/p/w342${item.poster_path}`)
@@ -33,6 +35,7 @@ export function MovieCard({ item, compact }: MovieCardProps) {
               sizes="(max-width: 640px) 33vw, (max-width: 1024px) 20vw, 15vw"
               className="object-cover transition-opacity duration-300 hover:opacity-90"
               loading="lazy"
+              unoptimized={item.poster_path ? item.poster_path.startsWith('http') : false}
             />
             
             {/* Rating Badge - Simplified for performance */}
