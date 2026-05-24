@@ -29,7 +29,7 @@ const features = [
 ];
 
 export default function LandingPage() {
-  const androidAppLink = "https://github.com/iMayhem/moovie/releases/latest/download/app-release.apk";
+  const androidAppLink = "https://github.com/iMayhem/Movora/releases/latest/download/app-release.apk";
 
   return (
     <div className="bg-background text-foreground min-h-screen flex flex-col">
